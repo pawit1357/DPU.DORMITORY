@@ -1,0 +1,5 @@
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Utils.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Utils.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.csprojResolveAssemblyReference.cache
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.pdb

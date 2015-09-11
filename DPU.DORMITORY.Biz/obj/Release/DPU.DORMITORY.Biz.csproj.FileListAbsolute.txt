@@ -1,0 +1,9 @@
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\DPU.DORMITORY.Biz.dll.config
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\DPU.DORMITORY.Biz.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\DPU.DORMITORY.Biz.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\DPU.DORMITORY.Repositories.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\EntityFramework.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\DPU.DORMITORY.Repositories.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.csprojResolveAssemblyReference.cache
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.pdb

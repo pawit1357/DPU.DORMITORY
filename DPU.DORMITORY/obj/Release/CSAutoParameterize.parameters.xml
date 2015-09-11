@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DORMEntities-Web.config Connection String" description="DORMEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/DataAccess.Model1.csdl|res://*/DataAccess.Model1.ssdl|res://*/DataAccess.Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=as095\SQLEXPRESS;Initial Catalog=DORM;User ID=dorm;Password=P@ssw0rd;MultipleActiveResultSets=True;Application Name=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\pawit\\Documents\\Visual\ Studio\ 2013\\Projects\\DPU\.DORMITORY\\DPU\.DORMITORY\\obj\\Release\\Package\\PackageTmp\\web\.config$" match="/configuration/connectionStrings/add[@name='DORMEntities']/@connectionString" />
+  </parameter>
+</parameters>

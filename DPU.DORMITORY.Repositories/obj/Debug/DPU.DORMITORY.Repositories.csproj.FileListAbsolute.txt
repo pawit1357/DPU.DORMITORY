@@ -1,0 +1,5 @@
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\DPU.DORMITORY.Repositories.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\DPU.DORMITORY.Repositories.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\EntityFramework.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\obj\Debug\DPU.DORMITORY.Repositories.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\obj\Debug\DPU.DORMITORY.Repositories.pdb

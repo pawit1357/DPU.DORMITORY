@@ -1,0 +1,16 @@
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Tests.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Tests.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Repositories.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Biz.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\log4net.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Utils.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\EntityFramework.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Repositories.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Biz.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\log4net.xml
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\bin\Debug\DPU.DORMITORY.Utils.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\obj\Debug\DPU.DORMITORY.Tests.csprojResolveAssemblyReference.cache
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\obj\Debug\DPU.DORMITORY.Tests.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Tests\obj\Debug\DPU.DORMITORY.Tests.pdb

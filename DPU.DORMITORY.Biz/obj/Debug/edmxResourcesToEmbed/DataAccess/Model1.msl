@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DORMModelStoreContainer" CdmEntityContainer="DORMEntities">
+    <EntitySetMapping Name="MENUs">
+      <EntityTypeMapping TypeName="DORMModel.MENU">
+        <MappingFragment StoreEntitySet="MENU">
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="DISPLAY_ORDER" ColumnName="DISPLAY_ORDER" />
+          <ScalarProperty Name="PREVIOUS_MENU_ID" ColumnName="PREVIOUS_MENU_ID" />
+          <ScalarProperty Name="MENU_TAG" ColumnName="MENU_TAG" />
+          <ScalarProperty Name="URL_NAVIGATE" ColumnName="URL_NAVIGATE" />
+          <ScalarProperty Name="MENU_NAME" ColumnName="MENU_NAME" />
+          <ScalarProperty Name="MENU_ICON" ColumnName="MENU_ICON" />
+          <ScalarProperty Name="MENU_ID" ColumnName="MENU_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MENU_ROLE">
+      <EntityTypeMapping TypeName="DORMModel.MENU_ROLE">
+        <MappingFragment StoreEntitySet="MENU_ROLE">
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="IS_DELETE" ColumnName="IS_DELETE" />
+          <ScalarProperty Name="IS_EDIT" ColumnName="IS_EDIT" />
+          <ScalarProperty Name="IS_CREATE" ColumnName="IS_CREATE" />
+          <ScalarProperty Name="IS_REQUIRED_ACTION" ColumnName="IS_REQUIRED_ACTION" />
+          <ScalarProperty Name="MENU_ID" ColumnName="MENU_ID" />
+          <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_CUSTOMER">
+      <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER">
+        <MappingFragment StoreEntitySet="TB_CUSTOMER">
+          <ScalarProperty Name="PAYER" ColumnName="PAYER" />
+          <ScalarProperty Name="HAS_STDNUM" ColumnName="HAS_STDNUM" />
+          <ScalarProperty Name="STD_STATUS" ColumnName="STD_STATUS" />
+          <ScalarProperty Name="STD_PRO_TYPE_NAME" ColumnName="STD_PRO_TYPE_NAME" />
+          <ScalarProperty Name="STD_MAJOR" ColumnName="STD_MAJOR" />
+          <ScalarProperty Name="STD_FACULTY" ColumnName="STD_FACULTY" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="MOVEROOM_DATE" ColumnName="MOVEROOM_DATE" />
+          <ScalarProperty Name="CHECKOUT_DATE" ColumnName="CHECKOUT_DATE" />
+          <ScalarProperty Name="RESERV_DATE" ColumnName="RESERV_DATE" />
+          <ScalarProperty Name="CHECKIN_DATE" ColumnName="CHECKIN_DATE" />
+          <ScalarProperty Name="PERSONALID" ColumnName="PERSONALID" />
+          <ScalarProperty Name="SURNAME" ColumnName="SURNAME" />
+          <ScalarProperty Name="FIRSTNAME" ColumnName="FIRSTNAME" />
+          <ScalarProperty Name="CUSTOMER_TYPE_ID" ColumnName="CUSTOMER_TYPE_ID" />
+          <ScalarProperty Name="ROOM_ID" ColumnName="ROOM_ID" />
+          <ScalarProperty Name="CUSTOMER_NUMBER" ColumnName="CUSTOMER_NUMBER" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_CUSTOMER_FUND">
+      <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER_FUND">
+        <MappingFragment StoreEntitySet="TB_CUSTOMER_FUND">
+          <ScalarProperty Name="FOR_SERVICE_ID" ColumnName="FOR_SERVICE_ID" />
+          <ScalarProperty Name="FUND_ID" ColumnName="FUND_ID" />
+          <ScalarProperty Name="CUS_ID" ColumnName="CUS_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_CUSTOMER_PROFILE">
+      <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER_PROFILE">
+        <MappingFragment StoreEntitySet="TB_CUSTOMER_PROFILE">
+          <ScalarProperty Name="PROFILE_TYPE" ColumnName="PROFILE_TYPE" />
+          <ScalarProperty Name="NATION_ID" ColumnName="NATION_ID" />
+          <ScalarProperty Name="PHONE" ColumnName="PHONE" />
+          <ScalarProperty Name="ZIPCODE" ColumnName="ZIPCODE" />
+          <ScalarProperty Name="PROVINCE" ColumnName="PROVINCE" />
+          <ScalarProperty Name="AMPHUR" ColumnName="AMPHUR" />
+          <ScalarProperty Name="TAMBON" ColumnName="TAMBON" />
+          <ScalarProperty Name="SOI" ColumnName="SOI" />
+          <ScalarProperty Name="ROAD" ColumnName="ROAD" />
+          <ScalarProperty Name="ADDR" ColumnName="ADDR" />
+          <ScalarProperty Name="CUS_ID" ColumnName="CUS_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_INVOICE">
+      <EntityTypeMapping TypeName="DORMModel.TB_INVOICE">
+        <MappingFragment StoreEntitySet="TB_INVOICE">
+          <ScalarProperty Name="POST_TIME" ColumnName="POST_TIME" />
+          <ScalarProperty Name="OTHER" ColumnName="OTHER" />
+          <ScalarProperty Name="INVOICE_TYPE" ColumnName="INVOICE_TYPE" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="PAYMENT_STATUS" ColumnName="PAYMENT_STATUS" />
+          <ScalarProperty Name="STAY_DAY" ColumnName="STAY_DAY" />
+          <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+          <ScalarProperty Name="SAP_DOCNO" ColumnName="SAP_DOCNO" />
+          <ScalarProperty Name="POSTING_DATE" ColumnName="POSTING_DATE" />
+          <ScalarProperty Name="REF_ID" ColumnName="REF_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_INVOICE_DETAIL">
+      <EntityTypeMapping TypeName="DORMModel.TB_INVOICE_DETAIL">
+        <MappingFragment StoreEntitySet="TB_INVOICE_DETAIL">
+          <ScalarProperty Name="SUB_TRANS" ColumnName="SUB_TRANS" />
+          <ScalarProperty Name="MAIN_TRANS" ColumnName="MAIN_TRANS" />
+          <ScalarProperty Name="PROFIT_CTR" ColumnName="PROFIT_CTR" />
+          <ScalarProperty Name="BA" ColumnName="BA" />
+          <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
+          <ScalarProperty Name="PAY_AMOUT" ColumnName="PAY_AMOUT" />
+          <ScalarProperty Name="PAY_BY" ColumnName="PAY_BY" />
+          <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+          <ScalarProperty Name="SERVICE_ID" ColumnName="SERVICE_ID" />
+          <ScalarProperty Name="INVOICE_ID" ColumnName="INVOICE_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_BUILD">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_BUILD">
+        <MappingFragment StoreEntitySet="TB_M_BUILD">
+          <ScalarProperty Name="ADDRESS_LINE_2_EN" ColumnName="ADDRESS_LINE_2_EN" />
+          <ScalarProperty Name="ADDRESS_LINE_1_EN" ColumnName="ADDRESS_LINE_1_EN" />
+          <ScalarProperty Name="ADDRESS_LINE_2" ColumnName="ADDRESS_LINE_2" />
+          <ScalarProperty Name="ADDRESS_LINE_1" ColumnName="ADDRESS_LINE_1" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UDPATE_DATE" ColumnName="UDPATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="DESCRIPTION_EN" ColumnName="DESCRIPTION_EN" />
+          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+          <ScalarProperty Name="TXT_NO" ColumnName="TXT_NO" />
+          <ScalarProperty Name="PROFIT_CTR" ColumnName="PROFIT_CTR" />
+          <ScalarProperty Name="BA" ColumnName="BA" />
+          <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="BUILD_ID" ColumnName="BUILD_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_CUSTOMER_TYPE">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_CUSTOMER_TYPE">
+        <MappingFragment StoreEntitySet="TB_M_CUSTOMER_TYPE">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_FUND">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_FUND">
+        <MappingFragment StoreEntitySet="TB_M_FUND">
+          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="FOR_SERVICE_ID" ColumnName="FOR_SERVICE_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_NATION">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_NATION">
+        <MappingFragment StoreEntitySet="TB_M_NATION">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="CODE" ColumnName="CODE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_ROOM_TYPE">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_ROOM_TYPE">
+        <MappingFragment StoreEntitySet="TB_M_ROOM_TYPE">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_SERVICE">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_SERVICE">
+        <MappingFragment StoreEntitySet="TB_M_SERVICE">
+          <ScalarProperty Name="NAME_EN" ColumnName="NAME_EN" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_TITLE">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_TITLE">
+        <MappingFragment StoreEntitySet="TB_M_TITLE">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_RATES_GROUP">
+      <EntityTypeMapping TypeName="DORMModel.TB_RATES_GROUP">
+        <MappingFragment StoreEntitySet="TB_RATES_GROUP">
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="END_DATE" ColumnName="END_DATE" />
+          <ScalarProperty Name="START_DATE" ColumnName="START_DATE" />
+          <ScalarProperty Name="INSURANCE_AMOUNT" ColumnName="INSURANCE_AMOUNT" />
+          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="BUILD_ID" ColumnName="BUILD_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_RATES_GROUP_DETAIL">
+      <EntityTypeMapping TypeName="DORMModel.TB_RATES_GROUP_DETAIL">
+        <MappingFragment StoreEntitySet="TB_RATES_GROUP_DETAIL">
+          <ScalarProperty Name="VAT" ColumnName="VAT" />
+          <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+          <ScalarProperty Name="UNIT" ColumnName="UNIT" />
+          <ScalarProperty Name="GL" ColumnName="GL" />
+          <ScalarProperty Name="SUBTRAN" ColumnName="SUBTRAN" />
+          <ScalarProperty Name="MAINTRAN" ColumnName="MAINTRAN" />
+          <ScalarProperty Name="SERVICE_ID" ColumnName="SERVICE_ID" />
+          <ScalarProperty Name="RATES_GROUP_ID" ColumnName="RATES_GROUP_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_ROOM">
+      <EntityTypeMapping TypeName="DORMModel.TB_ROOM">
+        <MappingFragment StoreEntitySet="TB_ROOM">
+          <ScalarProperty Name="RATES_GROUP_ID" ColumnName="RATES_GROUP_ID" />
+          <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="CUSTOMER_LIMIT" ColumnName="CUSTOMER_LIMIT" />
+          <ScalarProperty Name="NUMBER" ColumnName="NUMBER" />
+          <ScalarProperty Name="FLOOR" ColumnName="FLOOR" />
+          <ScalarProperty Name="ROOM_TYPE_ID" ColumnName="ROOM_TYPE_ID" />
+          <ScalarProperty Name="BUILD_ID" ColumnName="BUILD_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_ROOM_METER">
+      <EntityTypeMapping TypeName="DORMModel.TB_ROOM_METER">
+        <MappingFragment StoreEntitySet="TB_ROOM_METER">
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="METER_END" ColumnName="METER_END" />
+          <ScalarProperty Name="METER_START" ColumnName="METER_START" />
+          <ScalarProperty Name="METER_TYPE" ColumnName="METER_TYPE" />
+          <ScalarProperty Name="ROOM_ID" ColumnName="ROOM_ID" />
+          <ScalarProperty Name="METER_DATE" ColumnName="METER_DATE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_TRANSFER_LOG">
+      <EntityTypeMapping TypeName="DORMModel.TB_TRANSFER_LOG">
+        <MappingFragment StoreEntitySet="TB_TRANSFER_LOG">
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="ERROR_ROW" ColumnName="ERROR_ROW" />
+          <ScalarProperty Name="COMPLETE_ROW" ColumnName="COMPLETE_ROW" />
+          <ScalarProperty Name="TOTAL_ROW" ColumnName="TOTAL_ROW" />
+          <ScalarProperty Name="RUN_STATUS" ColumnName="RUN_STATUS" />
+          <ScalarProperty Name="END_RUN_DATE" ColumnName="END_RUN_DATE" />
+          <ScalarProperty Name="START_RUN_DATE" ColumnName="START_RUN_DATE" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_TRANSFER_REJECT_LOG">
+      <EntityTypeMapping TypeName="DORMModel.TB_TRANSFER_REJECT_LOG">
+        <MappingFragment StoreEntitySet="TB_TRANSFER_REJECT_LOG">
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="ERROR_DESC" ColumnName="ERROR_DESC" />
+          <ScalarProperty Name="INVOICE_NO" ColumnName="INVOICE_NO" />
+          <ScalarProperty Name="TRANSFER_LOG_ID" ColumnName="TRANSFER_LOG_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USERS">
+      <EntityTypeMapping TypeName="DORMModel.USER">
+        <MappingFragment StoreEntitySet="USERS">
+          <ScalarProperty Name="RESPONSIBLE_BUIDING" ColumnName="RESPONSIBLE_BUIDING" />
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="PASSWORD_COUNTER" ColumnName="PASSWORD_COUNTER" />
+          <ScalarProperty Name="PASSWORD_HISTORY_5" ColumnName="PASSWORD_HISTORY_5" />
+          <ScalarProperty Name="PASSWORD_HISTORY_4" ColumnName="PASSWORD_HISTORY_4" />
+          <ScalarProperty Name="PASSWORD_HISTORY_3" ColumnName="PASSWORD_HISTORY_3" />
+          <ScalarProperty Name="PASSWORD_HISTORY_2" ColumnName="PASSWORD_HISTORY_2" />
+          <ScalarProperty Name="PASSWORD_HISTORY_1" ColumnName="PASSWORD_HISTORY_1" />
+          <ScalarProperty Name="LAST_PWD_CHANGE_DATE" ColumnName="LAST_PWD_CHANGE_DATE" />
+          <ScalarProperty Name="LAST_SIGN_IN_DATE" ColumnName="LAST_SIGN_IN_DATE" />
+          <ScalarProperty Name="IS_FORCE_CHANGE_PASSWORD" ColumnName="IS_FORCE_CHANGE_PASSWORD" />
+          <ScalarProperty Name="IS_ACTIVE" ColumnName="IS_ACTIVE" />
+          <ScalarProperty Name="EMAIL_ADDRESS" ColumnName="EMAIL_ADDRESS" />
+          <ScalarProperty Name="EXTENSION_NO" ColumnName="EXTENSION_NO" />
+          <ScalarProperty Name="PHONE_NO" ColumnName="PHONE_NO" />
+          <ScalarProperty Name="LAST_NAME" ColumnName="LAST_NAME" />
+          <ScalarProperty Name="FIRST_NAME" ColumnName="FIRST_NAME" />
+          <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+          <ScalarProperty Name="TITLE_ID" ColumnName="TITLE_ID" />
+          <ScalarProperty Name="USER_PASSWORD" ColumnName="USER_PASSWORD" />
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USERS_LOGGED">
+      <EntityTypeMapping TypeName="DORMModel.USERS_LOGGED">
+        <MappingFragment StoreEntitySet="USERS_LOGGED">
+          <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
+          <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
+          <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
+          <ScalarProperty Name="LAST_SIGN_IN_DATE" ColumnName="LAST_SIGN_IN_DATE" />
+          <ScalarProperty Name="SESSION_ID" ColumnName="SESSION_ID" />
+          <ScalarProperty Name="IP_ADDRESS" ColumnName="IP_ADDRESS" />
+          <ScalarProperty Name="USER_ID" ColumnName="USER_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="USERS_ROLE">
+      <EntityTypeMapping TypeName="DORMModel.USERS_ROLE">
+        <MappingFragment StoreEntitySet="USERS_ROLE">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ROLE_ID" ColumnName="ROLE_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ff49f826af024698bb5b251bccc21411" Name="Diagram1">
+        <EntityTypeShape EntityType="DORMModel.MENU" Width="1.5" PointX="14.75" PointY="15.125" />
+        <EntityTypeShape EntityType="DORMModel.MENU_ROLE" Width="1.5" PointX="17" PointY="15.25" />
+        <EntityTypeShape EntityType="DORMModel.TB_CUSTOMER" Width="1.5" PointX="10.25" PointY="17.625" />
+        <EntityTypeShape EntityType="DORMModel.TB_CUSTOMER_FUND" Width="1.5" PointX="12.5" PointY="14.25" />
+        <EntityTypeShape EntityType="DORMModel.TB_CUSTOMER_PROFILE" Width="1.5" PointX="12.5" PointY="18.75" />
+        <EntityTypeShape EntityType="DORMModel.TB_INVOICE" Width="1.5" PointX="11" PointY="1.375" />
+        <EntityTypeShape EntityType="DORMModel.TB_INVOICE_DETAIL" Width="1.5" PointX="13.25" PointY="4.5" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_BUILD" Width="1.5" PointX="5.75" PointY="9.125" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_CUSTOMER_TYPE" Width="1.5" PointX="8" PointY="19.625" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_FUND" Width="1.5" PointX="10.25" PointY="14.625" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_NATION" Width="1.5" PointX="10.25" PointY="24.5" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_ROOM_TYPE" Width="1.5" PointX="11" PointY="6.5" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_SERVICE" Width="1.5" PointX="8" PointY="6.125" />
+        <EntityTypeShape EntityType="DORMModel.TB_M_TITLE" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DORMModel.TB_RATES_GROUP" Width="1.5" PointX="8" PointY="9.5" />
+        <EntityTypeShape EntityType="DORMModel.TB_RATES_GROUP_DETAIL" Width="1.5" PointX="10.25" PointY="9.75" />
+        <EntityTypeShape EntityType="DORMModel.TB_ROOM" Width="1.5" PointX="13.25" PointY="9.375" />
+        <EntityTypeShape EntityType="DORMModel.TB_ROOM_METER" Width="1.5" PointX="15.5" PointY="9.875" />
+        <EntityTypeShape EntityType="DORMModel.TB_TRANSFER_LOG" Width="1.5" PointX="0.75" PointY="15.125" />
+        <EntityTypeShape EntityType="DORMModel.TB_TRANSFER_REJECT_LOG" Width="1.5" PointX="3" PointY="15.5" />
+        <EntityTypeShape EntityType="DORMModel.USER" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="DORMModel.USERS_LOGGED" Width="1.5" PointX="5.25" PointY="3.25" />
+        <EntityTypeShape EntityType="DORMModel.USERS_ROLE" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="DORMModel.FK_MENU_ROLE_MENU" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_CUSTOMER" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_TB_M_CUSTOMER_TYPE" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_FUND" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_SERVICE" />
+        <AssociationConnector Association="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_M_NATION" />
+        <AssociationConnector Association="DORMModel.FK_TB_INVOICE_DETAIL_TB_INVOICE" />
+        <AssociationConnector Association="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_SERVICE" />
+        <AssociationConnector Association="DORMModel.FK_TB_RATES_GROUP_TB_M_BUILD" />
+        <AssociationConnector Association="DORMModel.FK_TB_ROOM_TB_M_BUILD" />
+        <AssociationConnector Association="DORMModel.FK_TB_M_FUND_TB_M_SERVICE" />
+        <AssociationConnector Association="DORMModel.FK_TB_ROOM_TB_M_ROOM_TYPE" />
+        <AssociationConnector Association="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE" />
+        <AssociationConnector Association="DORMModel.FK_USERS_TB_M_TITLE" />
+        <AssociationConnector Association="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_RATES_GROUP" />
+        <AssociationConnector Association="DORMModel.FK_TB_ROOM_TB_RATES_GROUP" />
+        <AssociationConnector Association="DORMModel.FK_TB_ROOM_METER_TB_ROOM_METER" />
+        <AssociationConnector Association="DORMModel.FK_TB_TRANSFER_REJECT_LOG_TB_TRANSFER_LOG" />
+        <AssociationConnector Association="DORMModel.FK_USERS_LOGGED_USERS" />
+        <AssociationConnector Association="DORMModel.FK_USERS_USERS" />
+        <AssociationConnector Association="DORMModel.FK_USERS_USERS_ROLE" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
