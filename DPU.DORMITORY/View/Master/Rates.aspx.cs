@@ -20,13 +20,17 @@ namespace DPU.DORMITORY.Web.View.Master
         private Repository<TB_RATES_GROUP> repRateGroup;
         private Repository<TB_RATES_GROUP_DETAIL> repRateGroupDetail;
         private Repository<TB_M_SERVICE> repService;
-
+        private Repository<TB_M_ROOM_TYPE> repRoomType;
+        private Repository<TB_M_COST_TYPE> repCostType;
         public Rates()
         {
             repBuild = unitOfWork.Repository<TB_M_BUILD>();
             repRateGroupDetail = unitOfWork.Repository<TB_RATES_GROUP_DETAIL>();
             repService = unitOfWork.Repository<TB_M_SERVICE>();
             repRateGroup = unitOfWork.Repository<TB_RATES_GROUP>();
+            repRoomType = unitOfWork.Repository<TB_M_ROOM_TYPE>();
+            repCostType = unitOfWork.Repository<TB_M_COST_TYPE>();
+
         }
 
         public USER userLogin
@@ -69,6 +73,7 @@ namespace DPU.DORMITORY.Web.View.Master
             {
                 TB_RATES_GROUP _obj = new TB_RATES_GROUP();
                 _obj.BUILD_ID = Convert.ToInt32(ddlBuildId.SelectedValue);
+                _obj.ROOM_TYPE_ID = Convert.ToInt32(ddlRoomType.SelectedValue);
                 _obj.NAME = txtName.Text;
                 _obj.DESCRIPTION = txtDescription.Text;
                 _obj.INSURANCE_AMOUNT = Convert.ToDecimal(txtAmout.Text);
@@ -77,6 +82,7 @@ namespace DPU.DORMITORY.Web.View.Master
                 _obj.UPDATE_BY = userLogin.USER_ID;
                 _obj.CREATE_DATE = DateTime.Now;
                 _obj.UPDATE_DATE = DateTime.Now;
+                _obj.CALCULATE_INVOICE_TYPE = Convert.ToInt32(ddlCalType.SelectedValue);
                 _obj.TB_RATES_GROUP_DETAIL = listRateGroupDetal;
                 _obj.RowState = CommandName;
                 return _obj;
@@ -85,6 +91,8 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private void initialPage()
         {
+
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
             SearchRates prvPage = Page.PreviousPage as SearchRates;
             this.CommandName = (prvPage == null) ? this.CommandName : prvPage.CommandName;
             this.PKID = (prvPage == null) ? this.PKID : prvPage.PKID;
@@ -93,7 +101,8 @@ namespace DPU.DORMITORY.Web.View.Master
             ddlBuildId.DataSource = repBuild.Table.ToList();
             ddlBuildId.DataBind();
 
-
+            ddlRoomType.DataSource = repRoomType.Table.ToList();
+            ddlRoomType.DataBind();
 
             //lbCommandName.Text = CommandName.ToString();
             switch (CommandName)
@@ -101,20 +110,16 @@ namespace DPU.DORMITORY.Web.View.Master
                 case CommandNameEnum.Add:
                     btnSave.CssClass = Constants.CSS_BUTTON_SAVE;
                     btnCancel.CssClass = Constants.CSS_BUTTON_CANCEL;
+                    ddlBuildId.SelectedValue = "1";//Fix DPU1
 
                     listRateGroupDetal = new List<TB_RATES_GROUP_DETAIL>();
-                    List<TB_M_SERVICE> services = repService.Table.ToList();
-                    foreach (TB_M_SERVICE _service in services)
+                    List<TB_M_COST_TYPE> costType = repCostType.Table.ToList();
+                    foreach (TB_M_COST_TYPE _val in costType)
                     {
                         TB_RATES_GROUP_DETAIL detail = new TB_RATES_GROUP_DETAIL();
-                        detail.ID = _service.ID;
-                        //detail.RATES_GROUP_ID = this.PKID;
-                        detail.SERVICE_ID = _service.ID;
-                        detail.SERVICE_NAME = _service.NAME;
-                        //detail.SUBTRAN = 0;
-                        //detail.GL = 0;
-                        //detail.AMOUNT = 0;
-                        //detail.VAT = 0;
+                        detail.ID = _val.ID;
+                        detail.COST_TYPE_ID = _val.ID;
+                        detail.SERVICE_NAME = _val.NAME;
                         listRateGroupDetal.Add(detail);
                     }
                     gvResult.DataSource = listRateGroupDetal;
@@ -145,19 +150,27 @@ namespace DPU.DORMITORY.Web.View.Master
                 txtName.Text = _obj.NAME;
                 txtDescription.Text = _obj.DESCRIPTION;
                 txtAmout.Text = _obj.INSURANCE_AMOUNT.Value.ToString();
-                txtStartDate.Text = _obj.START_DATE.Value.ToString("dd/MM/yyyy");
-                txtEndDate.Text = _obj.END_DATE.Value.ToString("dd/MM/yyyy");
-                List<TB_M_SERVICE> serviceList = repService.Table.ToList();
-
+                txtStartDate.Text = (_obj.START_DATE == null) ? DateTime.MinValue.ToString("dd/MM/yyyy") : _obj.START_DATE.Value.ToString("dd/MM/yyyy");
+                txtEndDate.Text = (_obj.END_DATE == null) ? DateTime.MinValue.ToString("dd/MM/yyyy") : _obj.END_DATE.Value.ToString("dd/MM/yyyy");
+                //List<TB_M_SERVICE> serviceList = repService.Table.ToList();
+                if (_obj.CALCULATE_INVOICE_TYPE == null)
+                {
+                    ddlCalType.SelectedValue = "1";
+                }
+                else
+                {
+                    ddlCalType.SelectedValue = _obj.CALCULATE_INVOICE_TYPE.Value.ToString();
+                }
                 listRateGroupDetal = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == _obj.ID).ToList();
                 if (listRateGroupDetal != null)
                 {
                     foreach (TB_RATES_GROUP_DETAIL val in listRateGroupDetal)
                     {
-                        TB_M_SERVICE _service = serviceList.Where(x => x.ID == val.SERVICE_ID).FirstOrDefault();
-                        if (_service != null)
+
+                        TB_M_COST_TYPE _cosType = repCostType.Table.Where(x => x.ID == val.COST_TYPE_ID).FirstOrDefault();
+                        if (_cosType != null)
                         {
-                            val.SERVICE_NAME = _service.NAME;
+                            val.SERVICE_NAME = _cosType.NAME;
                         }
                     }
                     gvResult.DataSource = listRateGroupDetal;
@@ -211,9 +224,6 @@ namespace DPU.DORMITORY.Web.View.Master
                         TB_RATES_GROUP_DETAIL editGroupDetail = repRateGroupDetail.Table.Where(x => x.ID == _detail.ID).FirstOrDefault();
                         if (editGroupDetail != null)
                         {
-                            editGroupDetail.MAINTRAN = _detail.MAINTRAN;
-                            editGroupDetail.SUBTRAN = _detail.SUBTRAN;
-                            editGroupDetail.GL = _detail.GL;
                             editGroupDetail.UNIT = _detail.UNIT;
                             editGroupDetail.AMOUNT = _detail.AMOUNT;
                             editGroupDetail.VAT = _detail.VAT;
@@ -242,7 +252,6 @@ namespace DPU.DORMITORY.Web.View.Master
             Response.Redirect(PreviousPath);
         }
 
-
         #region "GV RESULT"
         protected void gvResult_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -266,9 +275,9 @@ namespace DPU.DORMITORY.Web.View.Master
 
         protected void gvResult_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
-            //gvResult.EditIndex = -1;
-            //gvResult.DataSource = this.listRateGroupDetalShow;
-            //gvResult.DataBind();
+            gvResult.EditIndex = -1;
+            gvResult.DataSource = this.listRateGroupDetal;
+            gvResult.DataBind();
         }
 
         protected void gvResult_RowDeleting(object sender, GridViewDeleteEventArgs e)
@@ -300,28 +309,30 @@ namespace DPU.DORMITORY.Web.View.Master
             //bool isServiceExist = listRateGroupDetalShow.Where(x => x.SERVICE_ID == Convert.ToInt32(ddlServiceID.SelectedValue)).Any();
             //if (!isServiceExist)
             //{
-                TextBox txtSubtran = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtSubtran");
-                TextBox txtMainTran = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtMainTran");
-                TextBox txtGL = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtGL");
-                TextBox txtAMOUNT = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtAMOUNT");
-                TextBox txtVAT = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtVAT");
-                TextBox txtUnit = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtUnit");
+            TextBox txtMainTrans = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtMainTrans");
+            TextBox txtSubTrans = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtSubTrans");
+            TextBox txtGL = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtGL");
+            TextBox txtAMOUNT = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtAMOUNT");
+            TextBox txtVAT = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtVAT");
+            TextBox txtUnit = (TextBox)gvResult.Rows[e.RowIndex].FindControl("txtUnit");
 
-                TB_RATES_GROUP_DETAIL tmp = this.listRateGroupDetal.Where(x => x.ID == _id).FirstOrDefault();
-                if (tmp != null)
-                {
-                    tmp.MAINTRAN = !CustomUtils.isNumber(txtMainTran.Text) ? 0 : Convert.ToInt32(txtMainTran.Text);
-                    tmp.SUBTRAN = !CustomUtils.isNumber(txtSubtran.Text) ? 0 : Convert.ToInt32(txtSubtran.Text);
-                    tmp.GL = !CustomUtils.isNumber(txtGL.Text) ? 0 : Convert.ToInt32(txtGL.Text);
-                    tmp.AMOUNT = !CustomUtils.isNumber(txtAMOUNT.Text) ? 0 : Convert.ToDecimal(txtAMOUNT.Text);
-                    tmp.VAT = !CustomUtils.isNumber(txtVAT.Text) ? 0 : Convert.ToInt32(txtVAT.Text);
-                    tmp.UNIT = !CustomUtils.isNumber(txtUnit.Text) ? 0 : Convert.ToInt32(txtUnit.Text);
-                    tmp.RowState = CommandNameEnum.Edit;
-                }
 
-                gvResult.EditIndex = -1;
-                gvResult.DataSource = this.listRateGroupDetal;
-                gvResult.DataBind();
+
+            TB_RATES_GROUP_DETAIL tmp = this.listRateGroupDetal.Where(x => x.ID == _id).FirstOrDefault();
+            if (tmp != null)
+            {
+                tmp.AMOUNT = !CustomUtils.isNumber(txtAMOUNT.Text) ? 0 : Convert.ToDecimal(txtAMOUNT.Text);
+                tmp.VAT = !CustomUtils.isNumber(txtVAT.Text) ? 0 : Convert.ToInt32(txtVAT.Text);
+                tmp.UNIT = !CustomUtils.isNumber(txtUnit.Text) ? 0 : Convert.ToInt32(txtUnit.Text);
+                tmp.MAIN_TRANS = Convert.ToInt32(txtMainTrans.Text);
+                tmp.SUB_TRANS = Convert.ToInt32( txtSubTrans.Text);
+
+                tmp.RowState = CommandNameEnum.Edit;
+            }
+
+            gvResult.EditIndex = -1;
+            gvResult.DataSource = this.listRateGroupDetal;
+            gvResult.DataBind();
             //}
             //else
             //{
@@ -347,6 +358,24 @@ namespace DPU.DORMITORY.Web.View.Master
             //detail.RowState = CommandNameEnum.Add;
             //this.listRateGroupDetal.Add(detail);
             //gvResult.DataSource = listRateGroupDetalShow;
+            //gvResult.DataBind();
+        }
+
+        protected void ddlBuildId_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //listRateGroupDetal = new List<TB_RATES_GROUP_DETAIL>();
+            //int buildId = Convert.ToInt32(ddlBuildId.SelectedValue);
+            //List<TB_M_SERVICE> services = repService.Table.Where(x => x.ID > 0 && x.BUILD_ID == buildId).ToList();
+            //foreach (TB_M_SERVICE _service in services)
+            //{
+            //    TB_RATES_GROUP_DETAIL detail = new TB_RATES_GROUP_DETAIL();
+            //    detail.ID = _service.ID;
+            //    //detail.RATES_GROUP_ID = this.PKID;
+            //    detail.SERVICE_ID = _service.ID;
+            //    //detail.SERVICE_NAME = _service.NAME;
+            //    listRateGroupDetal.Add(detail);
+            //}
+            //gvResult.DataSource = listRateGroupDetal;
             //gvResult.DataBind();
         }
 

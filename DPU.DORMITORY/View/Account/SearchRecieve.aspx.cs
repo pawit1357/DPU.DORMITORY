@@ -7,7 +7,8 @@ using System;
 using System.Collections;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using System.Linq;
+using System.Collections.Generic;
 namespace DPU.DORMITORY.View.Account
 {
     public partial class SearchRecieve : System.Web.UI.Page
@@ -16,12 +17,20 @@ namespace DPU.DORMITORY.View.Account
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_CUSTOMER> repCustomer;
         private Repository<TB_INVOICE> repInvoice;
+        private Repository<TB_ROOM> repRoom;
+        private Repository<TB_M_BUILD> repBuild;
+
         public SearchRecieve()
         {
             repCustomer = unitOfWork.Repository<TB_CUSTOMER>();
             repInvoice = unitOfWork.Repository<TB_INVOICE>();
+            repRoom = unitOfWork.Repository<TB_ROOM>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
         }
-
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
+        }
         public IEnumerable searchResult
         {
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
@@ -61,24 +70,45 @@ namespace DPU.DORMITORY.View.Account
             {
                 TB_INVOICE tmp = new TB_INVOICE();
                 //tmp.RoomNumber = txtRoom.Text;
-                tmp.FilterPaymentStatus = false;
-                //tmp.PAYMENT_STATUS = false;
+                tmp.BUILD_ID = Convert.ToInt32(ddlBuild.SelectedValue);
+                tmp.ROOM_NUMBER = txtRoomNum.Text;
+                tmp.PAYMENT_STATUS = false;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
+                tmp.FIRSTNAME = txtFirstName.Text;
+                tmp.SURNAME = txtLastName.Text;
+                tmp.SAP_DOCNO = txtSapDocNo.Text;
                 tmp.HasDocumentNo = true;
                 return tmp;
             }
         }
         private void initialPage()
         {
+
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
+            ddlBuild.DataBind();
+            if (build != null && build.Count > 1)
+            {
+                ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+
+
             if (objRoom != null)
             {
-                gvResult.DataSource = objInvoice.SearchPaymentHistory();
-                gvResult.DataBind();
+                bindingData();
+            }
+        }
+        private void bindingData()
+        {
+            searchResult = objInvoice.SearchPaymentHistory();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+            if (gvResult.Rows.Count > 0)
+            {
                 gvResult.UseAccessibleHeader = true;
                 gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
             }
         }
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -103,6 +133,7 @@ namespace DPU.DORMITORY.View.Account
                     if (_editInvoice != null)
                     {
                         _editInvoice.PAYMENT_STATUS = true;//1= Paymented
+                        _editInvoice.PAYMENT_DATE = DateTime.Now;
                         repInvoice.Update(_editInvoice);
                         #region "MESSAGE RESULT"
                         String errorMessage = repInvoice.errorMessage;
@@ -147,5 +178,18 @@ namespace DPU.DORMITORY.View.Account
             }
         }
         #endregion
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            bindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtFirstName.Text = string.Empty;
+            txtLastName.Text = string.Empty;
+            txtSapDocNo.Text = string.Empty;
+            bindingData();
+        }
     }
 }

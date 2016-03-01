@@ -1,6 +1,7 @@
 ﻿using DPU.DORMITORY.Biz;
 using DPU.DORMITORY.Biz.DataAccess;
 using DPU.DORMITORY.Repositories;
+using DPU.DORMITORY.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ namespace DPU.DORMITORY.Web.View.Admin
 
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<USER> repUser;
-
+        private Repository<TB_M_BUILD> repBuild;
+        private DormUtils dormUtil;
         public SearchUser()
         {
             repUser = unitOfWork.Repository<USER>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
+            dormUtil = new DormUtils();
         }
 
         #region "Property"
@@ -48,8 +52,9 @@ namespace DPU.DORMITORY.Web.View.Admin
             get
             {
                 USER tmp = new USER();
-                //tmp.username = txtUserName.Text;
-                //tmp.userProfile = new user_profile { phone = txtPhone.Text };
+                tmp.FIRST_NAME = txtName.Text;
+                tmp.LAST_NAME = txtSurname.Text;
+                tmp.PHONE_NO = txtPhone.Text;
                 return tmp;
             }
         }
@@ -112,5 +117,39 @@ namespace DPU.DORMITORY.Web.View.Admin
             }
         }
 
+        protected void gvResult_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                GridView gv = (GridView)sender;
+                Literal lbStatus = (Literal)e.Row.FindControl("litStatus");
+                Literal lbResp = (Literal)e.Row.FindControl("litResp");
+
+                if (lbStatus != null && lbResp !=null)
+                {
+                    lbStatus.Text = lbStatus.Text.Equals("True") ? "Active" : "InAcvice";
+                    lbResp.Text = dormUtil.getResponsibityDorm(lbResp.Text);
+                }
+            }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            bindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtName.Text = string.Empty;
+            txtPhone.Text = string.Empty;
+            txtSurname.Text = string.Empty;
+            bindingData();
+
+        }
+
+
+
+
+        
     }
 }

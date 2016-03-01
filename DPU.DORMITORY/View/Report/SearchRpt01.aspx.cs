@@ -56,7 +56,7 @@ namespace DPU.DORMITORY.View.Report
 
         private void SetReportDocument()
         {
-            SearchResult = objReport.getRpt01();
+            SearchResult = objReport.getRpt01(Convert.ToInt32(ddlLang.SelectedValue));
 
         }
 

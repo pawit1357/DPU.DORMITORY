@@ -28,16 +28,18 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public virtual DbSet<MENU> MENUs { get; set; }
         public virtual DbSet<MENU_ROLE> MENU_ROLE { get; set; }
         public virtual DbSet<TB_CUSTOMER> TB_CUSTOMER { get; set; }
-        public virtual DbSet<TB_CUSTOMER_FUND> TB_CUSTOMER_FUND { get; set; }
+        public virtual DbSet<TB_CUSTOMER_PAYER> TB_CUSTOMER_PAYER { get; set; }
         public virtual DbSet<TB_CUSTOMER_PROFILE> TB_CUSTOMER_PROFILE { get; set; }
         public virtual DbSet<TB_INVOICE> TB_INVOICE { get; set; }
         public virtual DbSet<TB_INVOICE_DETAIL> TB_INVOICE_DETAIL { get; set; }
         public virtual DbSet<TB_M_BUILD> TB_M_BUILD { get; set; }
+        public virtual DbSet<TB_M_COST_TYPE> TB_M_COST_TYPE { get; set; }
         public virtual DbSet<TB_M_CUSTOMER_TYPE> TB_M_CUSTOMER_TYPE { get; set; }
-        public virtual DbSet<TB_M_FUND> TB_M_FUND { get; set; }
         public virtual DbSet<TB_M_NATION> TB_M_NATION { get; set; }
         public virtual DbSet<TB_M_ROOM_TYPE> TB_M_ROOM_TYPE { get; set; }
         public virtual DbSet<TB_M_SERVICE> TB_M_SERVICE { get; set; }
+        public virtual DbSet<TB_M_SPONSOR> TB_M_SPONSOR { get; set; }
+        public virtual DbSet<TB_M_TERM_OF_PAYMENT> TB_M_TERM_OF_PAYMENT { get; set; }
         public virtual DbSet<TB_M_TITLE> TB_M_TITLE { get; set; }
         public virtual DbSet<TB_RATES_GROUP> TB_RATES_GROUP { get; set; }
         public virtual DbSet<TB_RATES_GROUP_DETAIL> TB_RATES_GROUP_DETAIL { get; set; }

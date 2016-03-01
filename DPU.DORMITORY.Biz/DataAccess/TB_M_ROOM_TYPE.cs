@@ -16,12 +16,14 @@ namespace DPU.DORMITORY.Biz.DataAccess
     {
         public TB_M_ROOM_TYPE()
         {
+            this.TB_RATES_GROUP = new HashSet<TB_RATES_GROUP>();
             this.TB_ROOM = new HashSet<TB_ROOM>();
         }
     
         public int ID { get; set; }
         public string NAME { get; set; }
     
+        public virtual ICollection<TB_RATES_GROUP> TB_RATES_GROUP { get; set; }
         public virtual ICollection<TB_ROOM> TB_ROOM { get; set; }
     }
 }

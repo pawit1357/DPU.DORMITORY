@@ -62,5 +62,32 @@ namespace DPU.DORMITORY.Biz
             get { return ConfigurationManager.AppSettings["DbCatalog"]; }
         }
 
+        public static String SAP_ASHOST
+        {
+            get { return ConfigurationManager.AppSettings["SAP_ASHOST"]; }
+        }
+        public static String SAP_SYSNR
+        {
+            get { return ConfigurationManager.AppSettings["SAP_SYSNR"]; }
+        }
+        public static String SAP_CLIENT
+        {
+            get { return ConfigurationManager.AppSettings["SAP_CLIENT"]; }
+        }
+        public static String SAP_USER
+        {
+            get { return ConfigurationManager.AppSettings["SAP_USER"]; }
+        }
+        public static String SAP_PASSWD
+        {
+            get { return ConfigurationManager.AppSettings["SAP_PASSWD"]; }
+        }
+
+        public static String SAP_LANG
+        {
+            get { return ConfigurationManager.AppSettings["SAP_LANG"]; }
+        }
+
+
     }
 }

@@ -37,6 +37,7 @@ namespace DPU.DORMITORY.Web.View.Admin
             get
             {
                 USERS_ROLE tmp = new USERS_ROLE();
+                tmp.NAME = txtName.Text;
                 return tmp;
             }
         }
@@ -55,7 +56,7 @@ namespace DPU.DORMITORY.Web.View.Admin
 
         private void bindingData()
         {
-            searchResult = repRole.Table.ToList();
+            searchResult = obj.Search();
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
@@ -128,10 +129,10 @@ namespace DPU.DORMITORY.Web.View.Admin
             gv.DataBind();
         }
 
-        protected void btnSearch_Click1(object sender, EventArgs e)
-        {
-            bindingData();
-        }
+        //protected void btnSearch_Click1(object sender, EventArgs e)
+        //{
+        //    bindingData();
+        //}
 
         protected void btnCancel_Click(object sender, EventArgs e)
         {
@@ -139,6 +140,12 @@ namespace DPU.DORMITORY.Web.View.Admin
 
             removeSession();
             bindingData();
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            bindingData();
+
         }
     }
 }

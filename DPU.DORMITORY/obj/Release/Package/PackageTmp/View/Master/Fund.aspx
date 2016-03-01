@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="Fund.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Master.Fund" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <form runat="server" id="Form1" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <%--   <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
@@ -17,7 +18,7 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;เชื้อชาติ</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp; <asp:Literal ID="litPageTitle" runat="server" /></span>
                 </div>
                 <%--               <div class="tools">
                     <a href="#" class="collapse"></a>
@@ -29,67 +30,49 @@
                 <div class="form-body">
                     <%--<h3 class="form-section">บันทึกข้อมูลบริการ</h3>--%>
 
-                                        <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">สำหรับ<span class="required" aria-required="true">* </span></label>
-                                <div class="col-md-9">
-                                    <asp:DropDownList ID="ddlServiceFor" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">รหัส<span class="required" aria-required="true">*</span></label>
-                                <div class="col-md-9">
-                                    <asp:TextBox ID="txtID" runat="server" CssClass="form-control"></asp:TextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">ชื่อ<span class="required" aria-required="true">*</span></label>
-                                <div class="col-md-9">
-                                    <asp:TextBox ID="txtName" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">คำอธิบาย<span class="required" aria-required="true">*</span></label>
-                                <div class="col-md-9">
-                                    <asp:TextBox ID="txtDesc" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
-                                </div>
+                    <!--/span-->
+                </div>
+<%--                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">รหัส<span class="required" aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <asp:TextBox ID="txtID" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-actions">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <asp:Button ID="btnSave" runat="server" class="btn green" Text="Save" OnClick="btnSave_Click" />
-                                        <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"> Cancel</asp:LinkButton>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
+                </div>--%>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">ชื่อ<span class="required" aria-required="true">*</span></label>
+                            <div class="col-md-9">
+                                <asp:TextBox ID="txtName" runat="server" CssClass="form-control" MaxLength="50"></asp:TextBox>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- END FORM-->
+
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-offset-3 col-md-9">
+                                    <asp:Button ID="btnSave" runat="server" class="btn green" Text="Save" OnClick="btnSave_Click" />
+                                    <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"> Cancel</asp:LinkButton>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- END FORM-->
             </div>
         </div>
 

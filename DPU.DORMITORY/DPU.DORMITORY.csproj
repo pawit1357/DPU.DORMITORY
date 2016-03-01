@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -38,14 +40,61 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit">
+      <HintPath>..\DPU.DORMITORY.Biz\Binaries\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="AjaxMin">
+      <HintPath>..\packages\AjaxMin.5.14.5506.26202\lib\net40\AjaxMin.dll</HintPath>
+    </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Shared, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.0.1011, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.1.2.3\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.1.2.3\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.1.2.3\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.1.2.3\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=1.2.3.246, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.1.2.3\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=1.2.3.490, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=1.2.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Log4NetAppender.1.2.6\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SAP.Connecter.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DPU.DORMITORY.Biz\Binaries\SAP.Connecter.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="SAP.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50436dca5c7f7d23">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DPU.DORMITORY.Biz\Binaries\SAP.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="SAP.Connector.Rfc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50436dca5c7f7d23">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DPU.DORMITORY.Biz\Binaries\SAP.Connector.Rfc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -2269,11 +2318,6 @@
     <Content Include="assets\js\highcharts.js" />
     <Content Include="assets\js\jquery.min.js" />
     <Content Include="Default.aspx" />
-    <Content Include="Document\ReadMe.txt" />
-    <Content Include="Services\DashboardService.asmx" />
-    <Content Include="Document\CCF08292013_00000.jpg" />
-    <Content Include="Document\CCF08292013_00002.jpg" />
-    <Content Include="Document\TABLE.txt" />
     <Content Include="ForceChangePassword.aspx" />
     <Content Include="LogOut.aspx" />
     <Content Include="Main.Master" />
@@ -2281,7 +2325,9 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
-    <Content Include="Services\DormDashboardService.asmx" />
+    <Content Include="scripts\ai.0.15.0-build58334.js" />
+    <Content Include="scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Services\ChartService.asmx" />
     <Content Include="View\Account\CreateInvoice.aspx" />
     <Content Include="View\Account\Posting2SAP.aspx" />
     <Content Include="View\Account\SearchRecieve.aspx" />
@@ -2298,6 +2344,7 @@
     <Content Include="View\Master\Building.aspx" />
     <Content Include="View\Master\CustomerType.aspx" />
     <Content Include="View\Master\Fund.aspx" />
+    <Content Include="View\Master\CostType.aspx" />
     <Content Include="View\Master\Nation.aspx" />
     <Content Include="View\Master\Rates.aspx" />
     <Content Include="View\Master\Room.aspx" />
@@ -2305,6 +2352,7 @@
     <Content Include="View\Master\SearchBuilding.aspx" />
     <Content Include="View\Master\SearchCustomerType.aspx" />
     <Content Include="View\Master\SearchFund.aspx" />
+    <Content Include="View\Master\SearchCostType.aspx" />
     <Content Include="View\Master\SearchNation.aspx" />
     <Content Include="View\Master\SearchRates.aspx" />
     <Content Include="View\Master\SearchRoom.aspx" />
@@ -2320,10 +2368,7 @@
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Services\DashboardService.asmx.cs">
-      <DependentUpon>DashboardService.asmx</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="ForceChangePassword.aspx.cs">
       <DependentUpon>ForceChangePassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2361,8 +2406,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Services\DormDashboardService.asmx.cs">
-      <DependentUpon>DormDashboardService.asmx</DependentUpon>
+    <Compile Include="Services\ChartService.asmx.cs">
+      <DependentUpon>ChartService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\Account\CreateInvoice.aspx.cs">
@@ -2477,6 +2522,13 @@
     <Compile Include="View\Master\Fund.aspx.designer.cs">
       <DependentUpon>Fund.aspx</DependentUpon>
     </Compile>
+    <Compile Include="View\Master\CostType.aspx.cs">
+      <DependentUpon>CostType.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Master\CostType.aspx.designer.cs">
+      <DependentUpon>CostType.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\Master\Nation.aspx.cs">
       <DependentUpon>Nation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2526,6 +2578,13 @@
     <Compile Include="View\Master\SearchFund.aspx.designer.cs">
       <DependentUpon>SearchFund.aspx</DependentUpon>
     </Compile>
+    <Compile Include="View\Master\SearchCostType.aspx.cs">
+      <DependentUpon>SearchCostType.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="View\Master\SearchCostType.aspx.designer.cs">
+      <DependentUpon>SearchCostType.aspx</DependentUpon>
+    </Compile>
     <Compile Include="View\Master\SearchNation.aspx.cs">
       <DependentUpon>SearchNation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2556,14 +2615,12 @@
     </Compile>
     <Compile Include="View\Master\SearchService.aspx.cs">
       <DependentUpon>SearchService.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="View\Master\SearchService.aspx.designer.cs">
       <DependentUpon>SearchService.aspx</DependentUpon>
     </Compile>
     <Compile Include="View\Master\Service.aspx.cs">
       <DependentUpon>Service.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="View\Master\Service.aspx.designer.cs">
       <DependentUpon>Service.aspx</DependentUpon>
@@ -2624,9 +2681,9 @@
       <Project>{b0bc5801-575f-4398-a228-06067d63cf9a}</Project>
       <Name>DPU.DORMITORY.Repositories</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DPU.DORMITORY.Utils\DPU.DORMITORY.Utils.csproj">
-      <Project>{e42e6bd2-000c-431b-a17e-ced1a95517a0}</Project>
-      <Name>DPU.DORMITORY.Utils</Name>
+    <ProjectReference Include="..\Gen_Bapizarfi_01_Bapizcmi003\Gen_Bapizarfi_01_Bapizcmi003.csproj">
+      <Project>{db4c887b-ceec-44ac-ba90-81694e9d1167}</Project>
+      <Name>Gen_Bapizarfi_01_Bapizcmi003</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -2715,63 +2772,12 @@
     <Content Include="assets\global\plugins\simple-line-icons\fonts\Simple-Line-Icons.woff" />
     <Content Include="assets\global\plugins\uniform\css\uniform.default.scss" />
     <Content Include="assets\global\plugins\uniform\README.md" />
-    <Content Include="Document\Project_Plan_DPU_20150706.xlsx" />
-    <Content Include="Document\ABC_Betagro_Quatation_20150706.xlsx" />
-    <Content Include="Document\Mockup.docx" />
-    <Content Include="Document\Project Plan DPU.xlsx" />
-    <Content Include="Document\Requirements Program หอพัก DPU.docx" />
-    <Content Include="Document\ขอแจ้งข้อมูลเพิ่มเติมและรายละเอียดที่ขอแก้ไขตามที่ประชุม 21.11.14 ค่ะ.msg" />
-    <Content Include="Document\ข้อมูลหอพัก.docx" />
-    <Content Include="Document\เลขห้องพักหอพัก DPU.xlsx" />
-    <Content Include="Document\ใบส่งมอบงาน ครั้งที่ 1.docx" />
-    <Content Include="Document\Fonts\font\TH Baijam Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Baijam Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Baijam Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Baijam.ttf" />
-    <Content Include="Document\Fonts\font\TH Chakra Petch Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Chakra Petch Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Chakra Petch Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Chakra Petch.ttf" />
-    <Content Include="Document\Fonts\font\TH Charm of AU.ttf" />
-    <Content Include="Document\Fonts\font\TH Charmonman Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Charmonman.ttf" />
-    <Content Include="Document\Fonts\font\TH Fahkwang Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Fahkwang Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Fahkwang Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Fahkwang.ttf" />
-    <Content Include="Document\Fonts\font\TH K2D July8 Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH K2D July8 Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH K2D July8 Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH K2D July8.ttf" />
-    <Content Include="Document\Fonts\font\TH Kodchasal Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Kodchasal Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Kodchasal Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Kodchasal.ttf" />
-    <Content Include="Document\Fonts\font\TH KoHo Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH KoHo Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH KoHo Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH KoHo.ttf" />
-    <Content Include="Document\Fonts\font\TH Krub Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Krub Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Krub Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Krub.ttf" />
-    <Content Include="Document\Fonts\font\TH Mali Grade6 Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Mali Grade6 Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Mali Grade6 Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Mali Grade6.ttf" />
-    <Content Include="Document\Fonts\font\TH Niramit AS Bold Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Niramit AS Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Niramit AS Italic.ttf" />
-    <Content Include="Document\Fonts\font\TH Niramit AS.ttf" />
-    <Content Include="Document\Fonts\font\TH Srisakdi Bold.ttf" />
-    <Content Include="Document\Fonts\font\TH Srisakdi.ttf" />
-    <Content Include="Document\Fonts\font\THSarabun Bold.ttf" />
-    <Content Include="Document\Fonts\font\THSarabun BoldItalic.ttf" />
-    <Content Include="Document\Fonts\font\THSarabun Italic.ttf" />
-    <Content Include="Document\Fonts\font\THSarabun.ttf" />
     <Content Include="packages.config" />
     <Content Include="assets\global\plugins\jquery-easypiechart\LICENSE" />
     <Content Include="assets\global\plugins\jquery-easypiechart\Readme.md" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Properties\PublishProfiles\DORM.pubxml" />
     <Content Include="View\Report\SearchRpt01.aspx" />
     <Content Include="View\Report\SearchRpt02.aspx" />

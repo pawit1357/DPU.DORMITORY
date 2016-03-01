@@ -26,6 +26,9 @@ namespace DPU.DORMITORY.Biz
         public const String LINK_ROOM = APPNAME + "/View/Master/Room.aspx";
         public const String LINK_SEARCH_ROOM = APPNAME + "/View/Master/SearchRoom.aspx";
         public const String LINK_BUILDING = APPNAME + "/View/Master/Building.aspx";
+        public const String LINK_COST_TYPE = APPNAME + "/View/Master/CostType.aspx";
+        public const String LINK_SEARCH_COST_TYPE = APPNAME + "/View/Master/SearchCostType.aspx";
+
         public const String LINK_SEARCH_BUILDING = APPNAME + "/View/Master/SearchBuilding.aspx";
         public const String LINK_CUSTOMER_TYPE = APPNAME + "/View/Master/CustomerType.aspx";
         public const String LINK_SEARCH_CUSTOMER_TYPE = APPNAME + "/View/Master/SearchCustomerType.aspx";
@@ -110,7 +113,13 @@ namespace DPU.DORMITORY.Biz
         UndoRepair = 12,
         Send2SAP = 13,
         ViewLogs = 14,
-        Payment = 15
+        Payment = 15,
+        Update = 16,
+        Cancel = 17,
+        Page =18,
+        ITEM = 19,
+        GROUP = 20,
+        OTHER = 21
     }
 
     public enum MenuRoleActionEnum : int
@@ -122,9 +131,13 @@ namespace DPU.DORMITORY.Biz
 
     public enum RoomStatusEmum : int
     {
+        [Description("ห้องว่าง")]
         Available = 1,
+        [Description("ห้องไม่ว่าง")]
         UnAvailable = 2,
+        [Description("จอง")]
         Reservation = 3,
+        [Description("กำลังทำความสะอาด")]
         RepairRoom = 4
     }
 
@@ -156,5 +169,12 @@ namespace DPU.DORMITORY.Biz
     {
         SELF = 1,
         FUND =2
+    }
+
+    public enum CalculateInvoiceEnum : int
+    {
+        ByPerson = 1,
+        ByRoom = 2
+        
     }
 }

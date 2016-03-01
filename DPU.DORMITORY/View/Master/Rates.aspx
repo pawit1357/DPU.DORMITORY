@@ -1,14 +1,20 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="Rates.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Master.Rates" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<%--<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>--%>
 
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<%--      <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+        <ContentTemplate>--%>
     <form id="Form1" method="post" runat="server" class="form-horizontal">
+<%--        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
+
         <%--<asp:HiddenField ID="hPKID" Value="0" runat="server" />--%>
         <div class="portlet light bordered">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">บันทึกข้อมูลกลุ่มอัตราค่าบริการ</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;
+                        <asp:Literal ID="litPageTitle" runat="server" /></span>
                     <%--<span class="caption-helper">กรอกข้อมูลให้ครบถ้วนในช่อง *</span>--%>
                 </div>
                 <div class="tools">
@@ -33,11 +39,22 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">อาคาร:<span class="required" aria-required="true">*</span></label>
                                 <div class="col-md-6">
-                                    <asp:DropDownList ID="ddlBuildId" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
+                                    <asp:DropDownList ID="ddlBuildId" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlBuildId_SelectedIndexChanged"></asp:DropDownList>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">ประเภทห้อง:<span class="required" aria-required="true">*</span></label>
+                                <div class="col-md-6">
+                                    <asp:DropDownList ID="ddlRoomType" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -71,7 +88,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <asp:Label ID="lbDate" runat="server" CssClass="control-label col-md-3" >ระยะเวลาเริ่มต้น<span class="required" aria-required="true">* </span></asp:Label>
+                                <asp:Label ID="lbDate" runat="server" CssClass="control-label col-md-3">ระยะเวลาเริ่มต้น<span class="required" aria-required="true">* </span></asp:Label>
                                 <div class="col-md-9">
                                     <div class="input-group input-medium date date-picker" data-date="10/2012" data-date-format="dd/mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
                                         <asp:TextBox ID="txtStartDate" runat="server" CssClass="form-control"></asp:TextBox>
@@ -98,70 +115,93 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">คิดค่าห้องตาม:<span class="required" aria-required="true">*</span></label>
+                                <div class="col-md-6">
+                                    <asp:DropDownList ID="ddlCalType" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID">
+                                        <asp:ListItem Value="1">คิดรายบุคคล</asp:ListItem>
+                                        <asp:ListItem Value="2">คิดตามห้อง</asp:ListItem>
+                                    </asp:DropDownList>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- BEGIN PAGE CONTENT-->
-                    <h4 class="form-section">รายการค่าใช้จ่าย</h4>
+                    <h4 class="form-section">กลุ่มค่าใช้จ่าย</h4>
                     <div class="row">
                         <div class="col-md-9">
                             <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="True"
                                 CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCancelingEdit="gvResult_RowCancelingEdit" OnRowDataBound="gvResult_RowDataBound" OnRowDeleting="gvResult_RowDeleting" OnRowEditing="gvResult_RowEditing" OnRowUpdating="gvResult_RowUpdating">
                                 <Columns>
+                                                                    <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                     <asp:TemplateField HeaderText="รายการค่าใช้จ่าย" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litServiceName" runat="server" Text='<%# Eval("SERVICE_NAME")%>' />
                                         </ItemTemplate>
                                         <ItemStyle HorizontalAlign="Left" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Main Tran" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <asp:Literal ID="litMainTran" runat="server" Text='<%# Eval("MAINTRAN")%>' />
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtMainTran" runat="server" Text='<%# Eval("MAINTRAN")%>' CssClass="form-control"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <ItemStyle HorizontalAlign="Center" />
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Subtran" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <asp:Literal ID="litSubtran" runat="server" Text='<%# Eval("SUBTRAN")%>' />
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtSubtran" runat="server" Text='<%# Eval("SUBTRAN")%>' CssClass="form-control"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <ItemStyle HorizontalAlign="Center" />
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="GL" ItemStyle-HorizontalAlign="Center">
-                                        <ItemTemplate>
-                                            <asp:Literal ID="litGL" runat="server" Text='<%# Eval("GL")%>' />
-                                        </ItemTemplate>
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="txtGL" runat="server" Text='<%# Eval("GL")%>' CssClass="form-control"></asp:TextBox>
-                                        </EditItemTemplate>
-                                        <ItemStyle HorizontalAlign="Center" />
-                                    </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="UNIT" ItemStyle-HorizontalAlign="Center">
+
+                                    <asp:TemplateField HeaderText="จำนวน" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litUnit" runat="server" Text='<%# Eval("UNIT")%>' />
                                         </ItemTemplate>
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="txtUnit" runat="server" Text='<%# Eval("UNIT")%>' CssClass="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtUnit" runat="server" Text='<%# Eval("UNIT")%>' CssClass="form-control" TextMode="Number"></asp:TextBox>
+                      <%--                      <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtendertxtUnit" TargetControlID="txtUnit"
+                                                FilterType="Custom, Numbers" ValidChars=".,-" runat="server" />--%>
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="AMOUNT" ItemStyle-HorizontalAlign="Center">
+                                    <asp:TemplateField HeaderText="จำนวนเงิน" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litAMOUNT" runat="server" Text='<%# Eval("AMOUNT")%>' />
                                         </ItemTemplate>
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="txtAMOUNT" runat="server" Text='<%# Eval("AMOUNT")%>' CssClass="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtAMOUNT" runat="server" Text='<%# Eval("AMOUNT")%>' CssClass="form-control" TextMode="Number"></asp:TextBox>
+                                           <%-- <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtendertxtAMOUNT" TargetControlID="txtAMOUNT"
+                                                FilterType="Custom, Numbers" ValidChars=".,-" runat="server" />--%>
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="VAT" ItemStyle-HorizontalAlign="Center">
+                                    <asp:TemplateField HeaderText="อัตตราภาษี" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litVAT" runat="server" Text='<%# Eval("VAT")%>' />
                                         </ItemTemplate>
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="txtVAT" runat="server" Text='<%# Eval("VAT")%>' CssClass="form-control"></asp:TextBox>
+                                            <asp:TextBox ID="txtVAT" runat="server" Text='<%# Eval("VAT")%>' CssClass="form-control" TextMode="Number"></asp:TextBox>
+                            <%--                <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtendertxtVAT" TargetControlID="txtVAT"
+                                                FilterType="Custom, Numbers" ValidChars=".,-" runat="server" />--%>
+                                        </EditItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
+
+                                    <asp:TemplateField HeaderText="Main Trans." ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Literal ID="litMainTrans" runat="server" Text='<%# Eval("MAIN_TRANS")%>' />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtMainTrans" runat="server" Text='<%# Eval("MAIN_TRANS")%>' CssClass="form-control" TextMode="Number"></asp:TextBox>
+                            <%--                <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtendertxtVAT" TargetControlID="txtVAT"
+                                                FilterType="Custom, Numbers" ValidChars=".,-" runat="server" />--%>
+                                        </EditItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" />
+                                    </asp:TemplateField>
+
+                                    <asp:TemplateField HeaderText="Sub Trans." ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:Literal ID="litSubTrans" runat="server" Text='<%# Eval("SUB_TRANS")%>' />
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:TextBox ID="txtSubTrans" runat="server" Text='<%# Eval("SUB_TRANS")%>' CssClass="form-control" TextMode="Number"></asp:TextBox>
+                            <%--                <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtendertxtVAT" TargetControlID="txtVAT"
+                                                FilterType="Custom, Numbers" ValidChars=".,-" runat="server" />--%>
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                     </asp:TemplateField>
@@ -230,7 +270,8 @@
         </div>
     </form>
 
-
+   <%--         </ContentTemplate>
+          </asp:UpdatePanel>--%>
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
     <script src="<%= ResolveUrl("~/assets/global/plugins/jquery.min.js") %>" type="text/javascript"></script>
     <!-- END PAGE LEVEL SCRIPTS -->

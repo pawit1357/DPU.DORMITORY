@@ -115,6 +115,24 @@ namespace DPU.DORMITORY.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ไม่พบห้องที่่ระบุ.
+        /// </summary>
+        internal static string MSG_NO_ROOM {
+            get {
+                return ResourceManager.GetString("MSG_NO_ROOM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ไม่พบเลขทะเบียน นักศึกษาใน SAP.
+        /// </summary>
+        internal static string MSG_NOT_FOUND_STD_INFO_IN_SAP {
+            get {
+                return ResourceManager.GetString("MSG_NOT_FOUND_STD_INFO_IN_SAP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ยังไม่ได้ชำระเงิน.
         /// </summary>
         internal static string MSG_PAYMENT_FALSE {
@@ -129,6 +147,24 @@ namespace DPU.DORMITORY.Properties {
         internal static string MSG_PAYMENT_TRUE {
             get {
                 return ResourceManager.GetString("MSG_PAYMENT_TRUE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to โปรดชำระยอดค้างชำระก่อนทำรายการ.
+        /// </summary>
+        internal static string MSG_PLASE_PAY_REMAIN {
+            get {
+                return ResourceManager.GetString("MSG_PLASE_PAY_REMAIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ระบุต้องที่ต้องการย้าย.
+        /// </summary>
+        internal static string MSG_REQUIRE_MOVE_TO_ROOM {
+            get {
+                return ResourceManager.GetString("MSG_REQUIRE_MOVE_TO_ROOM", resourceCulture);
             }
         }
         

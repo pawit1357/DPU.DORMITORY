@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DPU.DORMITORY.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Objects.SqlClient;
@@ -9,11 +10,14 @@ namespace DPU.DORMITORY.Biz.DataAccess
     [Serializable]
     public partial class TB_ROOM
     {
+        public int[] respoList { get; set; }
 
         public IEnumerable Search()
         {
             using (DORMEntities ctx = new DORMEntities())
             {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
                 var result = from r in ctx.TB_ROOM
                              join b in ctx.TB_M_BUILD on r.BUILD_ID equals b.ID
                              join rt in ctx.TB_M_ROOM_TYPE on r.ROOM_TYPE_ID equals rt.ID
@@ -53,6 +57,11 @@ namespace DPU.DORMITORY.Biz.DataAccess
                 {
                     result = result.Where(x => x.NUMBER.Equals(this.NUMBER));
                 }
+
+                if (respoList != null && respoList.Length > 0)
+                {
+                    result = result.Where(x => respoList.Contains(x.BUILD_ID.Value));
+                }
                 return result.ToList();
             }
         }
@@ -61,6 +70,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
         {
             using (DORMEntities ctx = new DORMEntities())
             {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
                 var result = from r in ctx.TB_ROOM
                              join b in ctx.TB_M_BUILD on r.BUILD_ID equals b.ID
                              join rt in ctx.TB_M_ROOM_TYPE on r.ROOM_TYPE_ID equals rt.ID
@@ -73,12 +84,13 @@ namespace DPU.DORMITORY.Biz.DataAccess
                                   {
                                       ROOM_ID = g.Key,
                                       CNT = (int?)g.Count(),
-                                      AMNT = g.Sum(x => x.ID)
+                                      AMNT = g.Sum(x => x.ID),
+                                      STAY_ALONE_STATUS = g.FirstOrDefault().STAY_ALONE
                                   }) on r.ID equals sub.ROOM_ID into subG
                              from personCount in subG.DefaultIfEmpty()
                              join sub1 in
                                  (from rr in ctx.TB_RATES_GROUP_DETAIL
-                                  where rr.SERVICE_ID == 1
+                                  where rr.COST_TYPE_ID == 1
                                   select new
                                   {
                                       rr.RATES_GROUP_ID,
@@ -101,7 +113,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
                                  rg.INSURANCE_AMOUNT,
                                  personCount.CNT,
                                  rentAmout.AMOUNT,
-                                 r.STATUS,
+                                 STATUS = (personCount.STAY_ALONE_STATUS.Value == true)? 2:(personCount.CNT >= r.CUSTOMER_LIMIT) ? 2 : r.STATUS,
                                  r.CUSTOMER_LIMIT
                              };
 
@@ -125,7 +137,15 @@ namespace DPU.DORMITORY.Biz.DataAccess
                 {
                     result = result.Where(x => x.NUMBER.Equals(this.NUMBER));
                 }
-                return result.ToList();
+                if (this.STATUS > 0)
+                {
+                    result = result.Where(x => x.STATUS == this.STATUS);
+                }
+                if (respoList != null && respoList.Length > 0)
+                {
+                    result = result.Where(x => respoList.Contains(x.BUILD_ID.Value));
+                }
+                return result.ToList().OrderBy(x => x.NUMBER);
             }
         }
 
@@ -133,6 +153,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
         {
             using (DORMEntities ctx = new DORMEntities())
             {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
                 var result = from c in ctx.TB_CUSTOMER
                              where c.STATUS == 0
                              group c by c.ROOM_ID into g
@@ -157,6 +179,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
             Boolean hadStdNum = true;
             using (DORMEntities ctx = new DORMEntities())
             {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
                 var result = from c in ctx.TB_CUSTOMER
                              where c.STATUS == 0  //CheckIn status
                              && c.ROOM_ID == this.ID
@@ -176,8 +200,32 @@ namespace DPU.DORMITORY.Biz.DataAccess
             return hadStdNum;
         }
 
-       
 
+     //   public List<TB_CUSTOMER_PAYER> prepareSponsor()
+     //   {
+     //       using (DORMEntities ctx = new DORMEntities())
+     //       {
+     //           var result = from r in ctx.TB_ROOM
+     //                        join s in ctx.TB_M_SERVICE on r.BUILD_ID equals s.BUILD_ID
+     //                        join ct in ctx.TB_M_COST_TYPE on s.COST_ID equals ct.ID
+     //                        select new TB_CUSTOMER_PAYER
+     //                        {
+     //   //ID,
+     // //CUS_ID,
+     // SERVICE_ID =s.ID,
+     // SPONSOR_ID = 0,
+     //SPONSOR_NAME = "";
+     // TERM_OF_PAYMENT_ID =0,
+     // AMOUNT =0,
+     // ROOM_ID =r.ID
+      
+     
+
+     //                        };
+     //           return result.ToList();
+     //       }
+
+     //   }
     }
 
 }

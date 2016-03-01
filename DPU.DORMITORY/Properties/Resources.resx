@@ -132,14 +132,26 @@
   <data name="MSG_MOVEROOM_DATE" xml:space="preserve">
     <value>วันที่ย้ายห้อง</value>
   </data>
+  <data name="MSG_NOT_FOUND_STD_INFO_IN_SAP" xml:space="preserve">
+    <value>ไม่พบเลขทะเบียน นักศึกษาใน SAP</value>
+  </data>
   <data name="MSG_NO_CUSTOMER_IN_ROOM" xml:space="preserve">
     <value>ไม่พบผู้พักในห้อง {0}</value>
+  </data>
+  <data name="MSG_NO_ROOM" xml:space="preserve">
+    <value>ไม่พบห้องที่่ระบุ</value>
   </data>
   <data name="MSG_PAYMENT_FALSE" xml:space="preserve">
     <value>ยังไม่ได้ชำระเงิน</value>
   </data>
   <data name="MSG_PAYMENT_TRUE" xml:space="preserve">
     <value>ชำระเงินแล้ว</value>
+  </data>
+  <data name="MSG_PLASE_PAY_REMAIN" xml:space="preserve">
+    <value>โปรดชำระยอดค้างชำระก่อนทำรายการ</value>
+  </data>
+  <data name="MSG_REQUIRE_MOVE_TO_ROOM" xml:space="preserve">
+    <value>ระบุต้องที่ต้องการย้าย</value>
   </data>
   <data name="MSG_SAVE_FAIL" xml:space="preserve">
     <value>เกิดข้อผิดพลาดในการบันทึกข้อมูล</value>

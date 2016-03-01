@@ -1,0 +1,12 @@
+﻿using System;
+using System.Collections;
+using System.Linq;
+
+namespace DPU.DORMITORY.Biz.DataAccess
+{
+    [Serializable]
+    public partial class TB_M_TERM_OF_PAYMENT
+    {
+    }
+
+}

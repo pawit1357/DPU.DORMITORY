@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using System.Linq;
 using DPU.DORMITORY.Utils;
 using DPU.DORMITORY.Properties;
+using System.Collections.Generic;
 
 namespace DPU.DORMITORY.Web.View.Management
 {
@@ -17,6 +18,11 @@ namespace DPU.DORMITORY.Web.View.Management
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_ROOM> repRoom;
         private Repository<TB_M_BUILD> repBuild;
+
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
+        }
 
         public SearchRoomForRent()
         {
@@ -35,8 +41,11 @@ namespace DPU.DORMITORY.Web.View.Management
             get { return (CommandNameEnum)ViewState[Constants.COMMAND_NAME]; }
             set { ViewState[Constants.COMMAND_NAME] = value; }
         }
-
-        public int PKID { get; set; }
+        public int ROOM_ID
+        {
+            get { return (int)Session[GetType().Name + "ROOM_ID"]; }
+            set { Session[GetType().Name + "ROOM_ID"] = value; }
+        }
 
         public TB_ROOM obj
         {
@@ -44,27 +53,45 @@ namespace DPU.DORMITORY.Web.View.Management
             {
                 TB_ROOM tmp = new TB_ROOM();
                 tmp.BUILD_ID = String.IsNullOrEmpty(ddlBuild.SelectedValue)? 0: Convert.ToInt32(ddlBuild.SelectedValue);
-                tmp.ID = String.IsNullOrEmpty(ddlRoom.SelectedValue) ? 0 : Convert.ToInt32(ddlRoom.SelectedValue);
+                //tmp.ID = String.IsNullOrEmpty(ddlRoom.SelectedValue) ? 0 : Convert.ToInt32(ddlRoom.SelectedValue);
+                tmp.NUMBER = txtRoomNum.Text;
+                tmp.STATUS = String.IsNullOrEmpty(ddlStatus.SelectedValue) ? 0 : Convert.ToInt32(ddlStatus.SelectedValue);
                 return tmp;
             }
         }
 
         private void initialPage()
         {
-            searchResult = obj.SearchForRent();
+
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
+            ddlBuild.DataBind();
+            if (build != null && build.Count > 1)
+            {
+                ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+            //else
+            //{
+            //    int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+            //    ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList().OrderBy(x=>x.NUMBER);
+            //    ddlRoom.DataBind();
+            //    ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            //}
+
+
+
+            foreach (RoomStatusEmum r in Enum.GetValues(typeof(RoomStatusEmum)))
+            {
+                ListItem item = new ListItem(Constants.GetEnumDescription(r) , Convert.ToInt32(r)+"");
+                ddlStatus.Items.Add(item);
+            }
+            ddlStatus.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            //
+            //pSearchResult.Visible = false;
+            
+          
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
-
-            ddlBuild.DataSource = repBuild.Table.ToList();
-            ddlBuild.DataBind();
-            ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
-
-
-            ddlRoom.DataSource = repRoom.Table.ToList();
-            ddlRoom.DataBind();
-            ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -97,10 +124,9 @@ namespace DPU.DORMITORY.Web.View.Management
         {
             CommandNameEnum cmd = (CommandNameEnum)Enum.Parse(typeof(CommandNameEnum), e.CommandName, true);
             this.CommandName = cmd;
-            this.PKID = int.Parse(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[0]);
-
+            this.ROOM_ID = int.Parse(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[0]);
             int customerInRoom = (!String.IsNullOrEmpty(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[1])) ? int.Parse(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[1]) : 0;
-            TB_ROOM _room = repRoom.Table.Where(x => x.ID == this.PKID).FirstOrDefault();
+            TB_ROOM _room = repRoom.Table.Where(x => x.ID == this.ROOM_ID).FirstOrDefault();
             switch (cmd)
             {
                 case CommandNameEnum.Edit:
@@ -250,24 +276,28 @@ namespace DPU.DORMITORY.Web.View.Management
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
             gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            if (gvResult.Rows.Count > 0)
+            {
+                pSearchResult.Visible = true;
+            }
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             ddlBuild.SelectedIndex = 0;
-            ddlRoom.SelectedIndex = 0;
+            //ddlRoom.SelectedIndex = 0;
             searchResult = obj.SearchForRent();
         }
 
         protected void ddlBuild_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
-            {
-                int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
-                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
-                ddlRoom.DataBind();
-                ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
-            }
+            //if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
+            //{
+            //    int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+            //    ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList().OrderBy(x => x.NUMBER);
+            //    ddlRoom.DataBind();
+            //    ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            //}
         }
 
 

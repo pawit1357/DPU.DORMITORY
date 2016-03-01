@@ -16,17 +16,13 @@ namespace DPU.DORMITORY.Biz.DataAccess
     {
         public int ID { get; set; }
         public int INVOICE_ID { get; set; }
-        public Nullable<int> SERVICE_ID { get; set; }
+        public Nullable<int> COST_TYPE_ID { get; set; }
+        public Nullable<int> CUS_ID { get; set; }
+        public Nullable<int> SPONSOR_ID { get; set; }
         public Nullable<decimal> AMOUNT { get; set; }
-        public Nullable<int> PAY_BY { get; set; }
-        public Nullable<decimal> PAY_AMOUT { get; set; }
-        public Nullable<int> COMPANY { get; set; }
-        public Nullable<int> BA { get; set; }
-        public Nullable<int> PROFIT_CTR { get; set; }
-        public Nullable<int> MAIN_TRANS { get; set; }
-        public Nullable<int> SUB_TRANS { get; set; }
+        public string REMARK { get; set; }
     
         public virtual TB_INVOICE TB_INVOICE { get; set; }
-        public virtual TB_M_SERVICE TB_M_SERVICE { get; set; }
+        public virtual TB_M_COST_TYPE TB_M_COST_TYPE { get; set; }
     }
 }

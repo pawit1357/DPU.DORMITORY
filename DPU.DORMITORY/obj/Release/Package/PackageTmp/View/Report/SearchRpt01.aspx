@@ -41,6 +41,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -55,6 +56,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">ภาษา:</label>
+                                <div class="col-md-6">
+                                    <div class="input-group" style="text-align: left">
+                                        <asp:DropDownList ID="ddlLang" runat="server" class="select2_category form-control" DataTextField="NAME" DataValueField="ID">
+                                            <asp:ListItem Value="1">ไทย</asp:ListItem>
+                                            <asp:ListItem Value="2">อังกฤษ</asp:ListItem>
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="form-actions">
                         <div class="row">

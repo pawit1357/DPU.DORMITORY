@@ -14,11 +14,11 @@ namespace DPU.DORMITORY.Web.View.Master
     {
 
         private UnitOfWork unitOfWork = new UnitOfWork();
-        private Repository<TB_M_FUND> rep;
+        private Repository<TB_M_SPONSOR> rep;
         private Repository<TB_M_SERVICE> repService;
         public SearchFund()
         {
-            rep = unitOfWork.Repository<TB_M_FUND>();
+            rep = unitOfWork.Repository<TB_M_SPONSOR>();
             repService = unitOfWork.Repository<TB_M_SERVICE>();
         }
 
@@ -36,14 +36,27 @@ namespace DPU.DORMITORY.Web.View.Master
 
         public int PKID { get; set; }
 
+        public TB_M_SPONSOR obj
+        {
+            get
+            {
+                TB_M_SPONSOR tmp = new TB_M_SPONSOR();
+                tmp.NAME = txtName.Text;
+                return tmp;
+            }
+        }
+
         private void initialPage()
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
+
             BindingData();
         }
 
         private void BindingData()
         {
-            gvResult.DataSource = rep.Table.ToList();
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
             gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
@@ -109,19 +122,30 @@ namespace DPU.DORMITORY.Web.View.Master
             {
                 Literal _litServiceFor = (Literal)e.Row.FindControl("litServiceFor");
 
-                if (_litServiceFor != null)
-                {
-                    if (!String.IsNullOrEmpty(_litServiceFor.Text))
-                    {
-                        int sid = Convert.ToInt32(_litServiceFor.Text);
-                        TB_M_SERVICE _service = repService.Table.Where(x => x.ID == sid).FirstOrDefault();
-                        if (_service != null)
-                        {
-                            _litServiceFor.Text = _service.NAME;
-                        }
-                    }
-                }
+                //if (_litServiceFor != null)
+                //{
+                //    if (!String.IsNullOrEmpty(_litServiceFor.Text))
+                //    {
+                //        int sid = Convert.ToInt32(_litServiceFor.Text);
+                //        TB_M_SERVICE _service = repService.Table.Where(x => x.ID == sid).FirstOrDefault();
+                //        if (_service != null)
+                //        {
+                //            //_litServiceFor.Text = _service.NAME;
+                //        }
+                //    }
+                //}
             }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            BindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtName.Text = string.Empty;
+            BindingData();
         }
     }
 }

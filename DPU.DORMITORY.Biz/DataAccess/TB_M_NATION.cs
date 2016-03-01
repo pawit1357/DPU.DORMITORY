@@ -22,6 +22,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public int ID { get; set; }
         public string CODE { get; set; }
         public string NAME { get; set; }
+        public string NAME_EN { get; set; }
     
         public virtual ICollection<TB_CUSTOMER_PROFILE> TB_CUSTOMER_PROFILE { get; set; }
     }

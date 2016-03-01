@@ -3,3 +3,8 @@ C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.csprojResolveAssemblyReference.cache
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.dll
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\obj\Debug\DPU.DORMITORY.Utils.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Biz.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Repositories.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\EntityFramework.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Biz.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Utils\bin\Debug\DPU.DORMITORY.Repositories.pdb

@@ -16,15 +16,16 @@ namespace DPU.DORMITORY.Biz.DataAccess
     {
         public int ID { get; set; }
         public int RATES_GROUP_ID { get; set; }
-        public Nullable<int> SERVICE_ID { get; set; }
-        public Nullable<int> MAINTRAN { get; set; }
-        public Nullable<int> SUBTRAN { get; set; }
-        public Nullable<int> GL { get; set; }
+        public Nullable<int> COST_TYPE_ID { get; set; }
         public Nullable<int> UNIT { get; set; }
         public Nullable<decimal> AMOUNT { get; set; }
         public Nullable<int> VAT { get; set; }
+        public string REMARK { get; set; }
+        public Nullable<int> MAIN_TRANS { get; set; }
+        public Nullable<int> SUB_TRANS { get; set; }
+        public Nullable<int> GL_ACCOUNT { get; set; }
     
-        public virtual TB_M_SERVICE TB_M_SERVICE { get; set; }
+        public virtual TB_M_COST_TYPE TB_M_COST_TYPE { get; set; }
         public virtual TB_RATES_GROUP TB_RATES_GROUP { get; set; }
     }
 }

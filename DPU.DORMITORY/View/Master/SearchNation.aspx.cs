@@ -35,6 +35,15 @@ namespace DPU.DORMITORY.Web.View.Master
 
         public int PKID { get; set; }
 
+        public TB_M_NATION obj
+        {
+            get
+            {
+                TB_M_NATION tmp = new TB_M_NATION();
+                tmp.NAME = txtName.Text;
+                return tmp;
+            }
+        }
         private void initialPage()
         {
             BindingData();
@@ -42,13 +51,16 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private void BindingData()
         {
-            gvResult.DataSource = rep.Table.ToList();
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
             gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
         }
         protected void Page_Load(object sender, EventArgs e)
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
+
             if (!Page.IsPostBack)
             {
                 initialPage();
@@ -101,5 +113,16 @@ namespace DPU.DORMITORY.Web.View.Master
             }
         }
         #endregion
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            BindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtName.Text = string.Empty;
+            BindingData();
+        }
     }
 }

@@ -16,6 +16,8 @@ namespace DPU.DORMITORY.Repositories
         public Repository(EFDbContext context)
         {
             this.context = context;
+            this.context.Configuration.LazyLoadingEnabled = false;
+            this.context.Configuration.ProxyCreationEnabled = false;
         }
 
         public T GetById(object id)
@@ -23,7 +25,7 @@ namespace DPU.DORMITORY.Repositories
             return this.Entities.Find(id);
         }
 
-        public void Insert(T entity)
+        public T Insert(T entity)
         {
             try
             {
@@ -33,6 +35,7 @@ namespace DPU.DORMITORY.Repositories
                 }
                 this.Entities.Add(entity);
                 this.context.SaveChanges();
+                return entity;
             }
             catch (DbEntityValidationException dbEx)
             {

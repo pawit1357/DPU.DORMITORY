@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,6 +38,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Binaries\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="SAP.Connecter.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\SAP.Connecter.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="SAP.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50436dca5c7f7d23">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\SAP.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="SAP.Connector.Rfc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=50436dca5c7f7d23">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Binaries\SAP.Connector.Rfc.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -46,6 +59,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,10 +67,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UserRoleBiz.cs" />
+    <Compile Include="SponsorBiz.cs" />
+    <Compile Include="DataAccess\TB_M_COST_TYPE.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\TB_M_SERVICE.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\TB_M_TERM_OF_PAYMENT.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CostTypeBiz.cs" />
+    <Compile Include="Extenders.cs" />
+    <Compile Include="PivotTable.cs" />
+    <Compile Include="ReportObjects\RptRecieve.cs">
+      <DependentUpon>RptRecieve.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ReportObjects\RptSummary_Elec_Water.cs">
+      <DependentUpon>RptSummary_Elec_Water.rpt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <SubType>Component</SubType>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SAPBiz.cs" />
+    <Compile Include="TermOfPayment.cs" />
     <Compile Include="BuildBiz.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerFundBiz.cs" />
+    <Compile Include="CustomUtils.cs" />
     <Compile Include="DataAccess\MENU.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -66,7 +109,7 @@
     <Compile Include="DataAccess\TB_CUSTOMER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataAccess\TB_CUSTOMER_FUND.cs">
+    <Compile Include="DataAccess\TB_CUSTOMER_PAYER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="DataAccess\TB_CUSTOMER_PROFILE.cs">
@@ -84,16 +127,13 @@
     <Compile Include="DataAccess\TB_M_CUSTOMER_TYPE.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataAccess\TB_M_FUND.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataAccess\TB_M_NATION.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="DataAccess\TB_M_ROOM_TYPE.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataAccess\TB_M_SERVICE.cs">
+    <Compile Include="DataAccess\TB_M_SPONSOR.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="DataAccess\TB_M_TITLE.cs">
@@ -126,6 +166,8 @@
     <Compile Include="DataAccess\USERS_ROLE.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="DormUtils.cs" />
+    <Compile Include="MessageBox.cs" />
     <Compile Include="ReportBiz.cs" />
     <Compile Include="ReportObjects\RptSummary_2.cs">
       <DependentUpon>RptSummary_2.rpt</DependentUpon>
@@ -145,8 +187,8 @@
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ReportObjects\RptRecieve.cs">
-      <DependentUpon>RptRecieve.rpt</DependentUpon>
+    <Compile Include="ReportObjects\_RptRecieve.cs">
+      <DependentUpon>_RptRecieve.rpt</DependentUpon>
       <AutoGen>True</AutoGen>
       <SubType>Component</SubType>
       <DesignTime>True</DesignTime>
@@ -214,6 +256,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -224,14 +267,31 @@
       <Project>{b0bc5801-575f-4398-a228-06067d63cf9a}</Project>
       <Name>DPU.DORMITORY.Repositories</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Gen_Bapizarfi_01_Bapizcmi003\Gen_Bapizarfi_01_Bapizcmi003.csproj">
+      <Project>{db4c887b-ceec-44ac-ba90-81694e9d1167}</Project>
+      <Name>Gen_Bapizarfi_01_Bapizcmi003</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Binaries\AjaxControlToolkit.dll" />
     <Content Include="Binaries\EntityFramework.dll" />
+    <Content Include="Binaries\librfc32.dll" />
+    <Content Include="Binaries\SAP.Connecter.Net.dll" />
+    <Content Include="Binaries\SAP.Connector.dll" />
+    <Content Include="Binaries\SAP.Connector.Rfc.dll" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SLCM\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ReportObjects\RptRecieve.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptRecieve.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReportObjects\RptSummary_Elec_Water.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>RptSummary_Elec_Water.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ReportObjects\RptSummary_2.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RptSummary_2.cs</LastGenOutput>
@@ -244,9 +304,9 @@
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>RptSummary.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportObjects\RptRecieve.rpt">
+    <EmbeddedResource Include="ReportObjects\_RptRecieve.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptRecieve.cs</LastGenOutput>
+      <LastGenOutput>_RptRecieve.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportObjects\RptInvoice.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

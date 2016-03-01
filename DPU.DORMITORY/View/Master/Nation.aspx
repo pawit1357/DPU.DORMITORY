@@ -17,7 +17,7 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;เชื้อชาติ</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp; <asp:Literal ID="litPageTitle" runat="server" /></span>
                 </div>
                 <%--               <div class="tools">
                     <a href="#" class="collapse"></a>
@@ -28,7 +28,7 @@
 
                 <div class="form-body">
                     <%--<h3 class="form-section">บันทึกข้อมูลบริการ</h3>--%>
-                    <div class="row">
+<%--                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-3">รหัส<span class="required" aria-required="true">*</span></label>
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--%>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -48,7 +48,16 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">ชื่อ (อังกฤษ)<span class="required" aria-required="true">*</span></label>
+                                <div class="col-md-9">
+                                    <asp:TextBox ID="txtNameEn" runat="server" CssClass="form-control" MaxLength="10"></asp:TextBox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-6">

@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="portlet-body">
-                    <div id="container1" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+<%--                    <div id="container1" style="min-width: 400px; height: 400px; margin: 0 auto"></div>--%>
 
                     <%--                    <div id="site_statistics_loading">
                         <img src="../../assets/admin/layout/img/loading.gif" alt="loading" />
@@ -32,6 +32,7 @@
                         </div>
                     </div>--%>
                 </div>
+
             </div>
             <!-- END PORTLET-->
         </div>
@@ -48,7 +49,7 @@
             $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
-                url: "Services/DormDashboardService.asmx/FruitAnalysis",
+                url: "/Services/ChartService.asmx/FruitAnalysis",
                 data: "{}",
                 dataType: "json",
                 success: function (Result) {
@@ -63,7 +64,7 @@
                     DreawChart(data);
                 },
                 error: function (Result) {
-                    alert("Error");
+                    //alert("Error");
                 }
             });
 

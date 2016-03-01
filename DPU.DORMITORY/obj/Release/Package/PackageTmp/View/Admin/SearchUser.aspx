@@ -15,11 +15,60 @@
                         </div>
                     </div>
                     <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">ชื่อ:</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">สกุล:</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:TextBox ID="txtSurname" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">เบอร์ติดต่อ:</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:TextBox ID="txtPhone" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <asp:LinkButton ID="btnSearch" runat="server" class="btn green" OnClick="btnSearch_Click"><i class="icon-search"></i> Search</asp:LinkButton>
+                                            <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"><i class="icon-refresh"></i> Cancel</asp:LinkButton>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                        <br />
                         <!-- BEGIN FORM-->
                         <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False"
-                            CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="USER_ID" OnRowCommand="gvResult_RowCommand" OnRowDeleting="gvResult_RowDeleting">
+                            CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="USER_ID" OnRowCommand="gvResult_RowCommand" OnRowDeleting="gvResult_RowDeleting" OnRowDataBound="gvResult_RowDataBound">
                             <Columns>
-                                <asp:TemplateField HeaderText="#" ItemStyle-HorizontalAlign="Center">
+                                <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <%# Container.DataItemIndex + 1 %>
                                     </ItemTemplate>
@@ -31,10 +80,20 @@
                                 <asp:BoundField HeaderText="นามสกุล" DataField="LAST_NAME" ItemStyle-HorizontalAlign="Left" SortExpression="LAST_NAME" />
                                 <asp:BoundField HeaderText="อีเมล์" DataField="EMAIL_ADDRESS" ItemStyle-HorizontalAlign="Left" SortExpression="EMAIL_ADDRESS" />
                                 <asp:BoundField HeaderText="เบอร์ติดต่อ" DataField="PHONE_NO" ItemStyle-HorizontalAlign="Left" SortExpression="PHONE_NO" />
+                                <asp:TemplateField HeaderText="สถานะ">
+                                    <ItemTemplate>
+                                        <asp:Literal ID="litStatus" runat="server" Text='<%# Eval("IS_ACTIVE")%>'></asp:Literal>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="หอที่รับผิดชอบ">
+                                    <ItemTemplate>
+                                        <asp:Literal ID="litResp" runat="server" Text='<%# Eval("RESPONSIBLE_BUIDING")%>'></asp:Literal>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
+                                <%--                                <asp:BoundField HeaderText="สถานะ" DataField="IS_ACTIVE" ItemStyle-HorizontalAlign="Center" SortExpression="IS_ACTIVE" />--%>
                                 <asp:BoundField HeaderText="ล็อคอินครั้งสุดท้าย" DataField="LAST_SIGN_IN_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="LAST_SIGN_IN_DATE" DataFormatString="{0:dd-MM-yyyy HH:mm:ss}" />
                                 <asp:BoundField HeaderText="วันที่สร้าง" DataField="CREATE_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="CREATE_DATE" DataFormatString="{0:dd-MM-yyyy}" />
 
-                                <asp:BoundField HeaderText="สถานะ" DataField="IS_ACTIVE" ItemStyle-HorizontalAlign="Center" SortExpression="IS_ACTIVE" />
 
                                 <asp:TemplateField HeaderText="">
                                     <ItemTemplate>
@@ -68,7 +127,9 @@
             // begin: third table
             table.dataTable({
                 // set the initial value
-                "pageLength": 10,
+                "pageLength": 50,
+                "searching": false,
+                "paging": true
             });
 
         });

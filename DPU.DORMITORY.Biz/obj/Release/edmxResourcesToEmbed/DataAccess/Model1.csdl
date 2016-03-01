@@ -4,16 +4,18 @@
     <EntitySet Name="MENUs" EntityType="DORMModel.MENU" />
     <EntitySet Name="MENU_ROLE" EntityType="DORMModel.MENU_ROLE" />
     <EntitySet Name="TB_CUSTOMER" EntityType="DORMModel.TB_CUSTOMER" />
-    <EntitySet Name="TB_CUSTOMER_FUND" EntityType="DORMModel.TB_CUSTOMER_FUND" />
+    <EntitySet Name="TB_CUSTOMER_PAYER" EntityType="DORMModel.TB_CUSTOMER_PAYER" />
     <EntitySet Name="TB_CUSTOMER_PROFILE" EntityType="DORMModel.TB_CUSTOMER_PROFILE" />
     <EntitySet Name="TB_INVOICE" EntityType="DORMModel.TB_INVOICE" />
     <EntitySet Name="TB_INVOICE_DETAIL" EntityType="DORMModel.TB_INVOICE_DETAIL" />
     <EntitySet Name="TB_M_BUILD" EntityType="DORMModel.TB_M_BUILD" />
+    <EntitySet Name="TB_M_COST_TYPE" EntityType="DORMModel.TB_M_COST_TYPE" />
     <EntitySet Name="TB_M_CUSTOMER_TYPE" EntityType="DORMModel.TB_M_CUSTOMER_TYPE" />
-    <EntitySet Name="TB_M_FUND" EntityType="DORMModel.TB_M_FUND" />
     <EntitySet Name="TB_M_NATION" EntityType="DORMModel.TB_M_NATION" />
     <EntitySet Name="TB_M_ROOM_TYPE" EntityType="DORMModel.TB_M_ROOM_TYPE" />
     <EntitySet Name="TB_M_SERVICE" EntityType="DORMModel.TB_M_SERVICE" />
+    <EntitySet Name="TB_M_SPONSOR" EntityType="DORMModel.TB_M_SPONSOR" />
+    <EntitySet Name="TB_M_TERM_OF_PAYMENT" EntityType="DORMModel.TB_M_TERM_OF_PAYMENT" />
     <EntitySet Name="TB_M_TITLE" EntityType="DORMModel.TB_M_TITLE" />
     <EntitySet Name="TB_RATES_GROUP" EntityType="DORMModel.TB_RATES_GROUP" />
     <EntitySet Name="TB_RATES_GROUP_DETAIL" EntityType="DORMModel.TB_RATES_GROUP_DETAIL" />
@@ -28,10 +30,6 @@
       <End Role="MENU" EntitySet="MENUs" />
       <End Role="MENU_ROLE" EntitySet="MENU_ROLE" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_CUSTOMER" Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_CUSTOMER">
-      <End Role="TB_CUSTOMER" EntitySet="TB_CUSTOMER" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
-    </AssociationSet>
     <AssociationSet Name="FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE" Association="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE">
       <End Role="TB_CUSTOMER" EntitySet="TB_CUSTOMER" />
       <End Role="TB_CUSTOMER_PROFILE" EntitySet="TB_CUSTOMER_PROFILE" />
@@ -40,13 +38,17 @@
       <End Role="TB_M_CUSTOMER_TYPE" EntitySet="TB_M_CUSTOMER_TYPE" />
       <End Role="TB_CUSTOMER" EntitySet="TB_CUSTOMER" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_M_FUND" Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_FUND">
-      <End Role="TB_M_FUND" EntitySet="TB_M_FUND" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE" Association="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_M_SERVICE" Association="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR" Association="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR">
+      <End Role="TB_M_SPONSOR" EntitySet="TB_M_SPONSOR" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_ROOM" Association="DORMModel.FK_TB_CUSTOMER_PAYER_TB_ROOM">
+      <End Role="TB_ROOM" EntitySet="TB_ROOM" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_CUSTOMER_PROFILE_TB_M_NATION" Association="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_M_NATION">
       <End Role="TB_M_NATION" EntitySet="TB_M_NATION" />
@@ -56,9 +58,13 @@
       <End Role="TB_INVOICE" EntitySet="TB_INVOICE" />
       <End Role="TB_INVOICE_DETAIL" EntitySet="TB_INVOICE_DETAIL" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_INVOICE_DETAIL_TB_M_SERVICE" Association="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
+    <AssociationSet Name="FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE" Association="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
       <End Role="TB_INVOICE_DETAIL" EntitySet="TB_INVOICE_DETAIL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TB_M_SERVICE_TB_M_BUILD" Association="DORMModel.FK_TB_M_SERVICE_TB_M_BUILD">
+      <End Role="TB_M_BUILD" EntitySet="TB_M_BUILD" />
+      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_RATES_GROUP_TB_M_BUILD" Association="DORMModel.FK_TB_RATES_GROUP_TB_M_BUILD">
       <End Role="TB_M_BUILD" EntitySet="TB_M_BUILD" />
@@ -68,17 +74,17 @@
       <End Role="TB_M_BUILD" EntitySet="TB_M_BUILD" />
       <End Role="TB_ROOM" EntitySet="TB_ROOM" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_M_FUND_TB_M_SERVICE" Association="DORMModel.FK_TB_M_FUND_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
-      <End Role="TB_M_FUND" EntitySet="TB_M_FUND" />
+    <AssociationSet Name="FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE" Association="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
+      <End Role="TB_RATES_GROUP_DETAIL" EntitySet="TB_RATES_GROUP_DETAIL" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TB_RATES_GROUP_TB_M_ROOM_TYPE" Association="DORMModel.FK_TB_RATES_GROUP_TB_M_ROOM_TYPE">
+      <End Role="TB_M_ROOM_TYPE" EntitySet="TB_M_ROOM_TYPE" />
+      <End Role="TB_RATES_GROUP" EntitySet="TB_RATES_GROUP" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_ROOM_TB_M_ROOM_TYPE" Association="DORMModel.FK_TB_ROOM_TB_M_ROOM_TYPE">
       <End Role="TB_M_ROOM_TYPE" EntitySet="TB_M_ROOM_TYPE" />
       <End Role="TB_ROOM" EntitySet="TB_ROOM" />
-    </AssociationSet>
-    <AssociationSet Name="FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE" Association="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
-      <End Role="TB_RATES_GROUP_DETAIL" EntitySet="TB_RATES_GROUP_DETAIL" />
     </AssociationSet>
     <AssociationSet Name="FK_USERS_TB_M_TITLE" Association="DORMModel.FK_USERS_TB_M_TITLE">
       <End Role="TB_M_TITLE" EntitySet="TB_M_TITLE" />
@@ -170,21 +176,24 @@
     <Property Name="STD_STATUS" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="HAS_STDNUM" Type="Boolean" />
     <Property Name="PAYER" Type="Boolean" />
-    <NavigationProperty Name="TB_CUSTOMER_FUND" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_CUSTOMER" FromRole="TB_CUSTOMER" ToRole="TB_CUSTOMER_FUND" />
+    <Property Name="STAY_ALONE" Type="Boolean" />
     <NavigationProperty Name="TB_CUSTOMER_PROFILE" Relationship="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE" FromRole="TB_CUSTOMER" ToRole="TB_CUSTOMER_PROFILE" />
     <NavigationProperty Name="TB_M_CUSTOMER_TYPE" Relationship="DORMModel.FK_TB_CUSTOMER_TB_M_CUSTOMER_TYPE" FromRole="TB_CUSTOMER" ToRole="TB_M_CUSTOMER_TYPE" />
   </EntityType>
-  <EntityType Name="TB_CUSTOMER_FUND">
+  <EntityType Name="TB_CUSTOMER_PAYER">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CUS_ID" Type="Int32" />
-    <Property Name="FUND_ID" Type="Int32" />
-    <Property Name="FOR_SERVICE_ID" Type="Int32" />
-    <NavigationProperty Name="TB_CUSTOMER" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_CUSTOMER" FromRole="TB_CUSTOMER_FUND" ToRole="TB_CUSTOMER" />
-    <NavigationProperty Name="TB_M_FUND" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_FUND" FromRole="TB_CUSTOMER_FUND" ToRole="TB_M_FUND" />
-    <NavigationProperty Name="TB_M_SERVICE" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_SERVICE" FromRole="TB_CUSTOMER_FUND" ToRole="TB_M_SERVICE" />
+    <Property Name="CUS_ID" Type="Int32" Nullable="false" />
+    <Property Name="COST_TYPE_ID" Type="Int32" />
+    <Property Name="SPONSOR_ID" Type="Int32" />
+    <Property Name="TERM_OF_PAYMENT_ID" Type="Int32" />
+    <Property Name="AMOUNT" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="ROOM_ID" Type="Int32" />
+    <NavigationProperty Name="TB_M_COST_TYPE" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE" FromRole="TB_CUSTOMER_PAYER" ToRole="TB_M_COST_TYPE" />
+    <NavigationProperty Name="TB_M_SPONSOR" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR" FromRole="TB_CUSTOMER_PAYER" ToRole="TB_M_SPONSOR" />
+    <NavigationProperty Name="TB_ROOM" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_ROOM" FromRole="TB_CUSTOMER_PAYER" ToRole="TB_ROOM" />
   </EntityType>
   <EntityType Name="TB_CUSTOMER_PROFILE">
     <Key>
@@ -209,7 +218,8 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="REF_ID" Type="Int32" />
+    <Property Name="CUS_ID" Type="Int32" />
+    <Property Name="SPONSOR_ID" Type="Int32" />
     <Property Name="POSTING_DATE" Type="DateTime" Precision="3" />
     <Property Name="SAP_DOCNO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="AMOUNT" Type="Decimal" Precision="15" Scale="2" />
@@ -219,9 +229,10 @@
     <Property Name="CREATE_DATE" Type="DateTime" Precision="3" />
     <Property Name="UPDATE_DATE" Type="DateTime" Precision="3" />
     <Property Name="STATUS" Type="Int32" />
-    <Property Name="INVOICE_TYPE" Type="Int32" />
-    <Property Name="OTHER" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="POST_TIME" Type="Int32" />
+    <Property Name="IS_ACTIVE" Type="Boolean" />
+    <Property Name="PAYER_NAME" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="PAYMENT_DATE" Type="DateTime" Precision="3" />
     <NavigationProperty Name="TB_INVOICE_DETAIL" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_INVOICE" FromRole="TB_INVOICE" ToRole="TB_INVOICE_DETAIL" />
   </EntityType>
   <EntityType Name="TB_INVOICE_DETAIL">
@@ -230,23 +241,19 @@
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="INVOICE_ID" Type="Int32" Nullable="false" />
-    <Property Name="SERVICE_ID" Type="Int32" />
+    <Property Name="COST_TYPE_ID" Type="Int32" />
+    <Property Name="CUS_ID" Type="Int32" />
+    <Property Name="SPONSOR_ID" Type="Int32" />
     <Property Name="AMOUNT" Type="Decimal" Precision="15" Scale="2" />
-    <Property Name="PAY_BY" Type="Int32" />
-    <Property Name="PAY_AMOUT" Type="Decimal" Precision="15" Scale="2" />
-    <Property Name="COMPANY" Type="Int32" />
-    <Property Name="BA" Type="Int32" />
-    <Property Name="PROFIT_CTR" Type="Int32" />
-    <Property Name="MAIN_TRANS" Type="Int32" />
-    <Property Name="SUB_TRANS" Type="Int32" />
+    <Property Name="REMARK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="TB_INVOICE" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_INVOICE" FromRole="TB_INVOICE_DETAIL" ToRole="TB_INVOICE" />
-    <NavigationProperty Name="TB_M_SERVICE" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_SERVICE" FromRole="TB_INVOICE_DETAIL" ToRole="TB_M_SERVICE" />
+    <NavigationProperty Name="TB_M_COST_TYPE" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE" FromRole="TB_INVOICE_DETAIL" ToRole="TB_M_COST_TYPE" />
   </EntityType>
   <EntityType Name="TB_M_BUILD">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="BUILD_ID" Type="Int32" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="COMPANY" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
@@ -262,56 +269,74 @@
     <Property Name="ADDRESS_LINE_2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="ADDRESS_LINE_1_EN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="ADDRESS_LINE_2_EN" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TB_M_SERVICE" Relationship="DORMModel.FK_TB_M_SERVICE_TB_M_BUILD" FromRole="TB_M_BUILD" ToRole="TB_M_SERVICE" />
     <NavigationProperty Name="TB_RATES_GROUP" Relationship="DORMModel.FK_TB_RATES_GROUP_TB_M_BUILD" FromRole="TB_M_BUILD" ToRole="TB_RATES_GROUP" />
     <NavigationProperty Name="TB_ROOM" Relationship="DORMModel.FK_TB_ROOM_TB_M_BUILD" FromRole="TB_M_BUILD" ToRole="TB_ROOM" />
+  </EntityType>
+  <EntityType Name="TB_M_COST_TYPE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NAME_EN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TB_CUSTOMER_PAYER" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE" FromRole="TB_M_COST_TYPE" ToRole="TB_CUSTOMER_PAYER" />
+    <NavigationProperty Name="TB_INVOICE_DETAIL" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE" FromRole="TB_M_COST_TYPE" ToRole="TB_INVOICE_DETAIL" />
+    <NavigationProperty Name="TB_RATES_GROUP_DETAIL" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE" FromRole="TB_M_COST_TYPE" ToRole="TB_RATES_GROUP_DETAIL" />
   </EntityType>
   <EntityType Name="TB_M_CUSTOMER_TYPE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="TB_CUSTOMER" Relationship="DORMModel.FK_TB_CUSTOMER_TB_M_CUSTOMER_TYPE" FromRole="TB_M_CUSTOMER_TYPE" ToRole="TB_CUSTOMER" />
-  </EntityType>
-  <EntityType Name="TB_M_FUND">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
-    <Property Name="FOR_SERVICE_ID" Type="Int32" />
-    <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DESCRIPTION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="TB_CUSTOMER_FUND" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_FUND" FromRole="TB_M_FUND" ToRole="TB_CUSTOMER_FUND" />
-    <NavigationProperty Name="TB_M_SERVICE" Relationship="DORMModel.FK_TB_M_FUND_TB_M_SERVICE" FromRole="TB_M_FUND" ToRole="TB_M_SERVICE" />
   </EntityType>
   <EntityType Name="TB_M_NATION">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="CODE" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NAME_EN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="TB_CUSTOMER_PROFILE" Relationship="DORMModel.FK_TB_CUSTOMER_PROFILE_TB_M_NATION" FromRole="TB_M_NATION" ToRole="TB_CUSTOMER_PROFILE" />
   </EntityType>
   <EntityType Name="TB_M_ROOM_TYPE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TB_RATES_GROUP" Relationship="DORMModel.FK_TB_RATES_GROUP_TB_M_ROOM_TYPE" FromRole="TB_M_ROOM_TYPE" ToRole="TB_RATES_GROUP" />
     <NavigationProperty Name="TB_ROOM" Relationship="DORMModel.FK_TB_ROOM_TB_M_ROOM_TYPE" FromRole="TB_M_ROOM_TYPE" ToRole="TB_ROOM" />
   </EntityType>
   <EntityType Name="TB_M_SERVICE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BUILD_ID" Type="Int32" />
+    <Property Name="COST_ID" Type="Int32" />
+    <Property Name="MAIN_TRANS" Type="Int32" />
+    <Property Name="SUB_TRANS" Type="Int32" />
+    <Property Name="GL_ACCOUNT" Type="Int32" />
+    <NavigationProperty Name="TB_M_BUILD" Relationship="DORMModel.FK_TB_M_SERVICE_TB_M_BUILD" FromRole="TB_M_SERVICE" ToRole="TB_M_BUILD" />
+  </EntityType>
+  <EntityType Name="TB_M_SPONSOR">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TB_CUSTOMER_PAYER" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR" FromRole="TB_M_SPONSOR" ToRole="TB_CUSTOMER_PAYER" />
+  </EntityType>
+  <EntityType Name="TB_M_TERM_OF_PAYMENT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
     <Property Name="ID" Type="Int32" Nullable="false" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="NAME_EN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="TB_CUSTOMER_FUND" Relationship="DORMModel.FK_TB_CUSTOMER_FUND_TB_M_SERVICE" FromRole="TB_M_SERVICE" ToRole="TB_CUSTOMER_FUND" />
-    <NavigationProperty Name="TB_INVOICE_DETAIL" Relationship="DORMModel.FK_TB_INVOICE_DETAIL_TB_M_SERVICE" FromRole="TB_M_SERVICE" ToRole="TB_INVOICE_DETAIL" />
-    <NavigationProperty Name="TB_M_FUND" Relationship="DORMModel.FK_TB_M_FUND_TB_M_SERVICE" FromRole="TB_M_SERVICE" ToRole="TB_M_FUND" />
-    <NavigationProperty Name="TB_RATES_GROUP_DETAIL" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE" FromRole="TB_M_SERVICE" ToRole="TB_RATES_GROUP_DETAIL" />
   </EntityType>
   <EntityType Name="TB_M_TITLE">
     <Key>
@@ -327,6 +352,7 @@
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="BUILD_ID" Type="Int32" />
+    <Property Name="ROOM_TYPE_ID" Type="Int32" />
     <Property Name="NAME" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="DESCRIPTION" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="INSURANCE_AMOUNT" Type="Decimal" Precision="15" Scale="2" />
@@ -335,7 +361,9 @@
     <Property Name="UPDATE_BY" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
     <Property Name="CREATE_DATE" Type="DateTime" Precision="0" />
     <Property Name="UPDATE_DATE" Type="DateTime" Precision="0" />
+    <Property Name="CALCULATE_INVOICE_TYPE" Type="Int32" />
     <NavigationProperty Name="TB_M_BUILD" Relationship="DORMModel.FK_TB_RATES_GROUP_TB_M_BUILD" FromRole="TB_RATES_GROUP" ToRole="TB_M_BUILD" />
+    <NavigationProperty Name="TB_M_ROOM_TYPE" Relationship="DORMModel.FK_TB_RATES_GROUP_TB_M_ROOM_TYPE" FromRole="TB_RATES_GROUP" ToRole="TB_M_ROOM_TYPE" />
     <NavigationProperty Name="TB_RATES_GROUP_DETAIL" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_RATES_GROUP" FromRole="TB_RATES_GROUP" ToRole="TB_RATES_GROUP_DETAIL" />
     <NavigationProperty Name="TB_ROOM" Relationship="DORMModel.FK_TB_ROOM_TB_RATES_GROUP" FromRole="TB_RATES_GROUP" ToRole="TB_ROOM" />
   </EntityType>
@@ -345,14 +373,15 @@
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="RATES_GROUP_ID" Type="Int32" Nullable="false" />
-    <Property Name="SERVICE_ID" Type="Int32" />
-    <Property Name="MAINTRAN" Type="Int32" />
-    <Property Name="SUBTRAN" Type="Int32" />
-    <Property Name="GL" Type="Int32" />
+    <Property Name="COST_TYPE_ID" Type="Int32" />
     <Property Name="UNIT" Type="Int32" />
     <Property Name="AMOUNT" Type="Decimal" Precision="15" Scale="2" />
     <Property Name="VAT" Type="Int32" />
-    <NavigationProperty Name="TB_M_SERVICE" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE" FromRole="TB_RATES_GROUP_DETAIL" ToRole="TB_M_SERVICE" />
+    <Property Name="REMARK" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="MAIN_TRANS" Type="Int32" />
+    <Property Name="SUB_TRANS" Type="Int32" />
+    <Property Name="GL_ACCOUNT" Type="Int32" />
+    <NavigationProperty Name="TB_M_COST_TYPE" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE" FromRole="TB_RATES_GROUP_DETAIL" ToRole="TB_M_COST_TYPE" />
     <NavigationProperty Name="TB_RATES_GROUP" Relationship="DORMModel.FK_TB_RATES_GROUP_DETAIL_TB_RATES_GROUP" FromRole="TB_RATES_GROUP_DETAIL" ToRole="TB_RATES_GROUP" />
   </EntityType>
   <EntityType Name="TB_ROOM">
@@ -370,6 +399,7 @@
     <Property Name="CREATE_DATE" Type="DateTime" Precision="0" />
     <Property Name="STATUS" Type="Int32" />
     <Property Name="RATES_GROUP_ID" Type="Int32" />
+    <NavigationProperty Name="TB_CUSTOMER_PAYER" Relationship="DORMModel.FK_TB_CUSTOMER_PAYER_TB_ROOM" FromRole="TB_ROOM" ToRole="TB_CUSTOMER_PAYER" />
     <NavigationProperty Name="TB_M_BUILD" Relationship="DORMModel.FK_TB_ROOM_TB_M_BUILD" FromRole="TB_ROOM" ToRole="TB_M_BUILD" />
     <NavigationProperty Name="TB_M_ROOM_TYPE" Relationship="DORMModel.FK_TB_ROOM_TB_M_ROOM_TYPE" FromRole="TB_ROOM" ToRole="TB_M_ROOM_TYPE" />
     <NavigationProperty Name="TB_RATES_GROUP" Relationship="DORMModel.FK_TB_ROOM_TB_RATES_GROUP" FromRole="TB_ROOM" ToRole="TB_RATES_GROUP" />
@@ -483,18 +513,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_CUSTOMER">
-    <End Type="DORMModel.TB_CUSTOMER" Role="TB_CUSTOMER" Multiplicity="0..1" />
-    <End Type="DORMModel.TB_CUSTOMER_FUND" Role="TB_CUSTOMER_FUND" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TB_CUSTOMER">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="CUS_ID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE">
     <End Type="DORMModel.TB_CUSTOMER" Role="TB_CUSTOMER" Multiplicity="1" />
     <End Type="DORMModel.TB_CUSTOMER_PROFILE" Role="TB_CUSTOMER_PROFILE" Multiplicity="0..1" />
@@ -519,27 +537,39 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_M_FUND">
-    <End Type="DORMModel.TB_M_FUND" Role="TB_M_FUND" Multiplicity="0..1" />
-    <End Type="DORMModel.TB_CUSTOMER_FUND" Role="TB_CUSTOMER_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE">
+    <End Type="DORMModel.TB_M_COST_TYPE" Role="TB_M_COST_TYPE" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_CUSTOMER_PAYER" Role="TB_CUSTOMER_PAYER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_FUND">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="FUND_ID" />
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="COST_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_M_SERVICE">
-    <End Type="DORMModel.TB_M_SERVICE" Role="TB_M_SERVICE" Multiplicity="0..1" />
-    <End Type="DORMModel.TB_CUSTOMER_FUND" Role="TB_CUSTOMER_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR">
+    <End Type="DORMModel.TB_M_SPONSOR" Role="TB_M_SPONSOR" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_CUSTOMER_PAYER" Role="TB_CUSTOMER_PAYER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_SPONSOR">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="FOR_SERVICE_ID" />
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="SPONSOR_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_ROOM">
+    <End Type="DORMModel.TB_ROOM" Role="TB_ROOM" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_CUSTOMER_PAYER" Role="TB_CUSTOMER_PAYER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TB_ROOM">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="ROOM_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -567,15 +597,27 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_INVOICE_DETAIL_TB_M_SERVICE">
-    <End Type="DORMModel.TB_M_SERVICE" Role="TB_M_SERVICE" Multiplicity="0..1" />
+  <Association Name="FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE">
+    <End Type="DORMModel.TB_M_COST_TYPE" Role="TB_M_COST_TYPE" Multiplicity="0..1" />
     <End Type="DORMModel.TB_INVOICE_DETAIL" Role="TB_INVOICE_DETAIL" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="TB_INVOICE_DETAIL">
-        <PropertyRef Name="SERVICE_ID" />
+        <PropertyRef Name="COST_TYPE_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TB_M_SERVICE_TB_M_BUILD">
+    <End Type="DORMModel.TB_M_BUILD" Role="TB_M_BUILD" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_M_SERVICE" Role="TB_M_SERVICE" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TB_M_BUILD">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TB_M_SERVICE">
+        <PropertyRef Name="BUILD_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -603,15 +645,27 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_M_FUND_TB_M_SERVICE">
-    <End Type="DORMModel.TB_M_SERVICE" Role="TB_M_SERVICE" Multiplicity="0..1" />
-    <End Type="DORMModel.TB_M_FUND" Role="TB_M_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE">
+    <End Type="DORMModel.TB_M_COST_TYPE" Role="TB_M_COST_TYPE" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_RATES_GROUP_DETAIL" Role="TB_RATES_GROUP_DETAIL" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_M_FUND">
-        <PropertyRef Name="FOR_SERVICE_ID" />
+      <Dependent Role="TB_RATES_GROUP_DETAIL">
+        <PropertyRef Name="COST_TYPE_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TB_RATES_GROUP_TB_M_ROOM_TYPE">
+    <End Type="DORMModel.TB_M_ROOM_TYPE" Role="TB_M_ROOM_TYPE" Multiplicity="0..1" />
+    <End Type="DORMModel.TB_RATES_GROUP" Role="TB_RATES_GROUP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TB_M_ROOM_TYPE">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TB_RATES_GROUP">
+        <PropertyRef Name="ROOM_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -624,18 +678,6 @@
       </Principal>
       <Dependent Role="TB_ROOM">
         <PropertyRef Name="ROOM_TYPE_ID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE">
-    <End Type="DORMModel.TB_M_SERVICE" Role="TB_M_SERVICE" Multiplicity="0..1" />
-    <End Type="DORMModel.TB_RATES_GROUP_DETAIL" Role="TB_RATES_GROUP_DETAIL" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="TB_RATES_GROUP_DETAIL">
-        <PropertyRef Name="SERVICE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

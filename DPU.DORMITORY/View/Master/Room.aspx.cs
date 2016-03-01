@@ -66,12 +66,15 @@ namespace DPU.DORMITORY.Web.View.Master
                 _tmp.RATES_GROUP_ID = Convert.ToInt32(ddlRateGroupId.SelectedValue);
                 _tmp.CUSTOMER_LIMIT = Convert.ToInt32(txtCustomerLimit.Text);
                 _tmp.STATUS = Convert.ToInt32(RoomStatusEmum.Available);
+                //_tmp.SPLIT_INV_BY_PERSON = cbSplitInvByPerson.Checked;
                 return _tmp;
             }
         }
 
         private void initialPage()
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
+
             SearchRoom prvPage = Page.PreviousPage as SearchRoom;
             this.CommandName = (prvPage == null) ? this.CommandName : prvPage.CommandName;
             this.PKID = (prvPage == null) ? this.PKID : prvPage.PKID;
@@ -123,6 +126,8 @@ namespace DPU.DORMITORY.Web.View.Master
                 ddlRoomType.SelectedValue = _tmp.ROOM_TYPE_ID.ToString();
                 ddlRateGroupId.SelectedValue = _tmp.RATES_GROUP_ID.ToString();
                 txtCustomerLimit.Text = _tmp.CUSTOMER_LIMIT.ToString();
+                //cbSplitInvByPerson.Checked = (_tmp.SPLIT_INV_BY_PERSON == null) ? false : (Boolean)_tmp.SPLIT_INV_BY_PERSON;
+
             }
         }
 
@@ -157,6 +162,7 @@ namespace DPU.DORMITORY.Web.View.Master
                     editModel.ROOM_TYPE_ID = Convert.ToInt32(ddlRoomType.SelectedValue);
                     editModel.RATES_GROUP_ID = Convert.ToInt32(ddlRateGroupId.SelectedValue);
                     editModel.CUSTOMER_LIMIT = Convert.ToInt32(txtCustomerLimit.Text);
+                    //editModel.SPLIT_INV_BY_PERSON = cbSplitInvByPerson.Checked;
                     repRoom.Update(obj);
                     break;
             }

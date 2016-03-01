@@ -31,13 +31,13 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.Label lbCommandName;
         
         /// <summary>
-        /// txtID control.
+        /// litPageTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtID;
+        protected global::System.Web.UI.WebControls.Literal litPageTitle;
         
         /// <summary>
         /// txtName control.
@@ -47,6 +47,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtName;
+        
+        /// <summary>
+        /// txtNameEn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtNameEn;
         
         /// <summary>
         /// btnSave control.

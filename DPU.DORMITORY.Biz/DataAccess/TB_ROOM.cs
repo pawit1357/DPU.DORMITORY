@@ -16,6 +16,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
     {
         public TB_ROOM()
         {
+            this.TB_CUSTOMER_PAYER = new HashSet<TB_CUSTOMER_PAYER>();
             this.TB_ROOM_METER = new HashSet<TB_ROOM_METER>();
         }
     
@@ -31,6 +32,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public Nullable<int> STATUS { get; set; }
         public Nullable<int> RATES_GROUP_ID { get; set; }
     
+        public virtual ICollection<TB_CUSTOMER_PAYER> TB_CUSTOMER_PAYER { get; set; }
         public virtual TB_M_BUILD TB_M_BUILD { get; set; }
         public virtual TB_M_ROOM_TYPE TB_M_ROOM_TYPE { get; set; }
         public virtual TB_RATES_GROUP TB_RATES_GROUP { get; set; }

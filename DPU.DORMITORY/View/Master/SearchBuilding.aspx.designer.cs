@@ -22,6 +22,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
+        /// litPageTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litPageTitle;
+        
+        /// <summary>
         /// lbAdd control.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,42 @@ namespace DPU.DORMITORY.Web.View.Master {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lbAdd;
+        
+        /// <summary>
+        /// txtBuild control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBuild;
+        
+        /// <summary>
+        /// txtDesc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtDesc;
+        
+        /// <summary>
+        /// btnSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnSearch;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCancel;
         
         /// <summary>
         /// gvResult control.

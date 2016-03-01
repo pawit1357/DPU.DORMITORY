@@ -10,20 +10,61 @@
                 <div class="portlet box blue-madison">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-cogs"></i>รายการบัญชีค่าใช้จ่าย
+                            <i class="fa fa-cogs"></i> <asp:Literal ID="litPageTitle" runat="server" />
                         </div>
                         <div class="actions">
                             <asp:LinkButton ID="lbAdd" runat="server" class="btn btn-default btn-sm" OnClick="lbAdd_Click"><i class="icon-pencil"></i> Add</asp:LinkButton>
                         </div>
                     </div>
                     <div class="portlet-body">
+                                            <div class="row">
+                                                                      <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">Profit Center:</label>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="text-align: left">
+                                        <asp:TextBox ID="txtProfitCenter" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">รายการค่าใช้จ่าย:</label>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="text-align: left">
+                                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <asp:LinkButton ID="btnSearch" runat="server" class="btn green" OnClick="btnSearch_Click"><i class="icon-search"></i> Search</asp:LinkButton>
+                                        <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"><i class="icon-refresh"></i> Cancel</asp:LinkButton>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                            </div>
+                        </div>
+                    </div>
                         <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False"
                             CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDeleting="gvResult_RowDeleting" OnPageIndexChanging="gvResult_PageIndexChanging">
                             <Columns>
-                                <asp:BoundField HeaderText="ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID" />
-                                <asp:BoundField HeaderText="ชื่อ" DataField="NAME" ItemStyle-HorizontalAlign="Left" SortExpression="NAME" />
-                                <asp:BoundField HeaderText="ชื่อ(อังกฤษ)" DataField="NAME_EN" ItemStyle-HorizontalAlign="Left" SortExpression="NAME_EN" />
+                                <asp:BoundField HeaderText="Profit Center" DataField="PROFIT_CTR" ItemStyle-HorizontalAlign="Left" SortExpression="PROFIT_CTR" />
+                                <asp:BoundField HeaderText="Building" DataField="BUILD_NAME" ItemStyle-HorizontalAlign="Left" SortExpression="BUILD_NAME" />
+                                <asp:BoundField HeaderText="รายการค่าใช้จ่าย" DataField="NAME" ItemStyle-HorizontalAlign="Left" SortExpression="NAME" />
+                                <asp:BoundField HeaderText="Main Trans." DataField="MAIN_TRANS" ItemStyle-HorizontalAlign="Left" SortExpression="MAIN_TRANS" />
+                                <asp:BoundField HeaderText="Sub Trans." DataField="SUB_TRANS" ItemStyle-HorizontalAlign="Left" SortExpression="SUB_TRANS" />
+<%--                                <asp:BoundField HeaderText="GL ACCOUNT" DataField="GL_ACCOUNT" ItemStyle-HorizontalAlign="Left" SortExpression="GL_ACCOUNT" />--%>
+<%--                                <asp:BoundField HeaderText="Account Name" DataField="ACCOUNT_NAME" ItemStyle-HorizontalAlign="Left" SortExpression="ACCOUNT_NAME" />--%>
+
 
                                 <asp:TemplateField HeaderText="">
                                     <ItemTemplate>
@@ -62,7 +103,9 @@
             // begin: third table
             table.dataTable({
                 // set the initial value
-                "pageLength": 10,
+                "pageLength": 50,
+                "searching": false,
+                "paging": true
             });
 
             $('.select2_category').select2({

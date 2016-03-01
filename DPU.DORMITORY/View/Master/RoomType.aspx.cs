@@ -59,7 +59,7 @@ namespace DPU.DORMITORY.Web.View.Master
             get
             {
                 TB_M_ROOM_TYPE _tmp = new TB_M_ROOM_TYPE();
-                _tmp.ID = Convert.ToInt16(txtID.Text);
+                //_tmp.ID = Convert.ToInt16(txtID.Text);
                 _tmp.NAME = txtName.Text;
                 return _tmp;
             }
@@ -67,6 +67,8 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private void initialPage()
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
+
             SearchRoomType prvPage = Page.PreviousPage as SearchRoomType;
             this.CommandName = (prvPage == null) ? this.CommandName : prvPage.CommandName;
             this.PKID = (prvPage == null) ? this.PKID : prvPage.PKID;
@@ -83,14 +85,14 @@ namespace DPU.DORMITORY.Web.View.Master
                     btnSave.CssClass = Constants.CSS_BUTTON_SAVE;
                     btnCancel.CssClass = Constants.CSS_BUTTON_CANCEL;
                     //Set ReadOnly
-                    txtID.ReadOnly = true;
+                    //txtID.ReadOnly = true;
                     break;
                 case CommandNameEnum.View:
                     fillInData();
                     btnSave.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
                     btnCancel.CssClass = Constants.CSS_BUTTON_CANCEL;
                     //Set ReadOnly
-                    txtID.ReadOnly = true;
+                    //txtID.ReadOnly = true;
                     txtName.ReadOnly = true;
                     break;
             }
@@ -101,7 +103,7 @@ namespace DPU.DORMITORY.Web.View.Master
             TB_M_ROOM_TYPE _tmp = rep.Table.Where(x => x.ID == this.PKID).FirstOrDefault();
             if (_tmp != null)
             {
-                txtID.Text = _tmp.ID.ToString();
+                //txtID.Text = _tmp.ID.ToString();
                 txtName.Text = _tmp.NAME;
             }
         }
@@ -126,20 +128,20 @@ namespace DPU.DORMITORY.Web.View.Master
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            this.PKID = Convert.ToInt32(txtID.Text);
+            //this.PKID = Convert.ToInt32(txtID.Text);
             String errorMessage = String.Empty;
             switch (CommandName)
             {
                 case CommandNameEnum.Add:
-                    Boolean isExistPK = rep.Table.Where(x => x.ID == PKID).Any();
-                    if (!isExistPK)
-                    {
+                    //Boolean isExistPK = rep.Table.Where(x => x.ID == PKID).Any();
+                    //if (!isExistPK)
+                    //{
                         rep.Insert(obj);
-                    }
-                    else
-                    {
-                        errorMessage = String.Format(Resources.MSG_DONT_INSERT_EXIST, txtID.Text);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    errorMessage = String.Format(Resources.MSG_DONT_INSERT_EXIST, txtID.Text);
+                    //}
                     break;
                 case CommandNameEnum.Edit:
                     TB_M_ROOM_TYPE editModel = rep.GetById(this.PKID);

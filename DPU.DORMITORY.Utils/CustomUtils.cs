@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -149,18 +150,38 @@ namespace DPU.DORMITORY.Utils
 
         public static DateTime converFromDDMMYYYY(String _val)
         {
-            //26/01/2015
+            string sysFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+
+            DateTime _date = DateTime.MinValue;
             String[] data = _val.Split('/');
             if (data.Length == 2)
             {
-                return Convert.ToDateTime(String.Format("{0}/{1}/{2}", data[0], DateTime.DaysInMonth(Convert.ToInt32(data[1]), Convert.ToInt32(data[0])), data[1]));
+
+                switch (sysFormat)
+                {
+                    case "dd/MMM/yy":
+                        _date = Convert.ToDateTime(String.Format("{0}/{1}/{2}", DateTime.DaysInMonth(Convert.ToInt32(data[1]), Convert.ToInt32(data[0])), data[1], data[2]));
+                        break;
+                    case "MM/dd/yy":
+                    case "MM/dd/yyyy":
+                        _date = Convert.ToDateTime(String.Format("{0}/{1}/{2}", data[1], DateTime.DaysInMonth(Convert.ToInt32(data[1]), Convert.ToInt32(data[0])), data[2]));
+                        break;
+                }
             }
             else
             {
-                return Convert.ToDateTime(String.Format("{0}/{1}/{2}", data[1], data[0], data[2]));
+                switch (sysFormat)
+                {
+                    case "dd/MMM/yy":
+                        _date = Convert.ToDateTime(String.Format("{0}/{1}/{2}", data[0], data[1], data[2]));
+                        break;
+                    case "MM/dd/yy":
+                    case "MM/dd/yyyy":
+                          _date = Convert.ToDateTime(String.Format("{0}/{1}/{2}", data[1], data[0], data[2]));
+                        break;
+                }
             }
-            
-
+            return _date;
         }
 
         public static string getMachineKey(int argv)
@@ -178,6 +199,10 @@ namespace DPU.DORMITORY.Utils
                 sb.Append(string.Format("{0:X2}", buff[i]));
             return sb.ToString();
 
+        }
+        public static int[] ToIntArray(string value, char separator)
+        {
+            return Array.ConvertAll(value.Split(separator), s => int.Parse(s));
         }
     }
 }

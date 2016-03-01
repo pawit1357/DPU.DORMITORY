@@ -14,21 +14,13 @@ namespace DPU.DORMITORY.Biz.DataAccess
     
     public partial class TB_M_SERVICE
     {
-        public TB_M_SERVICE()
-        {
-            this.TB_CUSTOMER_FUND = new HashSet<TB_CUSTOMER_FUND>();
-            this.TB_INVOICE_DETAIL = new HashSet<TB_INVOICE_DETAIL>();
-            this.TB_M_FUND = new HashSet<TB_M_FUND>();
-            this.TB_RATES_GROUP_DETAIL = new HashSet<TB_RATES_GROUP_DETAIL>();
-        }
-    
         public int ID { get; set; }
-        public string NAME { get; set; }
-        public string NAME_EN { get; set; }
+        public Nullable<int> BUILD_ID { get; set; }
+        public Nullable<int> COST_ID { get; set; }
+        public Nullable<int> MAIN_TRANS { get; set; }
+        public Nullable<int> SUB_TRANS { get; set; }
+        public Nullable<int> GL_ACCOUNT { get; set; }
     
-        public virtual ICollection<TB_CUSTOMER_FUND> TB_CUSTOMER_FUND { get; set; }
-        public virtual ICollection<TB_INVOICE_DETAIL> TB_INVOICE_DETAIL { get; set; }
-        public virtual ICollection<TB_M_FUND> TB_M_FUND { get; set; }
-        public virtual ICollection<TB_RATES_GROUP_DETAIL> TB_RATES_GROUP_DETAIL { get; set; }
+        public virtual TB_M_BUILD TB_M_BUILD { get; set; }
     }
 }

@@ -5755,6 +5755,9 @@ button.close {
   width: auto;
   margin: 10px;
 }
+.modal-wide .modal-dialog {
+  width: 80%; /* or whatever you wish */
+}
 .modal-content {
   position: relative;
   background-color: #fff;
@@ -5824,7 +5827,7 @@ button.close {
 }
 @media (min-width: 768px) {
   .modal-dialog {
-    width: 600px;
+    width: 700px;
     margin: 30px auto;
   }
   .modal-content {

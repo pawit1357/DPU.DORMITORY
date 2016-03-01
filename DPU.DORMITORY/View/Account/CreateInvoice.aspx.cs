@@ -11,6 +11,11 @@ using System.IO;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using MoreLinq;
+using System.Data;
+using System.Transactions;
+using System.Text;
+using Gen_Bapizarfi_01_Bapizcmi003;
 
 namespace DPU.DORMITORY.Web.View.Account
 {
@@ -26,7 +31,7 @@ namespace DPU.DORMITORY.Web.View.Account
 
         #region "Property"
         private UnitOfWork unitOfWork = new UnitOfWork();
-        private Repository<TB_M_FUND> repFund;
+        private Repository<TB_M_SPONSOR> repFund;
         //private Repository<TB_M_SERVICE> repService;
         private Repository<TB_M_BUILD> repBuild;
         private Repository<TB_RATES_GROUP_DETAIL> repRateGroupDetail;
@@ -34,15 +39,21 @@ namespace DPU.DORMITORY.Web.View.Account
         private Repository<TB_INVOICE_DETAIL> repInvoiceDetail;
         private Repository<TB_CUSTOMER> repCustomer;
         private Repository<TB_CUSTOMER_PROFILE> repCustomerProfile;
-        private Repository<TB_CUSTOMER_FUND> repCustomerFund;
+        //private Repository<TB_CUSTOMER_FUND> repCustomerFund;
 
         private Repository<TB_M_CUSTOMER_TYPE> repCustomerType;
         private Repository<TB_ROOM> repRoom;
         private Repository<TB_ROOM_METER> repMeter;
+        private Repository<TB_M_COST_TYPE> repCostType;
+        private Repository<TB_CUSTOMER_PAYER> repCustomerPayer;
+
+        private Repository<TB_M_SPONSOR> repSponsor;
+        private Repository<TB_RATES_GROUP> repRateGroup;
+        private SAPBiz sapBiz;
 
         public CreateInvoice()
         {
-            repFund = unitOfWork.Repository<TB_M_FUND>();
+            repFund = unitOfWork.Repository<TB_M_SPONSOR>();
             repBuild = unitOfWork.Repository<TB_M_BUILD>();
             repRateGroupDetail = unitOfWork.Repository<TB_RATES_GROUP_DETAIL>();
             //repService = unitOfWork.Repository<TB_M_SERVICE>();
@@ -50,10 +61,16 @@ namespace DPU.DORMITORY.Web.View.Account
             repInvoiceDetail = unitOfWork.Repository<TB_INVOICE_DETAIL>();
             repCustomer = unitOfWork.Repository<TB_CUSTOMER>();
             repCustomerProfile = unitOfWork.Repository<TB_CUSTOMER_PROFILE>();
-            repCustomerFund = unitOfWork.Repository<TB_CUSTOMER_FUND>();
+            //repCustomerFund = unitOfWork.Repository<TB_CUSTOMER_FUND>();
             repCustomerType = unitOfWork.Repository<TB_M_CUSTOMER_TYPE>();
             repRoom = unitOfWork.Repository<TB_ROOM>();
             repMeter = unitOfWork.Repository<TB_ROOM_METER>();
+            repCostType = unitOfWork.Repository<TB_M_COST_TYPE>();
+            repCustomerPayer = unitOfWork.Repository<TB_CUSTOMER_PAYER>();
+            repSponsor = unitOfWork.Repository<TB_M_SPONSOR>();
+            repRateGroup = unitOfWork.Repository<TB_RATES_GROUP>();
+            sapBiz = new SAPBiz();
+
         }
 
         public USER userLogin
@@ -96,444 +113,52 @@ namespace DPU.DORMITORY.Web.View.Account
             get { return (List<TB_CUSTOMER>)ViewState["customers"]; }
             set { ViewState["customers"] = value; }
         }
+        public List<InvDetail> InvDetails
+        {
+            get { return (List<InvDetail>)ViewState["InvDetail"]; }
+            set { ViewState["InvDetail"] = value; }
+        }
 
+        public String selectedPayer
+        {
+            get { return (String)ViewState["selectedPayer"]; }
+            set { ViewState["selectedPayer"] = value; }
+        }
+
+        //public List<InvDetail> InvdetailShow
+        //{
+        //    get { return this.InvDetails.Where(x => x.row_type != Convert.ToInt32(CommandNameEnum.ITEM)).ToList(); }
+        //}
+        public string pActive01
+        {
+            get { return (string)ViewState["pActive01"]; }
+            set { ViewState["pActive01"] = value; }
+        }
+        public string pActive02
+        {
+            get { return (string)ViewState["pActive02"]; }
+            set { ViewState["pActive02"] = value; }
+        }
+        public string pActive03
+        {
+            get { return (string)ViewState["pActive03"]; }
+            set { ViewState["pActive03"] = value; }
+        }
         public TB_INVOICE objInvoice
         {
-            //แสดงที่ยังไม่จ่ายตัง
             get
             {
                 TB_INVOICE tmp = new TB_INVOICE();
-                tmp.RoomNumber = txtRoom.Text;
+                tmp.BUILD_ID = Convert.ToInt16(ddlBuild.SelectedValue);
+                tmp.ROOM_NUMBER = txtRoom.Text;
                 tmp.FilterPaymentStatus = false;
                 tmp.PAYMENT_STATUS = false;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
-                tmp.OTHER = txtOther.Text;
+                //tmp.OTHER = txtOther.Text;
                 return tmp;
             }
         }
 
-        public List<TB_INVOICE_DETAIL> objInvoiceDetail
-        {
-            get
-            {
-                List<TB_RATES_GROUP_DETAIL> listRateGroup = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
-                TB_M_BUILD build = repBuild.Table.Where(x => x.BUILD_ID == objRoom.BUILD_ID).FirstOrDefault();
-                List<TB_INVOICE_DETAIL> invDets = new List<TB_INVOICE_DETAIL>();
-                TB_INVOICE_DETAIL invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 1;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost01.Text) ? Convert.ToDecimal(txtCost01.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                TB_RATES_GROUP_DETAIL rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 2;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost02.Text) ? Convert.ToDecimal(txtCost02.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 3;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost03.Text) ? Convert.ToDecimal(txtCost03.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 4;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost04.Text) ? Convert.ToDecimal(txtCost04.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 5;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost05.Text) ? Convert.ToDecimal(txtCost05.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 6;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost06.Text) ? Convert.ToDecimal(txtCost06.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 7;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost07.Text) ? Convert.ToDecimal(txtCost07.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 8;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost08.Text) ? Convert.ToDecimal(txtCost08.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 9;
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost09.Text) ? Convert.ToDecimal(txtCost09.Text) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                return invDets;
-
-            }
-        }
-        public List<TB_INVOICE_DETAIL> objInvoiceDetail1
-        {
-            get
-            {
-                List<TB_RATES_GROUP_DETAIL> listRateGroup = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
-                TB_M_BUILD build = repBuild.Table.Where(x => x.BUILD_ID == objRoom.BUILD_ID).FirstOrDefault();
-
-                List<TB_INVOICE_DETAIL> invDets = new List<TB_INVOICE_DETAIL>();
-                TB_INVOICE_DETAIL invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 1;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay01_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost01_1.Text) ? Convert.ToDecimal(txtCost01_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost01_1.Value) ? Convert.ToDecimal(hCost01_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                TB_RATES_GROUP_DETAIL rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 2;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay02_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost02_1.Text) ? Convert.ToDecimal(txtCost02_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost02_1.Value) ? Convert.ToDecimal(hCost02_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 3;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay03_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost03_1.Text) ? Convert.ToDecimal(txtCost03_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost03_1.Value) ? Convert.ToDecimal(hCost03_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 4;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay04_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost04_1.Text) ? Convert.ToDecimal(txtCost04_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost04_1.Value) ? Convert.ToDecimal(hCost04_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 5;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay05_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost05_1.Text) ? Convert.ToDecimal(txtCost05_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost05_1.Value) ? Convert.ToDecimal(hCost05_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 6;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay06_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost06_1.Text) ? Convert.ToDecimal(txtCost06_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost06_1.Value) ? Convert.ToDecimal(hCost06_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 7;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay07_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost07_1.Text) ? Convert.ToDecimal(txtCost07_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost07_1.Value) ? Convert.ToDecimal(hCost07_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 8;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay08_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost08_1.Text) ? Convert.ToDecimal(txtCost08_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost08_1.Value) ? Convert.ToDecimal(hCost08_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 9;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay09_1.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost09_1.Text) ? Convert.ToDecimal(txtCost09_1.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost09_1.Value) ? Convert.ToDecimal(hCost09_1.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                return invDets;
-
-            }
-        }
-        public List<TB_INVOICE_DETAIL> objInvoiceDetail2
-        {
-            get
-            {
-                List<TB_RATES_GROUP_DETAIL> listRateGroup = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
-                TB_M_BUILD build = repBuild.Table.Where(x => x.BUILD_ID == objRoom.BUILD_ID).FirstOrDefault();
-
-                List<TB_INVOICE_DETAIL> invDets = new List<TB_INVOICE_DETAIL>();
-                TB_INVOICE_DETAIL invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 1;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay01_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost01_2.Text) ? Convert.ToDecimal(txtCost01_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost01_2.Value) ? Convert.ToDecimal(hCost01_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                TB_RATES_GROUP_DETAIL rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 2;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay02_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost02_2.Text) ? Convert.ToDecimal(txtCost02_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost02_2.Value) ? Convert.ToDecimal(hCost02_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 3;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay03_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost03_2.Text) ? Convert.ToDecimal(txtCost03_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost03_2.Value) ? Convert.ToDecimal(hCost03_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 4;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay04_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost04_2.Text) ? Convert.ToDecimal(txtCost04_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost04_2.Value) ? Convert.ToDecimal(hCost04_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 5;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay05_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost05_2.Text) ? Convert.ToDecimal(txtCost05_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost05_2.Value) ? Convert.ToDecimal(hCost05_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 6;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay06_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost06_2.Text) ? Convert.ToDecimal(txtCost06_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost06_2.Value) ? Convert.ToDecimal(hCost06_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 7;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay07_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost07_2.Text) ? Convert.ToDecimal(txtCost07_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost07_2.Value) ? Convert.ToDecimal(hCost07_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 8;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay08_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost08_2.Text) ? Convert.ToDecimal(txtCost08_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost08_2.Value) ? Convert.ToDecimal(hCost08_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                invDet = new TB_INVOICE_DETAIL();
-                invDet.SERVICE_ID = 9;
-                invDet.PAY_BY = Convert.ToInt32(ddlPay09_2.SelectedValue);
-                invDet.AMOUNT = CustomUtils.isNumber(txtCost09_2.Text) ? Convert.ToDecimal(txtCost09_2.Text) : Convert.ToDecimal(0);
-                invDet.PAY_AMOUT = CustomUtils.isNumber(hCost09_2.Value) ? Convert.ToDecimal(hCost09_2.Value) : Convert.ToDecimal(0);
-                invDet.COMPANY = Convert.ToInt32(build.COMPANY);
-                invDet.BA = Convert.ToInt32(build.BA);
-                invDet.PROFIT_CTR = Convert.ToInt32(build.PROFIT_CTR);
-                rgd = listRateGroup.Where(x => x.SERVICE_ID == invDet.SERVICE_ID).FirstOrDefault();
-                if (rgd != null)
-                {
-                    invDet.MAIN_TRANS = rgd.MAINTRAN;
-                    invDet.SUB_TRANS = rgd.SUBTRAN;
-                }
-                invDets.Add(invDet);
-                return invDets;
-
-            }
-        }
         public List<TB_ROOM_METER> objRoomMeters
         {
             get
@@ -563,78 +188,33 @@ namespace DPU.DORMITORY.Web.View.Account
 
         private void bindPaymentHistory()
         {
-
-            IEnumerable paymentList = objInvoice.SearchPaymentHistory();
-            gvPaymentHistory.DataSource = paymentList;
-            gvPaymentHistory.DataBind();
-            gvPaymentHistory.UseAccessibleHeader = true;
-            gvPaymentHistory.HeaderRow.TableSection = TableRowSection.TableHeader;
-
+            //IEnumerable paymentList = objInvoice.SearchPaymentHistory();
+            //gvPaymentHistory.DataSource = paymentList;
+            //gvPaymentHistory.DataBind();
+            //gvPaymentHistory.UseAccessibleHeader = true;
+            //gvPaymentHistory.HeaderRow.TableSection = TableRowSection.TableHeader;
         }
 
         private void initialPage()
         {
-            ddlBuild.DataSource = repBuild.Table.ToList();
+            CommandName = new CommandNameEnum();
+            InvDetails = new List<InvDetail>();
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+
+            ddlBuild.DataSource = build;
             ddlBuild.DataBind();
             txtStayDay.Text = DateTime.Now.Day.ToString();
 
             btnCalculate.CssClass = Constants.CSS_BUTTON_CALCULATE;
             btnSave.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
-            btnPrintInvoice.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
-            pPaymentInfo.Visible = false;
+            //btnPrintInvoice.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
             btnSave.Attributes.Add("onclick", "return confirm('ต้องการบันทึกข้อมูล?');");
 
-            th_cus_1.Visible = false;
-            th_cus_2.Visible = false;
-            th_cus_1_rate.Visible = false;
-            th_cus_2_rate.Visible = false;
 
-            td_cus_1_1.Visible = false;
-            td_cus_1_2.Visible = false;
-            td_cus_1_3.Visible = false;
-            td_cus_1_4.Visible = false;
-            td_cus_1_5.Visible = false;
-            td_cus_1_6.Visible = false;
-            td_cus_1_7.Visible = false;
-            td_cus_1_8.Visible = false;
-            td_cus_1_9.Visible = false;
+            pActive01 = "active";
+            pActive02 = "";
+            pActive03 = "";
 
-            td_cus_2_1.Visible = false;
-            td_cus_2_2.Visible = false;
-            td_cus_2_3.Visible = false;
-            td_cus_2_4.Visible = false;
-            td_cus_2_5.Visible = false;
-            td_cus_2_6.Visible = false;
-            td_cus_2_7.Visible = false;
-            td_cus_2_8.Visible = false;
-            td_cus_2_9.Visible = false;
-
-
-            td_cus_1_1_pay.Visible = false;
-            td_cus_1_2_pay.Visible = false;
-            td_cus_1_3_pay.Visible = false;
-            td_cus_1_4_pay.Visible = false;
-            td_cus_1_5_pay.Visible = false;
-            td_cus_1_6_pay.Visible = false;
-            td_cus_1_7_pay.Visible = false;
-            td_cus_1_8_pay.Visible = false;
-            td_cus_1_9_pay.Visible = false;
-
-            td_cus_2_1_pay.Visible = false;
-            td_cus_2_2_pay.Visible = false;
-            td_cus_2_3_pay.Visible = false;
-            td_cus_2_4_pay.Visible = false;
-            td_cus_2_5_pay.Visible = false;
-            td_cus_2_6_pay.Visible = false;
-            td_cus_2_7_pay.Visible = false;
-            td_cus_2_8_pay.Visible = false;
-            td_cus_2_9_pay.Visible = false;
-
-            td_amout_1.Visible = true;
-            td_amout_2.Visible = false;
-            td_amout_3.Visible = false;
-            td_amout_bank_1.Visible = false;
-            td_amout_bank_2.Visible = false;
         }
 
         private void fillInData()
@@ -708,33 +288,15 @@ namespace DPU.DORMITORY.Web.View.Account
                     bindPaymentHistory();
                     #endregion
 
-                    pPaymentInfo.Visible = true;
-                    th_cus_1.Visible = false;
-                    td_cus_1_1.Visible = false;
-                    td_cus_1_2.Visible = false;
-                    td_cus_1_3.Visible = false;
-                    td_cus_1_4.Visible = false;
-                    td_cus_1_5.Visible = false;
-                    td_cus_1_6.Visible = false;
-                    td_cus_1_7.Visible = false;
-                    td_cus_1_8.Visible = false;
-                    td_cus_1_9.Visible = false;
-
-                    th_cus_2.Visible = false;
-                    td_cus_2_1.Visible = false;
-                    td_cus_2_2.Visible = false;
-                    td_cus_2_3.Visible = false;
-                    td_cus_2_4.Visible = false;
-                    td_cus_2_5.Visible = false;
-                    td_cus_2_6.Visible = false;
-                    td_cus_2_7.Visible = false;
-                    td_cus_2_8.Visible = false;
-                    td_cus_2_9.Visible = false;
                 }
                 else
                 {
                     MessageBox.Show(this.Page, String.Format(Resources.MSG_NO_CUSTOMER_IN_ROOM, objRoom.NUMBER));
                 }
+            }
+            else
+            {
+                MessageBox.Show(this.Page, Resources.MSG_NO_ROOM);
             }
         }
 
@@ -764,112 +326,153 @@ namespace DPU.DORMITORY.Web.View.Account
             if (customers != null && customers.Count > 0)
             {
 
-                #region "INVOICE"
-                switch (InvoiceType)
+                using (TransactionScope tran = new TransactionScope())
                 {
-                    case InvoiceTypeEnum.ROOM:
-                        if (Convert.ToDecimal(txtAmout1.Text) > 0)
+                    #region "METER"
+                    foreach (TB_ROOM_METER _val in objRoomMeters)
+                    {
+                        TB_ROOM_METER editMeter = repMeter.Table.Where(x => x.METER_TYPE == _val.METER_TYPE && x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).FirstOrDefault();
+                        if (editMeter != null)
                         {
-                            TB_INVOICE inv = new TB_INVOICE();
-                            inv.REF_ID = objRoom.ID;
-                            inv.POSTING_DATE = postingDate;
-                            inv.AMOUNT = Convert.ToDecimal(txtAmout1.Text);
-                            inv.STAY_DAY = Convert.ToInt32(txtStayDay.Text);
-                            inv.PAYMENT_STATUS = false;
-                            inv.UPDATE_BY = userLogin.USER_ID;
-                            inv.CREATE_DATE = DateTime.Now;
-                            inv.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);//Normal status is open
-                            inv.INVOICE_TYPE = Convert.ToInt32(InvoiceTypeEnum.ROOM);
-                            inv.TB_INVOICE_DETAIL = objInvoiceDetail;
-                            inv.OTHER = txtOther.Text;
-                            if (inv.AMOUNT > 0)
-                            {
-                                repInvoice.Insert(inv);
-                            }
+                            editMeter.METER_DATE = _val.METER_DATE;
+                            editMeter.ROOM_ID = _val.ROOM_ID;
+                            editMeter.METER_TYPE = _val.METER_TYPE;
+                            editMeter.METER_START = _val.METER_START;
+                            editMeter.METER_END = _val.METER_END;
+                            editMeter.UPDATE_BY = userLogin.USER_ID;
+                            editMeter.UPDATE_DATE = DateTime.Now;
+                            repMeter.Update(editMeter);
                         }
                         else
                         {
-                            Console.WriteLine();
+                            repMeter.Insert(_val);
                         }
-                        break;
-                    case InvoiceTypeEnum.CUSTOMER:
-                        int index = 1;
-
-                        foreach (TB_CUSTOMER customer in customers)
-                        {
-
-                            TB_INVOICE inv1 = new TB_INVOICE();
-                            inv1.REF_ID = customer.ID;
-                            inv1.POSTING_DATE = postingDate;
-                            inv1.STAY_DAY = Convert.ToInt32(txtStayDay.Text);
-                            inv1.PAYMENT_STATUS = false;
-                            inv1.UPDATE_BY = userLogin.USER_ID;
-                            inv1.CREATE_DATE = DateTime.Now;
-                            inv1.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);//Normal status is open
-                            inv1.INVOICE_TYPE = Convert.ToInt32(InvoiceTypeEnum.CUSTOMER);
-                            inv1.TB_INVOICE_DETAIL = (index == 1) ? objInvoiceDetail1 : objInvoiceDetail2;
-                            inv1.AMOUNT = (Decimal)inv1.TB_INVOICE_DETAIL.Sum(x => x.AMOUNT);
-
-                            inv1.OTHER = txtOther.Text;
-                            if (inv1.AMOUNT > 0)
-                            {
-                                repInvoice.Insert(inv1);
-                            }
+                    }
+                    #endregion
 
 
-                            index++;
-                        }
-
-                        break;
-                }
-                #endregion
-
-                #region "METER"
-                foreach (TB_ROOM_METER _val in objRoomMeters)
-                {
-                    TB_ROOM_METER editMeter = repMeter.Table.Where(x => x.METER_TYPE == _val.METER_TYPE && x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).FirstOrDefault();
-                    if (editMeter != null)
+                    //ADD CUSTOMER INVOICE
+                    var invFund = this.InvDetails.Where(x => x.SPONSOR_ID > 0).GroupBy(u => u.SPONSOR_ID)
+                                                             .Select(group => new { GroupID = group.Key, Customers = group.ToList() })
+                                                             .ToList();
+                    foreach (var item in invFund)
                     {
-                        editMeter.METER_DATE = _val.METER_DATE;
-                        editMeter.ROOM_ID = _val.ROOM_ID;
-                        editMeter.METER_TYPE = _val.METER_TYPE;
-                        editMeter.METER_START = _val.METER_START;
-                        editMeter.METER_END = _val.METER_END;
-                        editMeter.UPDATE_BY = userLogin.USER_ID;
-                        editMeter.UPDATE_DATE = DateTime.Now;
-                        repMeter.Update(editMeter);
+                        InvDetail detail = this.InvDetails.Where(x => x.SPONSOR_ID == item.GroupID && x.row_type == 2).FirstOrDefault();
+                        TB_INVOICE inv = new TB_INVOICE();
+                        inv.SPONSOR_ID = detail.SPONSOR_ID;
+                        inv.CUS_ID = detail.CUS_ID;
+                        inv.POSTING_DATE = postingDate;
+                        inv.AMOUNT = this.InvDetails.Where(x => x.SPONSOR_ID == detail.SPONSOR_ID && x.row_type == 2).Sum(x => x.PAYMENT_AMOUNT).Value;
+                        inv.STAY_DAY = 0;
+                        inv.PAYMENT_STATUS = false;
+                        inv.UPDATE_BY = userLogin.USER_ID;
+                        inv.CREATE_DATE = DateTime.Now;
+                        inv.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);//Normal status is open
+                        inv.PAYER_NAME = detail.PAYER_NAME;
+                        inv.IS_ACTIVE = detail.IS_ACTIVE;
+                        List<TB_INVOICE_DETAIL> invoiceDetails = new List<TB_INVOICE_DETAIL>();
+                        foreach (InvDetail _detail in this.InvDetails.Where(x => x.SPONSOR_ID == detail.SPONSOR_ID && x.row_type == 2))
+                        {
+                            TB_INVOICE_DETAIL invoice = new TB_INVOICE_DETAIL();
+                            //invoice.INVOICE_ID = inv.ID;
+                            invoice.COST_TYPE_ID = _detail.COST_TYPE_ID;
+                            invoice.CUS_ID = _detail.CUS_ID;
+                            invoice.SPONSOR_ID = _detail.SPONSOR_ID;
+                            invoice.AMOUNT = _detail.PAYMENT_AMOUNT;
+                            invoice.REMARK = _detail.REMARK;
+                            invoiceDetails.Add(invoice);
+                        }
+                        inv.TB_INVOICE_DETAIL = invoiceDetails;
+                        if (inv.AMOUNT > 0)
+                        {
+                            repInvoice.Insert(inv);
+                        }
+                    }
+                    var invCus = this.InvDetails.Where(x => x.SPONSOR_ID == 0).GroupBy(u => u.CUS_ID)
+                                                             .Select(group => new { GroupID = group.Key, Customers = group.ToList() })
+                                                             .ToList();
+                    int index = 1;
+                    foreach (var item in invCus)
+                    {
+                        //item.Customers.FirstOrDefault().
+
+                        InvDetail detail = this.InvDetails.Where(x => x.CUS_ID == item.GroupID && x.row_type == 1).FirstOrDefault();
+                        TB_INVOICE inv = new TB_INVOICE();
+                        inv.SPONSOR_ID = detail.SPONSOR_ID;
+                        inv.CUS_ID = detail.CUS_ID;
+                        inv.POSTING_DATE = postingDate;
+                        inv.AMOUNT = this.InvDetails.Where(x => x.CUS_ID == detail.CUS_ID && x.row_type == 1).Sum(x => x.PAYMENT_AMOUNT).Value;
+                        inv.STAY_DAY = 0;
+                        inv.PAYMENT_STATUS = false;
+                        inv.UPDATE_BY = userLogin.USER_ID;
+                        inv.CREATE_DATE = DateTime.Now;
+                        inv.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);//Normal status is open
+                        inv.PAYER_NAME = detail.PAYER_NAME;
+
+                        inv.IS_ACTIVE = (detail.PAYER_NAME.Split(',').Length == 2) ? (index == 1) ? true : false : true;
+                        List<TB_INVOICE_DETAIL> invoiceDetails = new List<TB_INVOICE_DETAIL>();
+                        foreach (InvDetail _detail in this.InvDetails.Where(x => x.CUS_ID == detail.CUS_ID && x.row_type == 1))
+                        {
+                            TB_INVOICE_DETAIL invoice = new TB_INVOICE_DETAIL();
+                            //invoice.INVOICE_ID = inv.ID;
+                            invoice.COST_TYPE_ID = _detail.COST_TYPE_ID;
+                            invoice.CUS_ID = _detail.CUS_ID;
+                            invoice.SPONSOR_ID = _detail.SPONSOR_ID;
+                            invoice.AMOUNT = _detail.PAYMENT_AMOUNT;
+                            invoice.REMARK = _detail.REMARK;
+                            invoiceDetails.Add(invoice);
+                        }
+                        inv.TB_INVOICE_DETAIL = invoiceDetails;
+                        if (inv.AMOUNT > 0)
+                        {
+                            repInvoice.Insert(inv);
+                        }
+                        index++;
+                    }
+
+
+
+
+                    #region "MESSAGE RESULT"
+                    String errorMessage = repInvoice.errorMessage;
+                    if (!String.IsNullOrEmpty(errorMessage))
+                    {
+                        tran.Dispose();
+                        MessageBox.Show(this, errorMessage);
                     }
                     else
                     {
-                        repMeter.Insert(_val);
+                        tran.Complete();
+
+                        MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS, Constants.LINK_CREATE_INVOICE);
+
+                        //MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS, PreviousPath);
                     }
+                    #endregion
+
+                    btnCalculate.CssClass = Constants.CSS_DISABLED_BUTTON_CALCULATE;
+                    btnSave.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
+                    //btnPrintInvoice.CssClass = Constants.CSS_BUTTON_SAVE;
+
+
                 }
-                #endregion
-
             }
-            #region "MESSAGE RESULT"
-            String errorMessage = repInvoice.errorMessage;
-            if (!String.IsNullOrEmpty(errorMessage))
-            {
-                MessageBox.Show(this, errorMessage);
-            }
-            else
-            {
-
-                MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS);
-
-                //MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS, PreviousPath);
-            }
-            #endregion
-
-            btnCalculate.CssClass = Constants.CSS_DISABLED_BUTTON_CALCULATE;
-            btnSave.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
-            btnPrintInvoice.CssClass = Constants.CSS_BUTTON_SAVE;
         }
 
         protected void btnCalculate_Click(object sender, EventArgs e)
         {
-            calculate();
+            pActive01 = "";
+            pActive02 = "active";
+            pActive03 = "";
+
+            int elecUnit = Convert.ToInt32(String.IsNullOrEmpty(txtElecMeterEnd.Text) ? "0" : txtElecMeterEnd.Text) - Convert.ToInt32(String.IsNullOrEmpty(txtElecMeterStart.Text) ? "0" : txtElecMeterStart.Text); ;
+            int waterUnit = Convert.ToInt32(String.IsNullOrEmpty(txtWaterMeterEnd.Text) ? "0" : txtWaterMeterEnd.Text) - Convert.ToInt32(String.IsNullOrEmpty(txtWaterMeterStart.Text) ? "0" : txtWaterMeterStart.Text);
+            if (elecUnit >= 0 && waterUnit >= 0)
+            {
+                calculate();
+            }
+
+
         }
 
         protected void btnPrintInvoice_Click(object sender, EventArgs e)
@@ -880,85 +483,6 @@ namespace DPU.DORMITORY.Web.View.Account
 
         protected void btnClear_Click(object sender, EventArgs e)
         {
-            txtCost01.Text = String.Empty;
-            txtCost02.Text = String.Empty;
-            txtCost03.Text = String.Empty;
-            txtCost04.Text = String.Empty;
-            txtCost05.Text = String.Empty;
-            txtCost06.Text = String.Empty;
-            txtCost07.Text = String.Empty;
-            txtCost08.Text = String.Empty;
-            txtCost09.Text = String.Empty;
-
-            txtCost01_1.Text = String.Empty;
-            txtCost02_1.Text = String.Empty;
-            txtCost03_1.Text = String.Empty;
-            txtCost04_1.Text = String.Empty;
-            txtCost05_1.Text = String.Empty;
-            txtCost06_1.Text = String.Empty;
-            txtCost07_1.Text = String.Empty;
-            txtCost08_1.Text = String.Empty;
-            txtCost09_1.Text = String.Empty;
-
-            txtCost01_2.Text = String.Empty;
-            txtCost02_2.Text = String.Empty;
-            txtCost03_2.Text = String.Empty;
-            txtCost04_2.Text = String.Empty;
-            txtCost05_2.Text = String.Empty;
-            txtCost06_2.Text = String.Empty;
-            txtCost07_2.Text = String.Empty;
-            txtCost08_2.Text = String.Empty;
-            txtCost09_2.Text = String.Empty;
-
-            txtAmout1.Text = String.Empty;
-            txtAmout2.Text = String.Empty;
-            txtAmout3.Text = String.Empty;
-
-            th_cus_1.Visible = false;
-            th_cus_2.Visible = false;
-            th_cus_1_rate.Visible = false;
-            th_cus_2_rate.Visible = false;
-
-            td_cus_1_1.Visible = false;
-            td_cus_1_2.Visible = false;
-            td_cus_1_3.Visible = false;
-            td_cus_1_4.Visible = false;
-            td_cus_1_5.Visible = false;
-            td_cus_1_6.Visible = false;
-            td_cus_1_7.Visible = false;
-            td_cus_1_8.Visible = false;
-            td_cus_1_9.Visible = false;
-
-            td_cus_2_1.Visible = false;
-            td_cus_2_2.Visible = false;
-            td_cus_2_3.Visible = false;
-            td_cus_2_4.Visible = false;
-            td_cus_2_5.Visible = false;
-            td_cus_2_6.Visible = false;
-            td_cus_2_7.Visible = false;
-            td_cus_2_8.Visible = false;
-            td_cus_2_9.Visible = false;
-
-
-            td_cus_1_1_pay.Visible = false;
-            td_cus_1_2_pay.Visible = false;
-            td_cus_1_3_pay.Visible = false;
-            td_cus_1_4_pay.Visible = false;
-            td_cus_1_5_pay.Visible = false;
-            td_cus_1_6_pay.Visible = false;
-            td_cus_1_7_pay.Visible = false;
-            td_cus_1_8_pay.Visible = false;
-            td_cus_1_9_pay.Visible = false;
-
-            td_cus_2_1_pay.Visible = false;
-            td_cus_2_2_pay.Visible = false;
-            td_cus_2_3_pay.Visible = false;
-            td_cus_2_4_pay.Visible = false;
-            td_cus_2_5_pay.Visible = false;
-            td_cus_2_6_pay.Visible = false;
-            td_cus_2_7_pay.Visible = false;
-            td_cus_2_8_pay.Visible = false;
-            td_cus_2_9_pay.Visible = false;
 
         }
 
@@ -969,32 +493,35 @@ namespace DPU.DORMITORY.Web.View.Account
 
         protected void txtPostingDate_TextChanged(object sender, EventArgs e)
         {
-            #region "SET PREVIOS METER"
-            DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text).AddDays(-1);
-
-            List<TB_ROOM_METER> meters = repMeter.Table.Where(x => x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).ToList();
-            if (meters != null && meters.Count > 0)
+            if (!String.IsNullOrEmpty(txtRoom.Text) && objRoom != null)
             {
-                TB_ROOM_METER meterElec = meters.Where(x => x.METER_TYPE == 3).FirstOrDefault();
-                if (meterElec != null)
+                #region "SET PREVIOS METER"
+                DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text).AddDays(-1);
+
+                List<TB_ROOM_METER> meters = repMeter.Table.Where(x => x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).ToList();
+                if (meters != null && meters.Count > 0)
                 {
-                    txtElecMeterStart.Text = meterElec.METER_END.Value.ToString();
+                    TB_ROOM_METER meterElec = meters.Where(x => x.METER_TYPE == 3).FirstOrDefault();
+                    if (meterElec != null)
+                    {
+                        txtElecMeterStart.Text = meterElec.METER_END.Value.ToString();
+                    }
+                    else
+                    {
+                        txtElecMeterStart.Text = string.Empty;
+                    }
+                    TB_ROOM_METER meterWater = meters.Where(x => x.METER_TYPE == 4).FirstOrDefault();
+                    if (meterWater != null)
+                    {
+                        txtWaterMeterStart.Text = meterWater.METER_END.Value.ToString();
+                    }
+                    else
+                    {
+                        txtWaterMeterStart.Text = string.Empty;
+                    }
                 }
-                else
-                {
-                    txtElecMeterStart.Text = string.Empty;
-                }
-                TB_ROOM_METER meterWater = meters.Where(x => x.METER_TYPE == 4).FirstOrDefault();
-                if (meterWater != null)
-                {
-                    txtWaterMeterStart.Text = meterWater.METER_END.Value.ToString();
-                }
-                else
-                {
-                    txtWaterMeterStart.Text = string.Empty;
-                }
+                #endregion
             }
-            #endregion
         }
 
         protected void gvPaymentHistory_RowDataBound(object sender, GridViewRowEventArgs e)
@@ -1002,9 +529,6 @@ namespace DPU.DORMITORY.Web.View.Account
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
                 Literal _litPaymentStatus = (Literal)e.Row.FindControl("litPaymentStatus");
-                //LinkButton _btnPay = (LinkButton)e.Row.FindControl("btnPay");
-
-
                 if (_litPaymentStatus != null)
                 {
                     if (!String.IsNullOrEmpty(_litPaymentStatus.Text))
@@ -1077,748 +601,325 @@ namespace DPU.DORMITORY.Web.View.Account
             crystalReport.SetParameterValue("P_INVOICE_ID", inv_id);
             crystalReport.SetParameterValue("P_MONTH", postingDate.Month);
             crystalReport.SetParameterValue("P_YEAR", postingDate.Year);
+            crystalReport.SetParameterValue("P_BUILD", ddlBuild.SelectedValue);
+
             crystalReport.PrintToPrinter(1, true, 0, 0);
         }
 
-        protected void ddlPay01_1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DropDownList ddl = ((DropDownList)sender);
-            switch (ddl.SelectedValue)
-            {
-                case "0":
-                    int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
-                    List<TB_CUSTOMER> listCus = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
-                    if (listCus != null && listCus.Count > 0)
-                    {
-                        int numOfCustomerInRoom = listCus.Count;
-                        decimal cus01 = CustomUtils.isNumber(txtCost01.Text) ? Convert.ToDecimal(txtCost01.Text) : Convert.ToDecimal(0);
-                        decimal cus02 = CustomUtils.isNumber(txtCost02.Text) ? Convert.ToDecimal(txtCost02.Text) : Convert.ToDecimal(0);
-                        decimal cus03 = CustomUtils.isNumber(txtCost03.Text) ? Convert.ToDecimal(txtCost03.Text) : Convert.ToDecimal(0);
-                        decimal cus04 = CustomUtils.isNumber(txtCost04.Text) ? Convert.ToDecimal(txtCost04.Text) : Convert.ToDecimal(0);
-                        decimal cus05 = CustomUtils.isNumber(txtCost05.Text) ? Convert.ToDecimal(txtCost05.Text) : Convert.ToDecimal(0);
-                        decimal cus06 = CustomUtils.isNumber(txtCost06.Text) ? Convert.ToDecimal(txtCost06.Text) : Convert.ToDecimal(0);
-                        decimal cus07 = CustomUtils.isNumber(txtCost07.Text) ? Convert.ToDecimal(txtCost07.Text) : Convert.ToDecimal(0);
-                        decimal cus08 = CustomUtils.isNumber(txtCost08.Text) ? Convert.ToDecimal(txtCost08.Text) : Convert.ToDecimal(0);
-                        decimal cus09 = CustomUtils.isNumber(txtCost09.Text) ? Convert.ToDecimal(txtCost09.Text) : Convert.ToDecimal(0);
-
-
-                        switch (ddl.ID)
-                        {
-                            case "ddlPay01_1":
-                                txtCost01_1.Text = (cus01 / numOfCustomerInRoom).ToString();
-                                hCost01_1.Value = "0";
-                                break;
-                            case "ddlPay02_1":
-                                txtCost02_1.Text = (cus02 / numOfCustomerInRoom).ToString();
-                                hCost02_1.Value = "0";
-                                break;
-                            case "ddlPay03_1":
-                                txtCost03_1.Text = (cus03 / numOfCustomerInRoom).ToString();
-                                hCost03_1.Value = "0";
-                                break;
-                            case "ddlPay04_1":
-                                txtCost04_1.Text = (cus04 / numOfCustomerInRoom).ToString();
-                                hCost04_1.Value = "0";
-                                break;
-                            case "ddlPay05_1":
-                                txtCost05_1.Text = (cus05 / numOfCustomerInRoom).ToString();
-                                hCost05_1.Value = "0";
-                                break;
-                            case "ddlPay06_1":
-                                txtCost06_1.Text = (cus06 / numOfCustomerInRoom).ToString();
-                                hCost06_1.Value = "0";
-                                break;
-                            case "ddlPay07_1":
-                                txtCost07_1.Text = (cus07 / numOfCustomerInRoom).ToString();
-                                hCost07_1.Value = "0";
-                                break;
-                            case "ddlPay08_1":
-                                txtCost08_1.Text = (cus08 / numOfCustomerInRoom).ToString();
-                                hCost08_1.Value = "0";
-                                break;
-                            case "ddlPay09_1":
-                                txtCost09_1.Text = (cus09 / numOfCustomerInRoom).ToString();
-                                hCost09_1.Value = "0";
-                                break;
-
-                            case "ddlPay01_2":
-                                txtCost01_2.Text = (cus01 / numOfCustomerInRoom).ToString();
-                                hCost01_2.Value = "0";
-                                break;
-                            case "ddlPay02_2":
-                                txtCost02_2.Text = (cus02 / numOfCustomerInRoom).ToString();
-                                hCost02_2.Value = "0";
-                                break;
-                            case "ddlPay03_2":
-                                txtCost03_2.Text = (cus03 / numOfCustomerInRoom).ToString();
-                                hCost03_2.Value = "0";
-                                break;
-                            case "ddlPay04_2":
-                                txtCost04_2.Text = (cus04 / numOfCustomerInRoom).ToString();
-                                hCost04_2.Value = "0";
-                                break;
-                            case "ddlPay05_2":
-                                txtCost05_2.Text = (cus05 / numOfCustomerInRoom).ToString();
-                                hCost05_2.Value = "0";
-                                break;
-                            case "ddlPay06_2":
-                                txtCost06_2.Text = (cus06 / numOfCustomerInRoom).ToString();
-                                hCost06_2.Value = "0";
-                                break;
-                            case "ddlPay07_2":
-                                txtCost07_2.Text = (cus07 / numOfCustomerInRoom).ToString();
-                                hCost07_2.Value = "0";
-                                break;
-                            case "ddlPay08_2":
-                                txtCost08_2.Text = (cus08 / numOfCustomerInRoom).ToString();
-                                hCost08_2.Value = "0";
-                                break;
-                            case "ddlPay09_2":
-                                txtCost09_2.Text = (cus09 / numOfCustomerInRoom).ToString();
-                                hCost09_2.Value = "0";
-                                break;
-                        }
-
-                    }
-                    break;
-                default:
-                    switch (ddl.ID)
-                    {
-                        case "ddlPay01_1": hCost01_1.Value = txtCost01_1.Text; txtCost01_1.Text = "0"; break;
-                        case "ddlPay02_1": hCost02_1.Value = txtCost02_1.Text; txtCost02_1.Text = "0"; break;
-                        case "ddlPay03_1": hCost03_1.Value = txtCost03_1.Text; txtCost03_1.Text = "0"; break;
-                        case "ddlPay04_1": hCost04_1.Value = txtCost04_1.Text; txtCost04_1.Text = "0"; break;
-                        case "ddlPay05_1": hCost05_1.Value = txtCost05_1.Text; txtCost05_1.Text = "0"; break;
-                        case "ddlPay06_1": hCost06_1.Value = txtCost06_1.Text; txtCost06_1.Text = "0"; break;
-                        case "ddlPay07_1": hCost07_1.Value = txtCost07_1.Text; txtCost07_1.Text = "0"; break;
-                        case "ddlPay08_1": hCost08_1.Value = txtCost08_1.Text; txtCost08_1.Text = "0"; break;
-                        case "ddlPay09_1": hCost09_1.Value = txtCost09_1.Text; txtCost09_1.Text = "0"; break;
-
-                        case "ddlPay01_2": hCost01_2.Value = txtCost01_2.Text; txtCost01_2.Text = "0"; break;
-                        case "ddlPay02_2": hCost02_2.Value = txtCost02_2.Text; txtCost02_2.Text = "0"; break;
-                        case "ddlPay03_2": hCost03_2.Value = txtCost03_2.Text; txtCost03_2.Text = "0"; break;
-                        case "ddlPay04_2": hCost04_2.Value = txtCost04_2.Text; txtCost04_2.Text = "0"; break;
-                        case "ddlPay05_2": hCost05_2.Value = txtCost05_2.Text; txtCost05_2.Text = "0"; break;
-                        case "ddlPay06_2": hCost06_2.Value = txtCost06_2.Text; txtCost06_2.Text = "0"; break;
-                        case "ddlPay07_2": hCost07_2.Value = txtCost07_2.Text; txtCost07_2.Text = "0"; break;
-                        case "ddlPay08_2": hCost08_2.Value = txtCost08_2.Text; txtCost08_2.Text = "0"; break;
-                        case "ddlPay09_2": hCost09_2.Value = txtCost09_2.Text; txtCost09_2.Text = "0"; break;
-                    }
-                    break;
-            }
-            txtAmout2.Text = (
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost01_1.Text) ? "0" : txtCost01_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost02_1.Text) ? "0" : txtCost02_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost03_1.Text) ? "0" : txtCost03_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost04_1.Text) ? "0" : txtCost04_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost05_1.Text) ? "0" : txtCost05_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost06_1.Text) ? "0" : txtCost06_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost07_1.Text) ? "0" : txtCost07_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost08_1.Text) ? "0" : txtCost08_1.Text) +
-      Convert.ToDouble(String.IsNullOrEmpty(txtCost09_1.Text) ? "0" : txtCost09_1.Text)).ToString();
-
-            txtAmout3.Text = (
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost01_2.Text) ? "0" : txtCost01_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost02_2.Text) ? "0" : txtCost02_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost03_2.Text) ? "0" : txtCost03_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost04_2.Text) ? "0" : txtCost04_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost05_2.Text) ? "0" : txtCost05_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost06_2.Text) ? "0" : txtCost06_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost07_2.Text) ? "0" : txtCost07_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost08_2.Text) ? "0" : txtCost08_2.Text) +
-                  Convert.ToDouble(String.IsNullOrEmpty(txtCost09_2.Text) ? "0" : txtCost09_2.Text)).ToString();
-        }
 
         private void calculate()
         {
-            int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
-            List<TB_CUSTOMER> listCus = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
-            if (listCus != null && listCus.Count > 0)
+            DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text);
+
+            List<InvDetail> tmps = new List<InvDetail>();
+            List<int> pkIds = new List<int>();
+
+            if (objRoom != null)
             {
-
-
-                #region "SET PAYMENT DETAIL"
-                List<TB_RATES_GROUP_DETAIL> invDetails = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == (int)objRoom.RATES_GROUP_ID).ToList();
-                if (invDetails != null && invDetails.Count > 0)
+                int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
+                List<TB_CUSTOMER> listCus = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
+                if (listCus != null && listCus.Count > 0)
                 {
+                    #region "SET WATER & ELECTRIC"
+                    decimal WaterMeterEnd = CustomUtils.isNumber(txtWaterMeterEnd.Text) ? Convert.ToDecimal(txtWaterMeterEnd.Text) : Convert.ToDecimal(0);
+                    decimal WaterMeterStart = CustomUtils.isNumber(txtWaterMeterStart.Text) ? Convert.ToDecimal(txtWaterMeterStart.Text) : Convert.ToDecimal(0);
 
-                    TB_RATES_GROUP_DETAIL invDetail = invDetails.Where(x => x.SERVICE_ID == 1).FirstOrDefault();
-                    if (invDetail != null)
+                    decimal ElecMeterEnd = CustomUtils.isNumber(txtElecMeterEnd.Text) ? Convert.ToDecimal(txtElecMeterEnd.Text) : Convert.ToDecimal(0);
+                    decimal ElecMeterStart = CustomUtils.isNumber(txtElecMeterStart.Text) ? Convert.ToDecimal(txtElecMeterStart.Text) : Convert.ToDecimal(0);
+
+                    lbWaterUnit.Text = (WaterMeterEnd - WaterMeterStart) + "";
+                    lbElecUnit.Text = (ElecMeterEnd - ElecMeterStart) + "";
+                    #endregion
+
+                    #region "Payment Detail"
+                    int order = 1;
+                    int rowIndex = 1;
+                    foreach (TB_CUSTOMER cus in listCus)
                     {
-                        txtCost01.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 2).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost02.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 3).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        lbElecUnit.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 4).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        lbWaterUnit.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 5).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost05.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 6).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost06.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 7).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost07.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 8).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost08.Text = invDetail.AMOUNT.ToString();
-                    }
-                    invDetail = invDetails.Where(x => x.SERVICE_ID == 9).FirstOrDefault();
-                    if (invDetail != null)
-                    {
-                        txtCost09.Text = invDetail.AMOUNT.ToString();
-                    }
-                }
-                #endregion
-
-                #region "SET WATER & ELECTRIC"
-                decimal WaterMeterEnd = CustomUtils.isNumber(txtWaterMeterEnd.Text) ? Convert.ToDecimal(txtWaterMeterEnd.Text) : Convert.ToDecimal(0);
-                decimal WaterMeterStart = CustomUtils.isNumber(txtWaterMeterStart.Text) ? Convert.ToDecimal(txtWaterMeterStart.Text) : Convert.ToDecimal(0);
-
-                decimal ElecMeterEnd = CustomUtils.isNumber(txtElecMeterEnd.Text) ? Convert.ToDecimal(txtElecMeterEnd.Text) : Convert.ToDecimal(0);
-                decimal ElecMeterStart = CustomUtils.isNumber(txtElecMeterStart.Text) ? Convert.ToDecimal(txtElecMeterStart.Text) : Convert.ToDecimal(0);
-
-                txtCost04.Text = ((WaterMeterEnd - WaterMeterStart) * Convert.ToDecimal(lbWaterUnit.Text)).ToString();
-                txtCost03.Text = ((ElecMeterEnd - ElecMeterStart) * Convert.ToDecimal(lbElecUnit.Text)).ToString();
-
-                decimal cus01 = CustomUtils.isNumber(txtCost01.Text) ? Convert.ToDecimal(txtCost01.Text) : Convert.ToDecimal(0);
-                decimal cus02 = CustomUtils.isNumber(txtCost02.Text) ? Convert.ToDecimal(txtCost02.Text) : Convert.ToDecimal(0);
-                decimal cus03 = CustomUtils.isNumber(txtCost03.Text) ? Convert.ToDecimal(txtCost03.Text) : Convert.ToDecimal(0);
-                decimal cus04 = CustomUtils.isNumber(txtCost04.Text) ? Convert.ToDecimal(txtCost04.Text) : Convert.ToDecimal(0);
-                decimal cus05 = CustomUtils.isNumber(txtCost05.Text) ? Convert.ToDecimal(txtCost05.Text) : Convert.ToDecimal(0);
-                decimal cus06 = CustomUtils.isNumber(txtCost06.Text) ? Convert.ToDecimal(txtCost06.Text) : Convert.ToDecimal(0);
-                decimal cus07 = CustomUtils.isNumber(txtCost07.Text) ? Convert.ToDecimal(txtCost07.Text) : Convert.ToDecimal(0);
-                decimal cus08 = CustomUtils.isNumber(txtCost08.Text) ? Convert.ToDecimal(txtCost08.Text) : Convert.ToDecimal(0);
-                decimal cus09 = CustomUtils.isNumber(txtCost09.Text) ? Convert.ToDecimal(txtCost09.Text) : Convert.ToDecimal(0);
-
-                switch (InvoiceType)
-                {
-                    case InvoiceTypeEnum.CUSTOMER:
-                        #region "CRETE INVOICE BY CUSTOMER"
-                        txtCost01.ReadOnly = true;
-                        txtCost02.ReadOnly = true;
-                        txtCost03.ReadOnly = true;
-                        txtCost04.ReadOnly = true;
-                        txtCost05.ReadOnly = true;
-                        txtCost06.ReadOnly = true;
-                        txtCost07.ReadOnly = true;
-                        txtCost08.ReadOnly = true;
-                        txtCost09.ReadOnly = true;
-
-                        th_cus_1.Visible = true;
-                        th_cus_2.Visible = true;
-                        th_cus_1_rate.Visible = true;
-                        th_cus_2_rate.Visible = true;
-
-                        td_cus_1_1.Visible = true;
-                        td_cus_1_2.Visible = true;
-                        td_cus_1_3.Visible = true;
-                        td_cus_1_4.Visible = true;
-                        td_cus_1_5.Visible = true;
-                        td_cus_1_6.Visible = true;
-                        td_cus_1_7.Visible = true;
-                        td_cus_1_8.Visible = true;
-                        td_cus_1_9.Visible = true;
-
-                        td_cus_2_1.Visible = true;
-                        td_cus_2_2.Visible = true;
-                        td_cus_2_3.Visible = true;
-                        td_cus_2_4.Visible = true;
-                        td_cus_2_5.Visible = true;
-                        td_cus_2_6.Visible = true;
-                        td_cus_2_7.Visible = true;
-                        td_cus_2_8.Visible = true;
-                        td_cus_2_9.Visible = true;
-
-                        td_cus_1_1_pay.Visible = true;
-                        td_cus_1_2_pay.Visible = true;
-                        td_cus_1_3_pay.Visible = true;
-                        td_cus_1_4_pay.Visible = true;
-                        td_cus_1_5_pay.Visible = true;
-                        td_cus_1_6_pay.Visible = true;
-                        td_cus_1_7_pay.Visible = true;
-                        td_cus_1_8_pay.Visible = true;
-                        td_cus_1_9_pay.Visible = true;
-
-                        td_cus_2_1_pay.Visible = true;
-                        td_cus_2_2_pay.Visible = true;
-                        td_cus_2_3_pay.Visible = true;
-                        td_cus_2_4_pay.Visible = true;
-                        td_cus_2_5_pay.Visible = true;
-                        td_cus_2_6_pay.Visible = true;
-                        td_cus_2_7_pay.Visible = true;
-                        td_cus_2_8_pay.Visible = true;
-                        td_cus_2_9_pay.Visible = true;
-
-
-
-
-                        List<TB_M_FUND> listFound = repFund.Table.ToList();
-
-                        int _PKID = 0;
-                        int numOfCustomerInRoom = listCus.Count;
-                        TB_CUSTOMER_FUND cf = new TB_CUSTOMER_FUND();
-                        switch (numOfCustomerInRoom)
+                        Boolean existInvoice = repInvoice.Table.Where(x => x.POSTING_DATE.Value.Year == postingDate.Year && x.POSTING_DATE.Value.Month == postingDate.Month && x.CUS_ID == cus.ID).Any();
+                        if (!existInvoice)
                         {
-                            case 1:
+                            List<TB_CUSTOMER_PAYER> cusPays = repCustomerPayer.Table.Where(x => x.CUS_ID == cus.ID && x.SPONSOR_ID != 0).ToList();
 
-                                txtCost01_1.Text = (cus01 / numOfCustomerInRoom).ToString();
-                                txtCost02_1.Text = (cus02 / numOfCustomerInRoom).ToString();
-                                txtCost03_1.Text = (cus03 / numOfCustomerInRoom).ToString();
-                                txtCost04_1.Text = (cus04 / numOfCustomerInRoom).ToString();
-                                txtCost05_1.Text = (cus05 / numOfCustomerInRoom).ToString();
-                                txtCost06_1.Text = (cus06 / numOfCustomerInRoom).ToString();
-                                txtCost07_1.Text = (cus07 / numOfCustomerInRoom).ToString();
-                                txtCost08_1.Text = (cus08 / numOfCustomerInRoom).ToString();
-                                txtCost09_1.Text = (cus09 / numOfCustomerInRoom).ToString();
+                            List<TB_RATES_GROUP_DETAIL> details = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
+                            foreach (TB_RATES_GROUP_DETAIL _detail in details)
+                            {
+                                TB_CUSTOMER_PAYER sponsor = cusPays.Where(x => x.COST_TYPE_ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                if (sponsor == null)
+                                {
+                                    InvDetail _tmp = new InvDetail();
+                                    _tmp.ID = order;
+                                    _tmp.SPONSOR_ID = 0;
+                                    _tmp.CUS_ID = cus.ID;
 
-                                #region "FUND CUS01"
-                                _PKID = Convert.ToInt32(listCus[0].ID);
-                                ddlPay01_1.DataSource = listFound;
-                                ddlPay01_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 1 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay01_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost01_1.Value = txtCost01_1.Text;
-                                    txtCost01_1.Text = "0";
-                                }
-                                ddlPay02_1.DataSource = listFound;
-                                ddlPay02_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 2 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay02_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost02_1.Value = txtCost02_1.Text;
-                                    txtCost02_1.Text = "0";
-                                }
-                                ddlPay03_1.DataSource = listFound;
-                                ddlPay03_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 3 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay03_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost03_1.Value = txtCost03_1.Text;
-                                    txtCost03_1.Text = "0";
-                                }
-                                ddlPay04_1.DataSource = listFound;
-                                ddlPay04_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 4 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay04_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost04_1.Value = txtCost04_1.Text;
-                                    txtCost04_1.Text = "0";
+                                    TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                    if (cusType != null)
+                                    {
+                                        _tmp.M_SERVICE_NAME = cusType.NAME;
+                                        _tmp.COST_TYPE_ID = cusType.ID;
+                                    }
 
-                                }
-                                ddlPay05_1.DataSource = listFound;
-                                ddlPay05_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 5 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay05_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost05_1.Value = txtCost05_1.Text;
-                                    txtCost05_1.Text = "0";
+                                    _tmp.PAYER_NAME = String.Format("{0} {1}", cus.FIRSTNAME, cus.SURNAME);
+                                    _tmp.RATE_UNIT = _detail.UNIT;
+                                    _tmp.RATE_AMOUNT = _detail.AMOUNT;
+                                    _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
 
-                                }
-                                ddlPay06_1.DataSource = listFound;
-                                ddlPay06_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 6 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay06_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost06_1.Value = txtCost06_1.Text;
-                                    txtCost06_1.Text = "0";
+                                    if (_detail.COST_TYPE_ID == 3)
+                                    {
+                                        _tmp.RATE_UNIT = Convert.ToInt32(lbElecUnit.Text);
+                                        _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbElecUnit.Text);
+                                    }
+                                    else if (_detail.COST_TYPE_ID == 4)
+                                    {
+                                        _tmp.RATE_UNIT = Convert.ToInt32(lbWaterUnit.Text);
+                                        _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbWaterUnit.Text);
+                                    }
+                                    _tmp.row_type = Convert.ToInt32(PayTypeEnum.SELF);
 
-                                }
-                                ddlPay07_1.DataSource = listFound;
-                                ddlPay07_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 7 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay07_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost07_1.Value = txtCost07_1.Text;
-                                    txtCost07_1.Text = "0";
+                                    TB_RATES_GROUP _rate = repRateGroup.Table.Where(x => x.ID == _detail.RATES_GROUP_ID).FirstOrDefault();
+                                    if (_rate != null)
+                                    {
+                                        CalculateInvoiceEnum cmd = (CalculateInvoiceEnum)Enum.ToObject(typeof(CalculateInvoiceEnum), (int)_rate.CALCULATE_INVOICE_TYPE);
+                                        switch (cmd)
+                                        {
+                                            case CalculateInvoiceEnum.ByPerson:
+                                                _tmp.PAYMENT_AMOUNT = (_tmp.PAYMENT_AMOUNT == null) ? 0 : _tmp.PAYMENT_AMOUNT.Value / listCus.Count;
 
-                                }
-                                ddlPay08_1.DataSource = listFound;
-                                ddlPay08_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 8 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay08_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost08_1.Value = txtCost08_1.Text;
-                                    txtCost08_1.Text = "0";
+                                                break;
+                                            case CalculateInvoiceEnum.ByRoom:
 
+                                                //Find Payer
+                                                TB_CUSTOMER _customer = listCus.Where(x => x.PAYER == true).FirstOrDefault();
+                                                if (_customer != null)
+                                                {
+                                                    _tmp.PAYER_NAME = String.Format("{0} {1}", _customer.FIRSTNAME, _customer.SURNAME);
+                                                }
+                                                else
+                                                {
+                                                    _tmp.PAYER_NAME = (listCus.Count == 2) ? (listCus[0].FIRSTNAME + " " + listCus[0].SURNAME + "," + listCus[1].FIRSTNAME + " " + listCus[1].SURNAME) : String.Empty;
+                                                }
+                                                break;
+                                        }
+                                    }
+                                    _tmp.IS_ACTIVE = (_tmp.CUS_ID.Value == listCus[0].ID) ? true : false;
+                                    tmps.Add(_tmp);
+                                    order++;
                                 }
-                                ddlPay09_1.DataSource = listFound;
-                                ddlPay09_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 9 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
+                                else
                                 {
-                                    ddlPay09_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost09_1.Value = txtCost09_1.Text;
-                                    txtCost09_1.Text = "0";
+                                    //Sponsor
+                                    InvDetail _tmp = new InvDetail();
+                                    _tmp.ID = order;
+                                    _tmp.SPONSOR_ID = sponsor.SPONSOR_ID;
+                                    _tmp.CUS_ID = sponsor.CUS_ID;
+                                    TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                    if (cusType != null)
+                                    {
+                                        _tmp.M_SERVICE_NAME = cusType.NAME;
+                                        _tmp.COST_TYPE_ID = cusType.ID;
+                                    }
+                                    TB_M_SPONSOR _sponsor = repSponsor.Table.Where(x => x.ID == sponsor.SPONSOR_ID).FirstOrDefault();
+                                    if (_sponsor != null)
+                                    {
+                                        _tmp.PAYER_NAME = _sponsor.NAME;
+                                    }
+                                    _tmp.RATE_UNIT = _detail.UNIT;
+                                    _tmp.RATE_AMOUNT = sponsor.AMOUNT;
+                                    _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
+                                    _tmp.IS_ACTIVE = true;
+                                    _tmp.row_type = Convert.ToInt32(PayTypeEnum.FUND);
+                                    if (!pkIds.Contains(sponsor.SPONSOR_ID.Value))
+                                    {
+                                        tmps.Add(_tmp);
+                                        pkIds.Add(sponsor.SPONSOR_ID.Value);
+                                    }
+                                    else
+                                    {
+                                        InvDetail invTmp = tmps.Where(x => x.SPONSOR_ID.Value == sponsor.SPONSOR_ID.Value).FirstOrDefault();
+                                        if (invTmp != null)
+                                        {
+                                            invTmp.PAYMENT_AMOUNT = invTmp.PAYMENT_AMOUNT + _tmp.PAYMENT_AMOUNT;
+                                        }
+                                    }
 
+                                    order++;
                                 }
-                                #endregion
-                                td_amout_1.Visible = true;
-                                td_amout_2.Visible = true;
-                                td_amout_3.Visible = false;
-                                td_amout_bank_1.Visible = true;
-                                td_amout_bank_2.Visible = false;
+                            }
 
-
-                                txtAmout2.Text = (
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost01_1.Text) ? "0" : txtCost01_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost02_1.Text) ? "0" : txtCost02_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost03_1.Text) ? "0" : txtCost03_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost04_1.Text) ? "0" : txtCost04_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost05_1.Text) ? "0" : txtCost05_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost06_1.Text) ? "0" : txtCost06_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost07_1.Text) ? "0" : txtCost07_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost08_1.Text) ? "0" : txtCost08_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost09_1.Text) ? "0" : txtCost09_1.Text)).ToString();
-                                lbCus01.Text = String.Format("1. {0}  {1}", listCus[0].FIRSTNAME, listCus[0].SURNAME);
-                                break;
-                            case 2:
-                                txtCost01_1.Text = (cus01 / numOfCustomerInRoom).ToString();
-                                txtCost02_1.Text = (cus02 / numOfCustomerInRoom).ToString();
-                                txtCost03_1.Text = (cus03 / numOfCustomerInRoom).ToString();
-                                txtCost04_1.Text = (cus04 / numOfCustomerInRoom).ToString();
-                                txtCost05_1.Text = (cus05 / numOfCustomerInRoom).ToString();
-                                txtCost06_1.Text = (cus06 / numOfCustomerInRoom).ToString();
-                                txtCost07_1.Text = (cus07 / numOfCustomerInRoom).ToString();
-                                txtCost08_1.Text = (cus08 / numOfCustomerInRoom).ToString();
-                                txtCost09_1.Text = (cus09 / numOfCustomerInRoom).ToString();
-
-                                txtCost01_2.Text = (cus01 / numOfCustomerInRoom).ToString();
-                                txtCost02_2.Text = (cus02 / numOfCustomerInRoom).ToString();
-                                txtCost03_2.Text = (cus03 / numOfCustomerInRoom).ToString();
-                                txtCost04_2.Text = (cus04 / numOfCustomerInRoom).ToString();
-                                txtCost05_2.Text = (cus05 / numOfCustomerInRoom).ToString();
-                                txtCost06_2.Text = (cus06 / numOfCustomerInRoom).ToString();
-                                txtCost07_2.Text = (cus07 / numOfCustomerInRoom).ToString();
-                                txtCost08_2.Text = (cus08 / numOfCustomerInRoom).ToString();
-                                txtCost09_2.Text = (cus09 / numOfCustomerInRoom).ToString();
-
-                                #region "FUND CUS01"
-                                _PKID = Convert.ToInt32(listCus[0].ID);
-                                ddlPay01_1.DataSource = listFound;
-                                ddlPay01_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 1 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay01_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost01_1.Value = txtCost01_1.Text;
-                                    txtCost01_1.Text = "0";
-                                }
-                                ddlPay02_1.DataSource = listFound;
-                                ddlPay02_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 2 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay02_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost02_1.Value = txtCost02_1.Text;
-                                    txtCost02_1.Text = "0";
-                                }
-                                ddlPay03_1.DataSource = listFound;
-                                ddlPay03_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 3 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay03_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost03_1.Value = txtCost03_1.Text;
-                                    txtCost03_1.Text = "0";
-                                }
-                                ddlPay04_1.DataSource = listFound;
-                                ddlPay04_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 4 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay04_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost04_1.Value = txtCost04_1.Text;
-                                    txtCost04_1.Text = "0";
-
-                                }
-                                ddlPay05_1.DataSource = listFound;
-                                ddlPay05_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 5 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay05_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost05_1.Value = txtCost05_1.Text;
-                                    txtCost05_1.Text = "0";
-
-                                }
-                                ddlPay06_1.DataSource = listFound;
-                                ddlPay06_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 6 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay06_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost06_1.Value = txtCost06_1.Text;
-                                    txtCost06_1.Text = "0";
-
-                                }
-                                ddlPay07_1.DataSource = listFound;
-                                ddlPay07_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 7 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay07_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost07_1.Value = txtCost07_1.Text;
-                                    txtCost07_1.Text = "0";
-
-                                }
-                                ddlPay08_1.DataSource = listFound;
-                                ddlPay08_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 8 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay08_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost08_1.Value = txtCost08_1.Text;
-                                    txtCost08_1.Text = "0";
-
-                                }
-                                ddlPay09_1.DataSource = listFound;
-                                ddlPay09_1.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 9 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay09_1.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost09_1.Value = txtCost09_1.Text;
-                                    txtCost09_1.Text = "0";
-
-                                }
-                                #endregion
-                                #region "FUND CUS02"
-                                _PKID = Convert.ToInt32(listCus[1].ID);
-                                ddlPay01_2.DataSource = listFound;
-                                ddlPay01_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 1 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay01_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost01_2.Value = txtCost01_2.Text;
-                                    txtCost01_2.Text = "0";
-                                }
-                                ddlPay02_2.DataSource = listFound;
-                                ddlPay02_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 2 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay02_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost02_2.Value = txtCost02_2.Text;
-                                    txtCost02_2.Text = "0";
-                                }
-                                ddlPay03_2.DataSource = listFound;
-                                ddlPay03_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 3 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay03_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost03_2.Value = txtCost03_2.Text;
-                                    txtCost03_2.Text = "0";
-                                }
-                                ddlPay04_2.DataSource = listFound;
-                                ddlPay04_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 4 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay04_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost04_2.Value = txtCost04_2.Text;
-                                    txtCost04_2.Text = "0";
-                                }
-                                ddlPay05_2.DataSource = listFound;
-                                ddlPay05_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 5 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay05_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost05_2.Value = txtCost05_2.Text;
-                                    txtCost05_2.Text = "0";
-                                }
-                                ddlPay06_2.DataSource = listFound;
-                                ddlPay06_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 6 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay06_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost06_2.Value = txtCost06_2.Text;
-                                    txtCost06_2.Text = "0";
-                                }
-                                ddlPay07_2.DataSource = listFound;
-                                ddlPay07_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 7 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay07_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost07_2.Value = txtCost07_2.Text;
-                                    txtCost07_2.Text = "0";
-                                }
-                                ddlPay08_2.DataSource = listFound;
-                                ddlPay08_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 8 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay08_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost08_2.Value = txtCost08_2.Text;
-                                    txtCost08_2.Text = "0";
-                                }
-                                ddlPay09_2.DataSource = listFound;
-                                ddlPay09_2.DataBind();
-                                cf = repCustomerFund.Table.Where(x => x.FOR_SERVICE_ID == 9 && x.CUS_ID == _PKID).FirstOrDefault();
-                                if (cf != null)
-                                {
-                                    ddlPay09_2.SelectedValue = cf.FUND_ID.ToString();
-                                    hCost09_2.Value = txtCost09_2.Text;
-                                    txtCost09_2.Text = "0";
-                                }
-                                #endregion
-                                td_amout_1.Visible = true;
-                                td_amout_2.Visible = true;
-                                td_amout_3.Visible = true;
-                                td_amout_bank_1.Visible = true;
-                                td_amout_bank_2.Visible = true;
-                                txtAmout2.Text = (
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost01_1.Text) ? "0" : txtCost01_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost02_1.Text) ? "0" : txtCost02_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost03_1.Text) ? "0" : txtCost03_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost04_1.Text) ? "0" : txtCost04_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost05_1.Text) ? "0" : txtCost05_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost06_1.Text) ? "0" : txtCost06_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost07_1.Text) ? "0" : txtCost07_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost08_1.Text) ? "0" : txtCost08_1.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost09_1.Text) ? "0" : txtCost09_1.Text)).ToString();
-
-                                txtAmout3.Text = (
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost01_2.Text) ? "0" : txtCost01_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost02_2.Text) ? "0" : txtCost02_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost03_2.Text) ? "0" : txtCost03_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost04_2.Text) ? "0" : txtCost04_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost05_2.Text) ? "0" : txtCost05_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost06_2.Text) ? "0" : txtCost06_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost07_2.Text) ? "0" : txtCost07_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost08_2.Text) ? "0" : txtCost08_2.Text) +
-                                      Convert.ToDouble(String.IsNullOrEmpty(txtCost09_2.Text) ? "0" : txtCost09_2.Text)).ToString();
-
-                                lbCus01.Text = String.Format("1. {0}  {1}", listCus[0].FIRSTNAME, listCus[0].SURNAME);
-                                lbCus02.Text = String.Format("2. {0}  {1}", listCus[1].FIRSTNAME, listCus[1].SURNAME);
-                                break;
+                            rowIndex++;
                         }
-                        #endregion
-                        break;
-                    case InvoiceTypeEnum.ROOM:
-                        #region "CRETE INVOICE BY ROOM"
-                        txtCost01.ReadOnly = false;
-                        txtCost02.ReadOnly = false;
-                        txtCost03.ReadOnly = false;
-                        txtCost04.ReadOnly = false;
-                        txtCost05.ReadOnly = false;
-                        txtCost06.ReadOnly = false;
-                        txtCost07.ReadOnly = false;
-                        txtCost08.ReadOnly = false;
-                        txtCost09.ReadOnly = false;
 
-                        th_cus_1.Visible = false;
-                        th_cus_2.Visible = false;
-                        th_cus_1_rate.Visible = false;
-                        th_cus_2_rate.Visible = false;
-
-                        td_cus_1_1.Visible = false;
-                        td_cus_1_2.Visible = false;
-                        td_cus_1_3.Visible = false;
-                        td_cus_1_4.Visible = false;
-                        td_cus_1_5.Visible = false;
-                        td_cus_1_6.Visible = false;
-                        td_cus_1_7.Visible = false;
-                        td_cus_1_8.Visible = false;
-                        td_cus_1_9.Visible = false;
-
-                        td_cus_2_1.Visible = false;
-                        td_cus_2_2.Visible = false;
-                        td_cus_2_3.Visible = false;
-                        td_cus_2_4.Visible = false;
-                        td_cus_2_5.Visible = false;
-                        td_cus_2_6.Visible = false;
-                        td_cus_2_7.Visible = false;
-                        td_cus_2_8.Visible = false;
-                        td_cus_2_9.Visible = false;
-
-
-                        td_cus_1_1_pay.Visible = false;
-                        td_cus_1_2_pay.Visible = false;
-                        td_cus_1_3_pay.Visible = false;
-                        td_cus_1_4_pay.Visible = false;
-                        td_cus_1_5_pay.Visible = false;
-                        td_cus_1_6_pay.Visible = false;
-                        td_cus_1_7_pay.Visible = false;
-                        td_cus_1_8_pay.Visible = false;
-                        td_cus_1_9_pay.Visible = false;
-
-                        td_cus_2_1_pay.Visible = false;
-                        td_cus_2_2_pay.Visible = false;
-                        td_cus_2_3_pay.Visible = false;
-                        td_cus_2_4_pay.Visible = false;
-                        td_cus_2_5_pay.Visible = false;
-                        td_cus_2_6_pay.Visible = false;
-                        td_cus_2_7_pay.Visible = false;
-                        td_cus_2_8_pay.Visible = false;
-                        td_cus_2_9_pay.Visible = false;
-                        td_amout_1.Visible = true;
-                        td_amout_2.Visible = false;
-                        td_amout_3.Visible = false;
-                        td_amout_bank_1.Visible = false;
-                        td_amout_bank_2.Visible = false;
-                        //SUMMARY
-                        txtAmout1.Text = (
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost01.Text) ? "0" : txtCost01.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost02.Text) ? "0" : txtCost02.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost03.Text) ? "0" : txtCost03.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost04.Text) ? "0" : txtCost04.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost05.Text) ? "0" : txtCost05.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost06.Text) ? "0" : txtCost06.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost07.Text) ? "0" : txtCost07.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost08.Text) ? "0" : txtCost08.Text) +
-                              Convert.ToDouble(String.IsNullOrEmpty(txtCost09.Text) ? "0" : txtCost09.Text)).ToString();
-
-
-                        #endregion
-                        break;
+                    }
                 }
 
 
+                this.InvDetails = tmps;
+                DataTable dt = new DataTable();
+                dt = PivotTable.GetInversedDataTable(this.InvDetails.Where(x => x.IS_ACTIVE = true).ToDataTable(), "M_SERVICE_NAME", "PAYER_NAME", "PAYMENT_AMOUNT", "-", false);
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+                //GridView1.Columns[1].HeaderText = String.Empty;//
+                //}
                 #endregion
-
-
-
             }
+
 
 
             //BUTTON STATUS
             btnCalculate.CssClass = Constants.CSS_BUTTON_CALCULATE;
             btnSave.CssClass = Constants.CSS_BUTTON_SAVE;
-            btnPrintInvoice.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
+            btnSave.Visible = GridView1.Rows.Count > 0;
+            //btnPrintInvoice.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
+        }
+
+        protected void btnMainData_Click(object sender, EventArgs e)
+        {
+            pActive01 = "active";
+            pActive02 = "";
+            pActive03 = "";
+        }
+
+        protected void btnPamentDetail_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txtPostingDate.Text))
+            {
+                int elecUnit = Convert.ToInt32(String.IsNullOrEmpty(txtElecMeterEnd.Text) ? "0" : txtElecMeterEnd.Text) - Convert.ToInt32(String.IsNullOrEmpty(txtElecMeterStart.Text) ? "0" : txtElecMeterStart.Text); ;
+                int waterUnit = Convert.ToInt32(String.IsNullOrEmpty(txtWaterMeterEnd.Text) ? "0" : txtWaterMeterEnd.Text) - Convert.ToInt32(String.IsNullOrEmpty(txtWaterMeterStart.Text) ? "0" : txtWaterMeterStart.Text);
+                if (elecUnit >= 0 && waterUnit >= 0)
+                {
+                    pActive01 = "";
+                    pActive02 = "active";
+                    pActive03 = "";
+                }
+            }
+        }
+
+        protected void btnOwner_Click(object sender, EventArgs e)
+        {
+            pActive01 = "";
+            pActive02 = "";
+            pActive03 = "active";
+        }
+
+        #region "Invoice Detail
+        protected void gvInvoiceDetail_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        {
+            gvInvoiceDetail.EditIndex = e.NewEditIndex;
+            gvInvoiceDetail.DataSource = this.InvDetails.Where(x => x.PAYER_NAME.Equals(this.selectedPayer)).OrderBy(x => x.ID);
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        protected void gvInvoiceDetail_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        {
+            int pkid = Convert.ToInt32(gvInvoiceDetail.DataKeys[e.RowIndex].Values[0].ToString());
+            TextBox _txtPAY_AMOUNT = (TextBox)gvInvoiceDetail.Rows[e.RowIndex].FindControl("txtPAY_AMOUNT");
+            TextBox _txtREMARKT = (TextBox)gvInvoiceDetail.Rows[e.RowIndex].FindControl("txtREMARKT");
+
+            InvDetail detail = this.InvDetails.Find(x => x.ID == pkid);
+            if (detail != null)
+            {
+                detail.PAYMENT_AMOUNT = Convert.ToDecimal(_txtPAY_AMOUNT.Text);
+                detail.REMARK = _txtREMARKT.Text;
+            }
+            gvInvoiceDetail.EditIndex = -1;
+            gvInvoiceDetail.DataSource = this.InvDetails.Where(x => x.PAYER_NAME.Equals(this.selectedPayer)).OrderBy(x => x.ID);
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        protected void gvInvoiceDetail_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+
+
+                int _id = Convert.ToInt32(gvInvoiceDetail.DataKeys[e.Row.RowIndex].Values[0].ToString());
+                InvDetail _inv = this.InvDetails.Find(x => x.ID == _id);
+                if (_inv != null)
+                {
+                    LinkButton btnEdit = (LinkButton)e.Row.FindControl("btnEdit");
+
+                    CommandNameEnum cmd = (CommandNameEnum)Enum.ToObject(typeof(CommandNameEnum), (int)_inv.row_type);
+                    switch (cmd)
+                    {
+                        case CommandNameEnum.ITEM:
+                            e.Row.ForeColor = System.Drawing.Color.Black;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = true;
+                            }
+                            break;
+                        case CommandNameEnum.GROUP:
+                            e.Row.ForeColor = System.Drawing.Color.Green;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = false;
+                            }
+                            break;
+                        case CommandNameEnum.OTHER:
+                            e.Row.ForeColor = System.Drawing.Color.Violet;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = false;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        protected void gvInvoiceDetail_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            gvInvoiceDetail.EditIndex = -1;
+            gvInvoiceDetail.DataSource = this.InvDetails.Where(x => x.PAYER_NAME.Equals(this.selectedPayer)).OrderBy(x => x.ID);
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        #endregion
+
+        protected void gvInvoiceDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int _deletePK = int.Parse(e.Keys[0].ToString().Split(Constants.CHAR_COMMA)[0]);
+
+            InvDetail _inv = this.InvDetails.Where(x => x.ID == _deletePK).FirstOrDefault();
+            if (_inv != null)
+            {
+                _inv.row_type = Convert.ToInt32(CommandNameEnum.Delete);
+                #region "MESSAGE RESULT"
+                String errorMessage = repInvoice.errorMessage;
+                if (!String.IsNullOrEmpty(errorMessage))
+                {
+                    MessageBox.Show(this, errorMessage);
+                }
+                else
+                {
+                    MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS);
+                }
+                #endregion
+            }
+        }
+
+        protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            int index = Convert.ToInt32(e.CommandArgument);
+            this.selectedPayer = GridView1.Rows[index].Cells[1].Text;
+            gvInvoiceDetail.DataSource = this.InvDetails.Where(x => x.PAYER_NAME.Equals(this.selectedPayer)).OrderBy(x => x.ID);
+            gvInvoiceDetail.DataBind();
+
+            ModolPopupExtender.Show();
+        }
+
+        protected void OK_Click(object sender, EventArgs e)
+        {
+            DataTable dt = new DataTable();
+            dt = PivotTable.GetInversedDataTable(this.InvDetails.ToDataTable(), "M_SERVICE_NAME", "PAYER_NAME", "PAYMENT_AMOUNT", "-", false);
+            GridView1.DataSource = dt;
+            GridView1.DataBind();
         }
 
     }

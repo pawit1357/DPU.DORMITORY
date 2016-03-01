@@ -17,7 +17,7 @@ namespace DPU.DORMITORY.Biz
         #endregion
 
 
-        public ReportDocument getRpt01()
+        public ReportDocument getRpt01(int lang_id)
         {
             ReportDocument _rpt = new ReportDocument();
             _rpt.Load(Configuration.PathReportInvoice);
@@ -28,10 +28,13 @@ namespace DPU.DORMITORY.Biz
             _rpt.SetParameterValue("P_MONTH", date.Month);
             _rpt.SetParameterValue("P_YEAR", date.Year);
             _rpt.SetParameterValue("P_BUILD", build_id);
+            _rpt.SetParameterValue("P_NATION", lang_id);
+
+            
             return _rpt;
         }
 
-        public ReportDocument getRpt02()
+        public ReportDocument getRpt02(int lang_id)
         {
             ReportDocument _rpt = new ReportDocument();
             _rpt.Load(Configuration.PathReportRecieve);
@@ -42,6 +45,8 @@ namespace DPU.DORMITORY.Biz
             _rpt.SetParameterValue("P_MONTH", date.Month);
             _rpt.SetParameterValue("P_YEAR", date.Year);
             _rpt.SetParameterValue("P_BUILD", build_id);
+            _rpt.SetParameterValue("P_NATION", lang_id);
+
             return _rpt;
         }
 
@@ -77,8 +82,7 @@ namespace DPU.DORMITORY.Biz
             _rpt.Load(Configuration.PathReportSummary_Elec_Water);
             _rpt.SetDatabaseLogon(Configuration.DbUserName, Configuration.DbPassword, Configuration.DbServiceIP, Configuration.DbCatalog);
             _rpt.SetParameterValue("P_ROOM_ID", room_id);
-            _rpt.SetParameterValue("P_CUSTOMER_ID", customer_id);
-            _rpt.SetParameterValue("P_INVOICE_ID", 0);
+            _rpt.SetParameterValue("P_BUILD", build_id);
             _rpt.SetParameterValue("P_MONTH", date.Month);
             _rpt.SetParameterValue("P_YEAR", date.Year);
             return _rpt;

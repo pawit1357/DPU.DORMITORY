@@ -22,6 +22,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
     
         public int ID { get; set; }
         public Nullable<int> BUILD_ID { get; set; }
+        public Nullable<int> ROOM_TYPE_ID { get; set; }
         public string NAME { get; set; }
         public string DESCRIPTION { get; set; }
         public Nullable<decimal> INSURANCE_AMOUNT { get; set; }
@@ -30,8 +31,10 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public string UPDATE_BY { get; set; }
         public Nullable<System.DateTime> CREATE_DATE { get; set; }
         public Nullable<System.DateTime> UPDATE_DATE { get; set; }
+        public Nullable<int> CALCULATE_INVOICE_TYPE { get; set; }
     
         public virtual TB_M_BUILD TB_M_BUILD { get; set; }
+        public virtual TB_M_ROOM_TYPE TB_M_ROOM_TYPE { get; set; }
         public virtual ICollection<TB_RATES_GROUP_DETAIL> TB_RATES_GROUP_DETAIL { get; set; }
         public virtual ICollection<TB_ROOM> TB_ROOM { get; set; }
     }

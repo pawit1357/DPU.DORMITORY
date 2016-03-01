@@ -14,11 +14,6 @@ namespace DPU.DORMITORY.Biz.DataAccess
     
     public partial class TB_CUSTOMER
     {
-        public TB_CUSTOMER()
-        {
-            this.TB_CUSTOMER_FUND = new HashSet<TB_CUSTOMER_FUND>();
-        }
-    
         public int ID { get; set; }
         public string CUSTOMER_NUMBER { get; set; }
         public Nullable<int> ROOM_ID { get; set; }
@@ -40,8 +35,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public string STD_STATUS { get; set; }
         public Nullable<bool> HAS_STDNUM { get; set; }
         public Nullable<bool> PAYER { get; set; }
+        public Nullable<bool> STAY_ALONE { get; set; }
     
-        public virtual ICollection<TB_CUSTOMER_FUND> TB_CUSTOMER_FUND { get; set; }
         public virtual TB_CUSTOMER_PROFILE TB_CUSTOMER_PROFILE { get; set; }
         public virtual TB_M_CUSTOMER_TYPE TB_M_CUSTOMER_TYPE { get; set; }
     }

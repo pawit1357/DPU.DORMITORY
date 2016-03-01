@@ -5,9 +5,10 @@ using DPU.DORMITORY.Properties;
 using DPU.DORMITORY.Repositories;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using System.Linq;
 namespace DPU.DORMITORY.Web.View.Management
 {
     public partial class SearchPaymentHistory : System.Web.UI.Page
@@ -15,10 +16,19 @@ namespace DPU.DORMITORY.Web.View.Management
 
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_CUSTOMER> repCustomer;
+        private Repository<TB_ROOM> repRoom;
+        private Repository<TB_M_BUILD> repBuild;
 
         public SearchPaymentHistory()
         {
             repCustomer = unitOfWork.Repository<TB_CUSTOMER>();
+            repRoom = unitOfWork.Repository<TB_ROOM>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
+        }
+
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
         }
 
         public IEnumerable searchResult
@@ -59,9 +69,13 @@ namespace DPU.DORMITORY.Web.View.Management
             get
             {
                 TB_INVOICE tmp = new TB_INVOICE();
+                tmp.BUILD_ID = Convert.ToInt32(ddlBuild.SelectedValue);
+                tmp.ROOM_ID = Convert.ToInt32(String.IsNullOrEmpty(ddlRoom.SelectedValue)? "0": ddlRoom.SelectedValue);
+                tmp.FIRSTNAME = txtName.Text;
+                tmp.SAP_DOCNO = txtInvoiceNo.Text;
                 //tmp.RoomNumber = txtRoom.Text;
-                tmp.FilterPaymentStatus = false;
-                //tmp.PAYMENT_STATUS = false;
+                tmp.FilterPaymentStatus = rdPayStatus.Checked;
+                tmp.PAYMENT_STATUS = rdPayStatus01.Checked;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
                 return tmp;
             }
@@ -70,10 +84,25 @@ namespace DPU.DORMITORY.Web.View.Management
         {
             if (objRoom != null)
             {
-                gvResult.DataSource = objInvoice.SearchPaymentHistory();
+                gvResult.DataSource = searchResult;
                 gvResult.DataBind();
-                gvResult.UseAccessibleHeader = true;
-                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                //gvResult.UseAccessibleHeader = true;
+                //gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
+
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
+            ddlBuild.DataBind();
+            if (build != null && build.Count > 1)
+            {
+                ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+            else
+            {
+                int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataBind();
+                ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
             }
         }
 
@@ -144,6 +173,38 @@ namespace DPU.DORMITORY.Web.View.Management
 
 
             crystalReport.PrintToPrinter(1, true, 0, 0);
+        }
+
+        protected void ddlBuild_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
+            {
+                int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataBind();
+                ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            searchResult = objInvoice.SearchPaymentHistory();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+            foreach(var item in searchResult){
+                
+            }
+            if (objInvoice.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
         }
     }
 }

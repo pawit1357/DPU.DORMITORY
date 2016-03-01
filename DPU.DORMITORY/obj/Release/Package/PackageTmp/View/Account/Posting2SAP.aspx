@@ -93,17 +93,27 @@
                             <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
                                 CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
                                 <Columns>
+                                    <asp:BoundField HeaderText="POST ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID"/>
+                                    <asp:BoundField HeaderText="BUILDING ID" DataField="BID" ItemStyle-HorizontalAlign="Left" SortExpression="BID"/>
 
-                                    <asp:BoundField HeaderText="ประจำเดือน" DataField="POSTING_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="POSTING_DATE" DataFormatString="{0:MM/yyyy}" />
-                                    <asp:BoundField HeaderText="Company" DataField="COMPANY" ItemStyle-HorizontalAlign="Left" />
+                                    <asp:BoundField HeaderText="เดือน" DataField="POSTING_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="POSTING_DATE" DataFormatString="{0:MM/yyyy}" />
+                                    <asp:BoundField HeaderText="อาคาร" DataField="NAME" ItemStyle-HorizontalAlign="Left" SortExpression="NAME"/>
+                                    <asp:BoundField HeaderText="ห้อง" DataField="NUMBER" ItemStyle-HorizontalAlign="Left" SortExpression="NUMBER"  />
+                                    <%--<asp:BoundField HeaderText="เลขทะเบียน/ผู้สนับสุน" DataField="REF_NUM" ItemStyle-HorizontalAlign="Left" SortExpression="REF_NUM"/>--%>
+                                     <asp:BoundField HeaderText="เลขทะเบียน" DataField="CUSTOMER_NUMBER" ItemStyle-HorizontalAlign="Left" />
+                                    <asp:BoundField HeaderText="ชื่อ" DataField="PAYER_NAME" ItemStyle-HorizontalAlign="Left" />
+
+<%--                                    <asp:BoundField HeaderText="Company" DataField="COMPANY" ItemStyle-HorizontalAlign="Left" />--%>
                                     <asp:BoundField HeaderText="BA" DataField="BA" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="Profit Ctr." DataField="PROFIT_CTR" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="Main trans" DataField="MAIN_TRANS" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="Sub trans" DataField="SUB_TRANS" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="Service" DataField="SERVICE" ItemStyle-HorizontalAlign="Left" />
+<%--                                    <asp:BoundField HeaderText="Profit Ctr." DataField="PROFIT_CTR" ItemStyle-HorizontalAlign="Left" />--%>
+<%--                                    <asp:BoundField HeaderText="Main trans" DataField="MAIN_TRANS" ItemStyle-HorizontalAlign="Left" />--%>
+                                    <%--<asp:BoundField HeaderText="Sub trans" DataField="SUB_TRANS" ItemStyle-HorizontalAlign="Left" />--%>
+            <%--                        <asp:BoundField HeaderText="Service" DataField="SERVICE" ItemStyle-HorizontalAlign="Left" />
                                     <asp:BoundField HeaderText="ผู้ชำระ" DataField="PAY_BY" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="BP No." DataField="BP_NO" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="Amout" DataField="AMOUT" ItemStyle-HorizontalAlign="Left" />
+                                    <asp:BoundField HeaderText="BP No." DataField="BP_NO" ItemStyle-HorizontalAlign="Left" />--%>
+
+                                    
+                                    <asp:BoundField HeaderText="Amout" DataField="AMOUNT" ItemStyle-HorizontalAlign="Left" />
                                 </Columns>
 
                                 <EmptyDataTemplate>
@@ -112,6 +122,7 @@
                                     </div>
                                 </EmptyDataTemplate>
                             </asp:GridView>
+
                             <%--<asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
                             CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
                             <Columns>

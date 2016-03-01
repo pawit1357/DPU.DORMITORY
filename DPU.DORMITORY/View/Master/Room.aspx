@@ -17,7 +17,8 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;ข้อมูลห้อง</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;
+                        <asp:Literal ID="litPageTitle" runat="server" /></span>
 
                 </div>
                 <div class="tools">
@@ -75,7 +76,7 @@
                                 <label class="control-label col-md-3">อัตราค่าบริการ</label>
                                 <div class="col-md-6">
 
-                                    <asp:DropDownList ID="ddlRateGroupId" runat="server" class="select2_category form-control" DataTextField="Description" DataValueField="ID"></asp:DropDownList>
+                                    <asp:DropDownList ID="ddlRateGroupId" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
 
                                 </div>
                             </div>
@@ -91,6 +92,19 @@
                             </div>
                         </div>
                     </div>
+<%--                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">
+                                </label>
+                                <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <asp:CheckBox ID="cbSplitInvByPerson" runat="server" Checked="true" />ออกใบแจ้งหนี้ตามคน
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>--%>
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-6">
@@ -113,7 +127,7 @@
     </form>
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        <script src="<%= ResolveUrl("~/assets/global/plugins/jquery.min.js") %>" type="text/javascript"></script>
+    <script src="<%= ResolveUrl("~/assets/global/plugins/jquery.min.js") %>" type="text/javascript"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
     <script>
         jQuery(document).ready(function () {
@@ -135,7 +149,7 @@
                 rules: {
                     ctl00$ContentPlaceHolder1$ddlBuildId: {
                         required: true,
-                        number:true
+                        number: true
                     },
                     ctl00$ContentPlaceHolder1$txtFloor: {
                         required: true,

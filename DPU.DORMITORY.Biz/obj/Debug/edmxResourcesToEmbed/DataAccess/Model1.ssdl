@@ -55,15 +55,19 @@
     <Property Name="STD_STATUS" Type="varchar" MaxLength="50" />
     <Property Name="HAS_STDNUM" Type="bit" />
     <Property Name="PAYER" Type="bit" />
+    <Property Name="STAY_ALONE" Type="bit" />
   </EntityType>
-  <EntityType Name="TB_CUSTOMER_FUND">
+  <EntityType Name="TB_CUSTOMER_PAYER">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CUS_ID" Type="int" />
-    <Property Name="FUND_ID" Type="int" />
-    <Property Name="FOR_SERVICE_ID" Type="int" />
+    <Property Name="CUS_ID" Type="int" Nullable="false" />
+    <Property Name="COST_TYPE_ID" Type="int" />
+    <Property Name="SPONSOR_ID" Type="int" />
+    <Property Name="TERM_OF_PAYMENT_ID" Type="int" />
+    <Property Name="AMOUNT" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="ROOM_ID" Type="int" />
   </EntityType>
   <EntityType Name="TB_CUSTOMER_PROFILE">
     <Key>
@@ -86,7 +90,8 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="REF_ID" Type="int" />
+    <Property Name="CUS_ID" Type="int" />
+    <Property Name="SPONSOR_ID" Type="int" />
     <Property Name="POSTING_DATE" Type="datetime" />
     <Property Name="SAP_DOCNO" Type="varchar" MaxLength="50" />
     <Property Name="AMOUNT" Type="decimal" Precision="15" Scale="2" />
@@ -96,9 +101,10 @@
     <Property Name="CREATE_DATE" Type="datetime" />
     <Property Name="UPDATE_DATE" Type="datetime" />
     <Property Name="STATUS" Type="int" />
-    <Property Name="INVOICE_TYPE" Type="int" />
-    <Property Name="OTHER" Type="varchar" MaxLength="50" />
     <Property Name="POST_TIME" Type="int" />
+    <Property Name="IS_ACTIVE" Type="bit" />
+    <Property Name="PAYER_NAME" Type="varchar" MaxLength="100" />
+    <Property Name="PAYMENT_DATE" Type="datetime" />
   </EntityType>
   <EntityType Name="TB_INVOICE_DETAIL">
     <Key>
@@ -106,21 +112,17 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="INVOICE_ID" Type="int" Nullable="false" />
-    <Property Name="SERVICE_ID" Type="int" />
+    <Property Name="COST_TYPE_ID" Type="int" />
+    <Property Name="CUS_ID" Type="int" />
+    <Property Name="SPONSOR_ID" Type="int" />
     <Property Name="AMOUNT" Type="decimal" Precision="15" Scale="2" />
-    <Property Name="PAY_BY" Type="int" />
-    <Property Name="PAY_AMOUT" Type="decimal" Precision="15" Scale="2" />
-    <Property Name="COMPANY" Type="int" />
-    <Property Name="BA" Type="int" />
-    <Property Name="PROFIT_CTR" Type="int" />
-    <Property Name="MAIN_TRANS" Type="int" />
-    <Property Name="SUB_TRANS" Type="int" />
+    <Property Name="REMARK" Type="varchar" MaxLength="100" />
   </EntityType>
   <EntityType Name="TB_M_BUILD">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BUILD_ID" Type="int" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
     <Property Name="COMPANY" Type="varchar" MaxLength="100" />
@@ -137,44 +139,61 @@
     <Property Name="ADDRESS_LINE_1_EN" Type="varchar" MaxLength="100" />
     <Property Name="ADDRESS_LINE_2_EN" Type="varchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="TB_M_COST_TYPE">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME" Type="varchar" MaxLength="50" />
+    <Property Name="NAME_EN" Type="varchar" MaxLength="50" />
+  </EntityType>
   <EntityType Name="TB_M_CUSTOMER_TYPE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <EntityType Name="TB_M_FUND">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="FOR_SERVICE_ID" Type="int" />
-    <Property Name="NAME" Type="varchar" MaxLength="50" />
-    <Property Name="DESCRIPTION" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="TB_M_NATION">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="CODE" Type="varchar" MaxLength="2" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
+    <Property Name="NAME_EN" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="TB_M_ROOM_TYPE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="TB_M_SERVICE">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BUILD_ID" Type="int" />
+    <Property Name="COST_ID" Type="int" />
+    <Property Name="MAIN_TRANS" Type="int" />
+    <Property Name="SUB_TRANS" Type="int" />
+    <Property Name="GL_ACCOUNT" Type="int" />
+  </EntityType>
+  <EntityType Name="TB_M_SPONSOR">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NAME" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TB_M_TERM_OF_PAYMENT">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
-    <Property Name="NAME_EN" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="TB_M_TITLE">
     <Key>
@@ -189,6 +208,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="BUILD_ID" Type="int" />
+    <Property Name="ROOM_TYPE_ID" Type="int" />
     <Property Name="NAME" Type="varchar" MaxLength="50" />
     <Property Name="DESCRIPTION" Type="varchar" MaxLength="50" />
     <Property Name="INSURANCE_AMOUNT" Type="decimal" Precision="15" Scale="2" />
@@ -197,6 +217,7 @@
     <Property Name="UPDATE_BY" Type="varchar" MaxLength="25" />
     <Property Name="CREATE_DATE" Type="date" />
     <Property Name="UPDATE_DATE" Type="date" />
+    <Property Name="CALCULATE_INVOICE_TYPE" Type="int" />
   </EntityType>
   <EntityType Name="TB_RATES_GROUP_DETAIL">
     <Key>
@@ -204,13 +225,14 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RATES_GROUP_ID" Type="int" Nullable="false" />
-    <Property Name="SERVICE_ID" Type="int" />
-    <Property Name="MAINTRAN" Type="int" />
-    <Property Name="SUBTRAN" Type="int" />
-    <Property Name="GL" Type="int" />
+    <Property Name="COST_TYPE_ID" Type="int" />
     <Property Name="UNIT" Type="int" />
     <Property Name="AMOUNT" Type="decimal" Precision="15" Scale="2" />
     <Property Name="VAT" Type="int" />
+    <Property Name="REMARK" Type="varchar" MaxLength="100" />
+    <Property Name="MAIN_TRANS" Type="int" />
+    <Property Name="SUB_TRANS" Type="int" />
+    <Property Name="GL_ACCOUNT" Type="int" />
   </EntityType>
   <EntityType Name="TB_ROOM">
     <Key>
@@ -326,39 +348,39 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_CUSTOMER">
-    <End Role="TB_CUSTOMER" Type="Self.TB_CUSTOMER" Multiplicity="0..1" />
-    <End Role="TB_CUSTOMER_FUND" Type="Self.TB_CUSTOMER_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE">
+    <End Role="TB_M_COST_TYPE" Type="Self.TB_M_COST_TYPE" Multiplicity="0..1" />
+    <End Role="TB_CUSTOMER_PAYER" Type="Self.TB_CUSTOMER_PAYER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_CUSTOMER">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="CUS_ID" />
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="COST_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_M_FUND">
-    <End Role="TB_M_FUND" Type="Self.TB_M_FUND" Multiplicity="0..1" />
-    <End Role="TB_CUSTOMER_FUND" Type="Self.TB_CUSTOMER_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR">
+    <End Role="TB_M_SPONSOR" Type="Self.TB_M_SPONSOR" Multiplicity="0..1" />
+    <End Role="TB_CUSTOMER_PAYER" Type="Self.TB_CUSTOMER_PAYER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_FUND">
+      <Principal Role="TB_M_SPONSOR">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="FUND_ID" />
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="SPONSOR_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_CUSTOMER_FUND_TB_M_SERVICE">
-    <End Role="TB_M_SERVICE" Type="Self.TB_M_SERVICE" Multiplicity="0..1" />
-    <End Role="TB_CUSTOMER_FUND" Type="Self.TB_CUSTOMER_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_CUSTOMER_PAYER_TB_ROOM">
+    <End Role="TB_ROOM" Type="Self.TB_ROOM" Multiplicity="0..1" />
+    <End Role="TB_CUSTOMER_PAYER" Type="Self.TB_CUSTOMER_PAYER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_ROOM">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_CUSTOMER_FUND">
-        <PropertyRef Name="FOR_SERVICE_ID" />
+      <Dependent Role="TB_CUSTOMER_PAYER">
+        <PropertyRef Name="ROOM_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -410,39 +432,39 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_INVOICE_DETAIL_TB_M_SERVICE">
-    <End Role="TB_M_SERVICE" Type="Self.TB_M_SERVICE" Multiplicity="0..1" />
+  <Association Name="FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE">
+    <End Role="TB_M_COST_TYPE" Type="Self.TB_M_COST_TYPE" Multiplicity="0..1" />
     <End Role="TB_INVOICE_DETAIL" Type="Self.TB_INVOICE_DETAIL" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="TB_INVOICE_DETAIL">
-        <PropertyRef Name="SERVICE_ID" />
+        <PropertyRef Name="COST_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_M_FUND_TB_M_SERVICE">
-    <End Role="TB_M_SERVICE" Type="Self.TB_M_SERVICE" Multiplicity="0..1" />
-    <End Role="TB_M_FUND" Type="Self.TB_M_FUND" Multiplicity="*" />
+  <Association Name="FK_TB_M_SERVICE_TB_M_BUILD">
+    <End Role="TB_M_BUILD" Type="Self.TB_M_BUILD" Multiplicity="0..1" />
+    <End Role="TB_M_SERVICE" Type="Self.TB_M_SERVICE" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_BUILD">
         <PropertyRef Name="ID" />
       </Principal>
-      <Dependent Role="TB_M_FUND">
-        <PropertyRef Name="FOR_SERVICE_ID" />
+      <Dependent Role="TB_M_SERVICE">
+        <PropertyRef Name="BUILD_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE">
-    <End Role="TB_M_SERVICE" Type="Self.TB_M_SERVICE" Multiplicity="0..1" />
+  <Association Name="FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE">
+    <End Role="TB_M_COST_TYPE" Type="Self.TB_M_COST_TYPE" Multiplicity="0..1" />
     <End Role="TB_RATES_GROUP_DETAIL" Type="Self.TB_RATES_GROUP_DETAIL" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="TB_M_SERVICE">
+      <Principal Role="TB_M_COST_TYPE">
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="TB_RATES_GROUP_DETAIL">
-        <PropertyRef Name="SERVICE_ID" />
+        <PropertyRef Name="COST_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -467,6 +489,18 @@
       </Principal>
       <Dependent Role="TB_RATES_GROUP">
         <PropertyRef Name="BUILD_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TB_RATES_GROUP_TB_M_ROOM_TYPE">
+    <End Role="TB_M_ROOM_TYPE" Type="Self.TB_M_ROOM_TYPE" Multiplicity="0..1" />
+    <End Role="TB_RATES_GROUP" Type="Self.TB_RATES_GROUP" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TB_M_ROOM_TYPE">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="TB_RATES_GROUP">
+        <PropertyRef Name="ROOM_TYPE_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -584,16 +618,18 @@
     <EntitySet Name="MENU" EntityType="Self.MENU" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MENU_ROLE" EntityType="Self.MENU_ROLE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_CUSTOMER" EntityType="Self.TB_CUSTOMER" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="TB_CUSTOMER_FUND" EntityType="Self.TB_CUSTOMER_FUND" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TB_CUSTOMER_PAYER" EntityType="Self.TB_CUSTOMER_PAYER" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_CUSTOMER_PROFILE" EntityType="Self.TB_CUSTOMER_PROFILE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_INVOICE" EntityType="Self.TB_INVOICE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_INVOICE_DETAIL" EntityType="Self.TB_INVOICE_DETAIL" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_BUILD" EntityType="Self.TB_M_BUILD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TB_M_COST_TYPE" EntityType="Self.TB_M_COST_TYPE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_CUSTOMER_TYPE" EntityType="Self.TB_M_CUSTOMER_TYPE" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="TB_M_FUND" EntityType="Self.TB_M_FUND" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_NATION" EntityType="Self.TB_M_NATION" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_ROOM_TYPE" EntityType="Self.TB_M_ROOM_TYPE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_SERVICE" EntityType="Self.TB_M_SERVICE" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TB_M_SPONSOR" EntityType="Self.TB_M_SPONSOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TB_M_TERM_OF_PAYMENT" EntityType="Self.TB_M_TERM_OF_PAYMENT" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_M_TITLE" EntityType="Self.TB_M_TITLE" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_RATES_GROUP" EntityType="Self.TB_RATES_GROUP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="TB_RATES_GROUP_DETAIL" EntityType="Self.TB_RATES_GROUP_DETAIL" Schema="dbo" store:Type="Tables" />
@@ -608,17 +644,17 @@
       <End Role="MENU" EntitySet="MENU" />
       <End Role="MENU_ROLE" EntitySet="MENU_ROLE" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_CUSTOMER" Association="Self.FK_TB_CUSTOMER_FUND_TB_CUSTOMER">
-      <End Role="TB_CUSTOMER" EntitySet="TB_CUSTOMER" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE" Association="Self.FK_TB_CUSTOMER_PAYER_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_M_FUND" Association="Self.FK_TB_CUSTOMER_FUND_TB_M_FUND">
-      <End Role="TB_M_FUND" EntitySet="TB_M_FUND" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR" Association="Self.FK_TB_CUSTOMER_PAYER_TB_M_SPONSOR">
+      <End Role="TB_M_SPONSOR" EntitySet="TB_M_SPONSOR" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_CUSTOMER_FUND_TB_M_SERVICE" Association="Self.FK_TB_CUSTOMER_FUND_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
-      <End Role="TB_CUSTOMER_FUND" EntitySet="TB_CUSTOMER_FUND" />
+    <AssociationSet Name="FK_TB_CUSTOMER_PAYER_TB_ROOM" Association="Self.FK_TB_CUSTOMER_PAYER_TB_ROOM">
+      <End Role="TB_ROOM" EntitySet="TB_ROOM" />
+      <End Role="TB_CUSTOMER_PAYER" EntitySet="TB_CUSTOMER_PAYER" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE" Association="Self.FK_TB_CUSTOMER_PROFILE_TB_CUSTOMER_PROFILE">
       <End Role="TB_CUSTOMER" EntitySet="TB_CUSTOMER" />
@@ -636,16 +672,16 @@
       <End Role="TB_INVOICE" EntitySet="TB_INVOICE" />
       <End Role="TB_INVOICE_DETAIL" EntitySet="TB_INVOICE_DETAIL" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_INVOICE_DETAIL_TB_M_SERVICE" Association="Self.FK_TB_INVOICE_DETAIL_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
+    <AssociationSet Name="FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE" Association="Self.FK_TB_INVOICE_DETAIL_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
       <End Role="TB_INVOICE_DETAIL" EntitySet="TB_INVOICE_DETAIL" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_M_FUND_TB_M_SERVICE" Association="Self.FK_TB_M_FUND_TB_M_SERVICE">
+    <AssociationSet Name="FK_TB_M_SERVICE_TB_M_BUILD" Association="Self.FK_TB_M_SERVICE_TB_M_BUILD">
+      <End Role="TB_M_BUILD" EntitySet="TB_M_BUILD" />
       <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
-      <End Role="TB_M_FUND" EntitySet="TB_M_FUND" />
     </AssociationSet>
-    <AssociationSet Name="FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE" Association="Self.FK_TB_RATES_GROUP_DETAIL_TB_M_SERVICE">
-      <End Role="TB_M_SERVICE" EntitySet="TB_M_SERVICE" />
+    <AssociationSet Name="FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE" Association="Self.FK_TB_RATES_GROUP_DETAIL_TB_M_COST_TYPE">
+      <End Role="TB_M_COST_TYPE" EntitySet="TB_M_COST_TYPE" />
       <End Role="TB_RATES_GROUP_DETAIL" EntitySet="TB_RATES_GROUP_DETAIL" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_RATES_GROUP_DETAIL_TB_RATES_GROUP" Association="Self.FK_TB_RATES_GROUP_DETAIL_TB_RATES_GROUP">
@@ -654,6 +690,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_TB_RATES_GROUP_TB_M_BUILD" Association="Self.FK_TB_RATES_GROUP_TB_M_BUILD">
       <End Role="TB_M_BUILD" EntitySet="TB_M_BUILD" />
+      <End Role="TB_RATES_GROUP" EntitySet="TB_RATES_GROUP" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TB_RATES_GROUP_TB_M_ROOM_TYPE" Association="Self.FK_TB_RATES_GROUP_TB_M_ROOM_TYPE">
+      <End Role="TB_M_ROOM_TYPE" EntitySet="TB_M_ROOM_TYPE" />
       <End Role="TB_RATES_GROUP" EntitySet="TB_RATES_GROUP" />
     </AssociationSet>
     <AssociationSet Name="FK_TB_ROOM_METER_TB_ROOM_METER" Association="Self.FK_TB_ROOM_METER_TB_ROOM_METER">

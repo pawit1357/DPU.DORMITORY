@@ -5,37 +5,53 @@ using System.Linq;
 namespace DPU.DORMITORY.Biz.DataAccess
 {
     [Serializable]
-    public partial class TB_CUSTOMER_FUND
+    public partial class TB_CUSTOMER_PAYER
     {
         #region "Property"
         public CommandNameEnum RowState { get; set; }
+        public int order { get; set; }
+        public String SERVICE_NAME { get; set; }
+        public String SPONSOR_NAME { get; set; }
+        public String TERM_OF_PAYMENT_NAME { get; set; }
+        public Decimal ROOM_RATE { get; set; }
+
         #endregion
 
         //ค้นหา Customer_Fund โดย join tb_m_service
-        public IEnumerable Search()
-        {
-            using (DORMEntities ctx = new DORMEntities())
-            {
-                var result = from c in ctx.TB_CUSTOMER
-                             join r in ctx.TB_ROOM on c.ROOM_ID equals r.ID
-                             join ct in ctx.TB_M_CUSTOMER_TYPE on c.CUSTOMER_TYPE_ID equals ct.ID
-                             join cp in ctx.TB_CUSTOMER_PROFILE on c.ID equals cp.CUS_ID
-                             where c.STATUS == 0//Show only CheckIn Status
-                             orderby c.ID, c.FIRSTNAME ascending
-                             select new
-                             {
-                                 c.STATUS,
-                                 c.ID,
-                                 c.CUSTOMER_NUMBER,
-                                 c.FIRSTNAME,
-                                 c.SURNAME,
-                                 CUSTOMER_TYPE = ct.NAME,
-                                 c.PERSONALID,
-                                 c.CHECKIN_DATE,
-                                 c.RESERV_DATE,
-                                 cp.PHONE,
-                                 c.ROOM_ID
-                             };
+        //public IEnumerable Search()
+        //{
+        //    using (DORMEntities ctx = new DORMEntities())
+        //    {
+
+
+                //payer.SPONSOR_ID = 0;
+                //payer.SERVICE_ID = service.ID;
+                //payer.SERVICE_NAME = service.NAME;
+                //payer.SPONSOR_NAME = String.Format("{0}  {1}", txtName.Text, txtSurname.Text);
+                //payer.TERM_OF_PAYMENT_ID = 2;
+                //payer.TERM_OF_PAYMENT_NAME = "SHARE (%)";
+                //payer.AMOUNT = 100;
+                //payer.ROOM_ID = this.ROOM_ID;
+
+
+                //var result = from c in ctx.TB_CUSTOMER
+                //             join cp in ctx.TB_CUSTOMER_PAYER on c.ID equals cp.CUS_ID
+                //             join sp in ctx.TB_M_SPONSOR on cp.SPONSOR_ID equals sp.ID
+                //             join ss in ctx.TB_M_SERVICE on cp.SERVICE_ID equals ss.ID
+                //             join tp in ctx.TB_M_TERM_OF_PAYMENT on cp.TERM_OF_PAYMENT_ID equals tp.ID
+                //             select new
+                //             {
+                //                 SPONSOR_ID = 0;
+                //                 SERVICE_ID = service.ID;
+                //                 SERVICE_NAME = service.NAME;
+                //                 SPONSOR_NAME = String.Format("{0}  {1}", txtName.Text, txtSurname.Text);
+                //                 TERM_OF_PAYMENT_ID = 2;
+                //                 TERM_OF_PAYMENT_NAME = "SHARE (%)";
+                //                 AMOUNT = 100;
+                //                 ROOM_ID = this.ROOM_ID;
+
+
+                //             };
 
                 //if (this.ROOM_ID > 0)
                 //{
@@ -45,10 +61,10 @@ namespace DPU.DORMITORY.Biz.DataAccess
                 //{
                 //    result = result.Where(x => STATUS == (int)x.STATUS);
                 //}
-                return result.ToList();
-            }
-        }
-        
+                //return result.ToList();
+            //}
+        //}
+
     }
 
 }

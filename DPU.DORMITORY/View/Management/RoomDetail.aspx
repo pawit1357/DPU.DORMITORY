@@ -56,7 +56,7 @@
                                         </ItemTemplate>
                                         <ItemStyle HorizontalAlign="Left" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="Subtran" ItemStyle-HorizontalAlign="Center">
+                                    <%--<asp:TemplateField HeaderText="Subtran" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litSubtran" runat="server" Text='<%# Eval("SUBTRAN")%>' />
                                         </ItemTemplate>
@@ -73,7 +73,7 @@
                                             <asp:TextBox ID="txtGL" runat="server" Text='<%# Eval("GL")%>' CssClass="form-control"></asp:TextBox>
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
-                                    </asp:TemplateField>
+                                    </asp:TemplateField>--%>
                                     <asp:TemplateField HeaderText="AMOUNT" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litAMOUNT" runat="server" Text='<%# Eval("AMOUNT")%>' />
@@ -83,7 +83,8 @@
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
                                     </asp:TemplateField>
-                                    <asp:TemplateField HeaderText="VAT" ItemStyle-HorizontalAlign="Center">
+
+              <%--                      <asp:TemplateField HeaderText="VAT" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
                                             <asp:Literal ID="litVAT" runat="server" Text='<%# Eval("VAT")%>' />
                                         </ItemTemplate>
@@ -91,7 +92,7 @@
                                             <asp:TextBox ID="txtVAT" runat="server" Text='<%# Eval("VAT")%>' CssClass="form-control"></asp:TextBox>
                                         </EditItemTemplate>
                                         <ItemStyle HorizontalAlign="Center" />
-                                    </asp:TemplateField>
+                                    </asp:TemplateField>--%>
                                 </Columns>
                                 
                                 <EmptyDataTemplate>
@@ -145,6 +146,12 @@
                                             <asp:Literal ID="litCheckInDate" runat="server" Text='<%# Eval("CHECKIN_DATE")%>' />
                                         </ItemTemplate>
                                         <ItemStyle HorizontalAlign="Left" />
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="พักคนเดียว" ItemStyle-HorizontalAlign="Center">
+                                        <ItemTemplate>
+                                            <asp:CheckBox ID="CheckBox1" runat="server" Checked='<%# Eval("STAY_ALONE")%>' Enabled="false" />
+                                        </ItemTemplate>
+                                        <ItemStyle HorizontalAlign="Center" />
                                     </asp:TemplateField>
 <%--                                    <asp:TemplateField HeaderText="วันที่จอง" ItemStyle-HorizontalAlign="Center">
                                         <ItemTemplate>
@@ -202,18 +209,18 @@
             });
 
 
-            var table = $('#ContentPlaceHolder1_gvResult');
-            // begin: third table
-            table.dataTable({
-                // set the initial value
-                "pageLength": 10,
-            });
-            var table1 = $('#ContentPlaceHolder1_gvCustomer');
-            // begin: third table
-            table1.dataTable({
-                // set the initial value
-                "pageLength": 10,
-            });
+            //var table = $('#ContentPlaceHolder1_gvResult');
+            //// begin: third table
+            //table.dataTable({
+            //    // set the initial value
+            //    "pageLength": 10,
+            //});
+            //var table1 = $('#ContentPlaceHolder1_gvCustomer');
+            //// begin: third table
+            //table1.dataTable({
+            //    // set the initial value
+            //    "pageLength": 10,
+            //});
         });
     </script>
     <!-- END JAVASCRIPTS -->

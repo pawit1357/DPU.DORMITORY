@@ -210,6 +210,19 @@ namespace DPU.DORMITORY.Biz
             return sb.ToString();
 
         }
+        public string getCurrentMenuName(string _currentPage)
+        {
+
+            String menuName = String.Empty;
+            _currentPage = Path.GetFileName(_currentPage);
+            MENU child = menuRep.Table.ToList().Where(x => Path.GetFileName(x.URL_NAVIGATE) == _currentPage).FirstOrDefault();
+            if (child != null)
+            {
+                menuName = child.MENU_NAME;
+            }
+
+            return menuName;
+        }
 
         public void getmenuByTree(ref TreeView tv, List<MENU_ROLE> roles)
         {

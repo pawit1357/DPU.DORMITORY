@@ -17,12 +17,12 @@ namespace DPU.DORMITORY.Web.View.Master
 
         #region "Property"
         private UnitOfWork unitOfWork = new UnitOfWork();
-        private Repository<TB_M_FUND> rep;
+        private Repository<TB_M_SPONSOR> rep;
         private Repository<TB_M_SERVICE> repService;
 
         public Fund()
         {
-            rep = unitOfWork.Repository<TB_M_FUND>();
+            rep = unitOfWork.Repository<TB_M_SPONSOR>();
             repService = unitOfWork.Repository<TB_M_SERVICE>();
 
         }
@@ -50,28 +50,24 @@ namespace DPU.DORMITORY.Web.View.Master
             set { ViewState["PKID"] = value; }
         }
 
-        public TB_M_FUND obj
+        public TB_M_SPONSOR obj
         {
             get
             {
-                TB_M_FUND _tmp = new TB_M_FUND();
-                _tmp.FOR_SERVICE_ID = Convert.ToInt16(ddlServiceFor.SelectedValue);
-                _tmp.ID = Convert.ToInt16(txtID.Text);
+                TB_M_SPONSOR _tmp = new TB_M_SPONSOR();
+                //_tmp.ID = Convert.ToInt16(txtID.Text);
                 _tmp.NAME = txtName.Text;
-                _tmp.DESCRIPTION = txtDesc.Text;
                 return _tmp;
             }
         }
 
         private void initialPage()
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
             SearchFund prvPage = Page.PreviousPage as SearchFund;
             this.CommandName = (prvPage == null) ? this.CommandName : prvPage.CommandName;
             this.PKID = (prvPage == null) ? this.PKID : prvPage.PKID;
             this.PreviousPath = Constants.LINK_SEARCH_FUND;
-
-            ddlServiceFor.DataSource = repService.Table.ToList();
-            ddlServiceFor.DataBind();
 
             lbCommandName.Text = CommandName.ToString();
             switch (CommandName)
@@ -85,14 +81,14 @@ namespace DPU.DORMITORY.Web.View.Master
                     btnSave.CssClass = Constants.CSS_BUTTON_SAVE;
                     btnCancel.CssClass = Constants.CSS_BUTTON_CANCEL;
                     //Set ReadOnly
-                    txtID.ReadOnly = true;
+                    //txtID.ReadOnly = true;
                     break;
                 case CommandNameEnum.View:
                     fillInData();
                     btnSave.CssClass = Constants.CSS_DISABLED_BUTTON_SAVE;
                     btnCancel.CssClass = Constants.CSS_BUTTON_CANCEL;
                     //Set ReadOnly
-                    txtID.ReadOnly = true;
+                    //txtID.ReadOnly = true;
                     txtName.ReadOnly = true;
 
                     break;
@@ -101,13 +97,11 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private void fillInData()
         {
-            TB_M_FUND _tmp = rep.Table.Where(x => x.ID == this.PKID).FirstOrDefault();
+            TB_M_SPONSOR _tmp = rep.Table.Where(x => x.ID == this.PKID).FirstOrDefault();
             if (_tmp != null)
             {
-                txtID.Text = _tmp.ID.ToString();
-                ddlServiceFor.SelectedValue = _tmp.FOR_SERVICE_ID.ToString();
+                //txtID.Text = _tmp.ID.ToString();
                 txtName.Text = _tmp.NAME;
-                txtDesc.Text = _tmp.DESCRIPTION;
             }
         }
 
@@ -129,26 +123,25 @@ namespace DPU.DORMITORY.Web.View.Master
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            this.PKID = Convert.ToInt32(txtID.Text);
+            //this.PKID = Convert.ToInt32(txtID.Text);
             String errorMessage = String.Empty;
             switch (CommandName)
             {
                 case CommandNameEnum.Add:
-                    Boolean isExistPK = rep.Table.Where(x => x.ID == PKID).Any();
-                    if (!isExistPK)
-                    {
+                    //Boolean isExistPK = rep.Table.Where(x => x.ID == PKID).Any();
+                    //if (!isExistPK)
+                    //{
                         rep.Insert(obj);
-                    }
-                    else
-                    {
-                        errorMessage = String.Format(Resources.MSG_DONT_INSERT_EXIST, txtID.Text);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    errorMessage = String.Format(Resources.MSG_DONT_INSERT_EXIST, txtID.Text);
+                    //}
                     break;
                 case CommandNameEnum.Edit:
-                    TB_M_FUND editModel = rep.GetById(this.PKID);
+                    TB_M_SPONSOR editModel = rep.GetById(this.PKID);
+                    //editModel.ID = Convert.ToInt32(txtID.Text);
                     editModel.NAME = txtName.Text;
-                    editModel.DESCRIPTION = txtDesc.Text;
-                    editModel.FOR_SERVICE_ID = Convert.ToInt16(ddlServiceFor.SelectedValue);
                     rep.Update(obj);
                     break;
             }
@@ -168,7 +161,6 @@ namespace DPU.DORMITORY.Web.View.Master
         protected void btnCancel_Click(object sender, EventArgs e)
         {
             txtName.Text = string.Empty;
-            txtDesc.Text = string.Empty;
 
             removeSession();
             Response.Redirect(PreviousPath);

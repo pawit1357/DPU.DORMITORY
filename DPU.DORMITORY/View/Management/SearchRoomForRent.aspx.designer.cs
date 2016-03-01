@@ -22,6 +22,15 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
+        /// ToolkitScript1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ToolkitScriptManager ToolkitScript1;
+        
+        /// <summary>
         /// ddlBuild control.
         /// </summary>
         /// <remarks>
@@ -31,13 +40,31 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.DropDownList ddlBuild;
         
         /// <summary>
-        /// ddlRoom control.
+        /// txtRoomNum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRoom;
+        protected global::System.Web.UI.WebControls.TextBox txtRoomNum;
+        
+        /// <summary>
+        /// FilteredTextBoxExtenderReceiptinAc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtenderReceiptinAc;
+        
+        /// <summary>
+        /// ddlStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlStatus;
         
         /// <summary>
         /// btnSearch control.
@@ -56,6 +83,15 @@ namespace DPU.DORMITORY.Web.View.Management {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton btnCancel;
+        
+        /// <summary>
+        /// pSearchResult control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pSearchResult;
         
         /// <summary>
         /// gvResult control.

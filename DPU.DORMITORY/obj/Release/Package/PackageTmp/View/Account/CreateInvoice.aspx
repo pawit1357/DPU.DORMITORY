@@ -1,33 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="CreateInvoice.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Account.CreateInvoice" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <form id="Form1" method="post" runat="server" class="form-horizontal">
-
-        <asp:HiddenField ID="hCost01_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost02_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost03_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost04_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost05_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost06_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost07_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost08_1" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost09_1" runat="server" Value="0" />
-
-        <asp:HiddenField ID="hCost01_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost02_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost03_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost04_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost05_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost06_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost07_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost08_2" runat="server" Value="0" />
-        <asp:HiddenField ID="hCost09_2" runat="server" Value="0" />
-
+        <asp:ToolkitScriptManager ID="ToolkitScript1" runat="server" />
+        <%--<asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <ContentTemplate>--%>
         <div class="portlet light bordered">
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">บันทึกข้อมูลสำหรับออกใบแจ้งหนี้</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">บันทึกข้อมูลตั้งหนี้</span>
                     <span class="caption-helper"></span>
                 </div>
                 <div class="tools">
@@ -43,384 +27,260 @@
                     <button class="close" data-close="alert"></button>
                     Your form validation is successful!
                 </div>
-                <div class="form-body">
-                    <h4 class="form-section">ห้องเช่า</h4>
+                <div class="tabbable-line boxless tabbable-reversed">
+                    <ul class="nav nav-tabs">
+                        <li class="<%=pActive01 %>">
+                            <asp:LinkButton ID="btnMainData" runat="server" OnClick="btnMainData_Click">ป้อนข้อมูลหน่วยค่าน้ำค่าไฟ</asp:LinkButton>
+                        </li>
+                        <li class="<%=pActive02 %>">
+                            <asp:LinkButton ID="btnPamentDetail" runat="server" OnClick="btnPamentDetail_Click">ตั้งหนี้</asp:LinkButton>
+                        </li>
+                        <%--               <li class="<%=pActive03 %>">
+                            <asp:LinkButton ID="LinkButton1" runat="server" OnClick="btnOwner_Click">รายการใบแจ้งหนี้ที่ยังไม่ชำระเงิน</asp:LinkButton>
+                        </li>--%>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane <%=pActive01 %>" id="tab_0">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">อาคาร<span class="required" aria-required="true">* </span></label>
+                                        <div class="col-md-9">
+                                            <asp:DropDownList ID="ddlBuild" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">ห้อง<span class="required" aria-required="true">* </span></label>
+                                        <div class="col-md-9">
+                                            <div class="input-group" style="text-align: left">
+                                                <asp:TextBox ID="txtRoom" runat="server" CssClass="form-control" placeholder=""></asp:TextBox>
+                                                <span class="input-group-btn">
+                                                    <%--<asp:Button ID="btnCheckRoom" runat="server" Text="Check" CssClass="btn green" OnClick="btnCheckRoom_Click" />--%>
+                                                    <asp:LinkButton ID="btnCheckRoom" runat="server" CssClass="btn green" OnClick="btnCheckRoom_Click"> Check</asp:LinkButton>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">เดือน<span class="required" aria-required="true">* </span></label>
+                                        <div class="col-md-9">
+                                            <div class="input-group input-medium date date-picker" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
+                                                <asp:TextBox ID="txtPostingDate" runat="server" CssClass="form-control" OnTextChanged="txtPostingDate_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                                <span class="input-group-btn">
+                                                    <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>รายการ</th>
+                                                <th>มิเตอร์ต้น(หน่วย)</th>
+                                                <th>มิเตอร์ปลาย(หน่วย)</th>
+                                                <th>ใช้ไปทั้งหมด(หน่วย)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>ค่าไฟฟ้า</td>
+                                                <td>
+                                                    <asp:TextBox ID="txtElecMeterStart" runat="server" CssClass="form-control"></asp:TextBox></td>
+                                                <td>
+                                                    <asp:TextBox ID="txtElecMeterEnd" runat="server" CssClass="form-control"></asp:TextBox></td>
+                                                <td>
+                                                    <asp:Label ID="lbElecUnit" runat="server" Text="0"></asp:Label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>ค่าน้ำ</td>
+                                                <td>
+                                                    <asp:TextBox ID="txtWaterMeterStart" runat="server" CssClass="form-control"></asp:TextBox></td>
+                                                <td>
+                                                    <asp:TextBox ID="txtWaterMeterEnd" runat="server" CssClass="form-control"></asp:TextBox></td>
+                                                <td>
+                                                    <asp:Label ID="lbWaterUnit" runat="server" Text="0"></asp:Label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <asp:Button ID="btnCalculate" runat="server" class="btn green" Text="คำนวณมิเตอร์" OnClick="btnCalculate_Click" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane <%=pActive02 %>" id="tab_1">
+                            <div class="row">
+                                <div class="col-md-9">
 
+                                    <asp:GridView ID="GridView1" runat="server" CssClass="table table-striped table-hover table-bordered" OnRowCommand="GridView1_RowCommand">
+                                        <Columns>
+                                            <asp:CommandField ShowSelectButton="True" />
+                                        </Columns>
+                                    </asp:GridView>
+                                    <br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!--/span-->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3">จำนวนวันที่เข้าพัก</label>
+                                        <div class="col-md-9">
+                                            <asp:TextBox ID="txtStayDay" runat="server" CssClass="form-control"></asp:TextBox>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-wide" id="pnlModalDemo" style="display: none;">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h class="modal-title">
+                                            แก้ไขรายละเอียดค่าใช้จ่าย</h>
+                                    </div>
+                                    <div class="modal-body" style="width: 600px; height: 400px; overflow-x: hidden; overflow-y: scroll; padding-bottom: 10px;">
+                                        <asp:GridView ID="gvInvoiceDetail" runat="server" AutoGenerateColumns="False" Width="550px" CssClass="table table-striped table-hover table-bordered"
+                                            ShowHeaderWhenEmpty="True" DataKeyNames="ID,row_type" OnRowDataBound="gvInvoiceDetail_RowDataBound" OnRowEditing="gvInvoiceDetail_RowEditing" OnRowUpdating="gvInvoiceDetail_RowUpdating" OnRowCancelingEdit="gvInvoiceDetail_RowCancelingEdit" OnRowDeleting="gvInvoiceDetail_RowDeleting">
+                                            <Columns>
+                                                <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <%# Container.DataItemIndex + 1 %>
+                                                    </ItemTemplate>
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="รายการค่าใช้จ่าย" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Literal ID="litM_SERVICE_NAME" runat="server" Text='<%# Eval("M_SERVICE_NAME")%>' />
+                                                    </ItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Left" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="ผู้ชำระ" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Literal ID="litPAYER_NAME" runat="server" Text='<%# Eval("PAYER_NAME")%>' />
+                                                    </ItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Left" />
+                                                </asp:TemplateField>
+                                                <%--                                               <asp:TemplateField HeaderText="หน่วย" ItemStyle-HorizontalAlign="Center">
+                                                            <ItemTemplate>
+                                                                <asp:Literal ID="litRATES_GROUP_DETAIL_UNIT" runat="server" Text='<%# Eval("RATE_UNIT")%>' />
+                                                            </ItemTemplate>
+                                                            <ItemStyle HorizontalAlign="Center" />
+                                                        </asp:TemplateField>
+                                                        <asp:TemplateField HeaderText="ราคาต่อหน่วย" ItemStyle-HorizontalAlign="Center">
+                                                            <ItemTemplate>
+                                                                <asp:Literal ID="litRATE_AMOUNT" runat="server" Text='<%# Eval("RATE_AMOUNT","{0:N2}")%>' />
+                                                            </ItemTemplate>
+                                                            <ItemStyle HorizontalAlign="Right" />
+                                                        </asp:TemplateField>--%>
+
+                                                <asp:TemplateField HeaderText="จำนวนเงินที่ชำระ" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Literal ID="litPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' class="form-control"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Right" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="หมายเหตุ" ItemStyle-HorizontalAlign="Center">
+                                                    <ItemTemplate>
+                                                        <asp:Literal ID="litREMARK" runat="server" Text='<%# Eval("REMARK")%>' />
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:TextBox ID="txtREMARKT" runat="server" Text='<%# Eval("REMARK")%>' class="form-control"></asp:TextBox>
+                                                    </EditItemTemplate>
+                                                    <ItemStyle HorizontalAlign="Right" />
+                                                </asp:TemplateField>
+                                                <asp:TemplateField HeaderText="">
+                                                    <ItemTemplate>
+                                                        <asp:LinkButton ID="btnEdit" runat="server" ToolTip="Edit" CommandName="Edit" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-edit"></i></asp:LinkButton>
+                                                        <%--      <asp:LinkButton ID="btnDelete" runat="server" ToolTip="Delete" CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');"
+                                                        CommandArgument='<%# Eval("ID")%>'><i class="fa fa-trash"></i></asp:LinkButton>--%>
+                                                    </ItemTemplate>
+                                                    <EditItemTemplate>
+                                                        <asp:LinkButton ID="btnUpdate" runat="server" ToolTip="Update" ValidationGroup="CreditLineGrid"
+                                                            CommandName="Update"><i class="fa fa-save"></i></asp:LinkButton>
+                                                        <asp:LinkButton ID="LinkCancel" runat="server" ToolTip="Cancel" CausesValidation="false"
+                                                            CommandName="Cancel"><i class="fa fa-remove"></i></asp:LinkButton>
+                                                    </EditItemTemplate>
+                                                </asp:TemplateField>
+                                            </Columns>
+
+                                            <EmptyDataTemplate>
+                                                <div class="data-not-found">
+                                                    <asp:Literal ID="libDataNotFound" runat="server" Text="Data Not found" />
+                                                </div>
+                                            </EmptyDataTemplate>
+                                        </asp:GridView>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <asp:Button ID="OK" runat="server" CssClass="btn purple" Style="margin-top: 10px; margin-left: 20px;" Text="บันทึก" OnClick="OK_Click" />
+
+                                        <asp:Button ID="btnClose" CssClass="btn default" Style="margin-top: 10px;" runat="server" Text="ปิด" OnClick="btnCancel_Click" />
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+
+                            <asp:LinkButton ID="lnkFake" runat="server">
+                            </asp:LinkButton>
+                            <asp:ModalPopupExtender ID="ModolPopupExtender" runat="server" PopupControlID="pnlModalDemo"
+                                TargetControlID="lnkFake" BackgroundCssClass="modal-backdrop modal-print-form fade in" BehaviorID="mpModalDemo"
+                                CancelControlID="btnClose">
+                            </asp:ModalPopupExtender>
+
+
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <asp:Button ID="btnSave" runat="server" class="btn green" Text="Submit" OnClick="btnSave_Click" />
+                                                <%--                                                <asp:Button ID="btnPrintInvoice" runat="server" class="btn green" Text="พิมพ์ใบแจ้งหนี้" OnClick="btnPrintInvoice_Click" />--%>
+                                                <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"> Cancel</asp:LinkButton>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                     <!--/row-->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">อาคาร<span class="required" aria-required="true">* </span></label>
-                                <div class="col-md-9">
-                                    <asp:DropDownList ID="ddlBuild" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID"></asp:DropDownList>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/span-->
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">ห้อง.<span class="required" aria-required="true">* </span></label>
-                                <div class="col-md-9">
-                                    <div class="input-group" style="text-align: left">
-                                        <asp:TextBox ID="txtRoom" runat="server" CssClass="form-control" placeholder=""></asp:TextBox>
-                                        <span class="input-group-btn">
-                                            <%--<asp:Button ID="btnCheckRoom" runat="server" Text="Check" CssClass="btn green" OnClick="btnCheckRoom_Click" />--%>
-                                            <asp:LinkButton ID="btnCheckRoom" runat="server" CssClass="btn green" OnClick="btnCheckRoom_Click"> Check</asp:LinkButton>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <asp:Panel ID="pPaymentInfo" runat="server">
-                        <h4 class="form-section">รายการใบแจ้งหนี้ที่ยังไม่ชำระเงิน</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <asp:GridView ID="gvPaymentHistory" runat="server" AutoGenerateColumns="False" AllowPaging="False"
-                                    CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvPaymentHistory_RowCommand" OnRowDeleting="gvPaymentHistory_RowDeleting" OnRowDataBound="gvPaymentHistory_RowDataBound">
-                                    <Columns>
-                                        <asp:BoundField HeaderText="ประจำเดือน" DataField="POSTING_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="POSTING_DATE" DataFormatString="{0:MM-yyyy}" />
-                                        <asp:TemplateField HeaderText="เลขทะเบียนนศ./เลขห้อง" ItemStyle-HorizontalAlign="Center">
-                                            <ItemTemplate>
-                                                <asp:Literal ID="litRefDesc" runat="server" Text='<%# Eval("REF_DESC")%>' />
-                                            </ItemTemplate>
-                                            <ItemStyle HorizontalAlign="Left" />
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="เลขที่ใบแจ้งหนี้" ItemStyle-HorizontalAlign="Center">
-                                            <ItemTemplate>
-                                                <asp:Literal ID="litSapDocNo" runat="server" Text='<%# Eval("SAP_DOCNO")%>' />
-                                            </ItemTemplate>
-                                            <ItemStyle HorizontalAlign="Left" />
-                                        </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="จำนวนเงิน" ItemStyle-HorizontalAlign="Center">
-                                            <ItemTemplate>
-                                                <asp:Literal ID="litAmount" runat="server" Text='<%# Eval("AMOUNT")%>' />
-                                            </ItemTemplate>
-                                            <ItemStyle HorizontalAlign="Left" />
-                                        </asp:TemplateField>
 
-                                        <asp:TemplateField HeaderText="สถานะ" ItemStyle-HorizontalAlign="Center">
-                                            <ItemTemplate>
-                                                <asp:Literal ID="litPaymentStatus" runat="server" Text='<%# Eval("PAYMENT_STATUS")%>' />
-                                            </ItemTemplate>
-                                            <ItemStyle HorizontalAlign="Left" />
-                                        </asp:TemplateField>
-                                        <asp:TemplateField HeaderText="Action">
-                                            <ItemTemplate>
-                                                <asp:LinkButton ID="btnPrintRecieve" runat="server" ToolTip="Print Invoice" CommandName="PrintInvoice" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-print"></i></asp:LinkButton>
-                                                <asp:LinkButton ID="btnDelete" runat="server" ToolTip="Delete" CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');"
-                                                    CommandArgument='<%# Eval("ID")%>'><i class="fa fa-trash"></i></asp:LinkButton>
-                                            </ItemTemplate>
-                                        </asp:TemplateField>
-                                    </Columns>
-
-                                    <EmptyDataTemplate>
-                                        <div class="data-not-found">
-                                            <asp:Literal ID="libDataNotFound" runat="server" Text="Data Not found" />
-                                        </div>
-                                    </EmptyDataTemplate>
-                                </asp:GridView>
-                            </div>
-                        </div>
-
-                        <h4 class="form-section">ข้อมูลค่าใช้จ่าย</h4>
-                        <div class="row">
-                            <!--/span-->
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3">ประจำเดือน</label>
-                                    <div class="col-md-9">
-                                        <div class="input-group input-medium date date-picker" data-date-format="mm/yyyy" data-date-viewmode="years" data-date-minviewmode="months">
-                                            <asp:TextBox ID="txtPostingDate" runat="server" CssClass="form-control" OnTextChanged="txtPostingDate_TextChanged" AutoPostBack="true"></asp:TextBox>
-                                            <span class="input-group-btn">
-                                                <button class="btn default" type="button"><i class="fa fa-calendar"></i></button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>รายการ</th>
-                                            <th>มิเตอร์ต้น(หน่วย)</th>
-                                            <th>มิเตอร์ปลาย(หน่วย)</th>
-                                            <th>หน่วยละ</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>ค่าไฟฟ้า</td>
-                                            <td>
-                                                <asp:TextBox ID="txtElecMeterStart" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td>
-                                                <asp:TextBox ID="txtElecMeterEnd" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td>
-                                                <asp:Label ID="lbElecUnit" runat="server" Text="0"></asp:Label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>ค่าน้ำ</td>
-                                            <td>
-                                                <asp:TextBox ID="txtWaterMeterStart" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td>
-                                                <asp:TextBox ID="txtWaterMeterEnd" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td>
-                                                <asp:Label ID="lbWaterUnit" runat="server" Text="0"></asp:Label>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <asp:Button ID="btnCalculate" runat="server" class="btn green" Text="Calculate" OnClick="btnCalculate_Click" />
-                                            <asp:LinkButton ID="btnClear" runat="server" class="btn default" OnClick="btnClear_Click"> Clear</asp:LinkButton>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-11">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>รายการ</th>
-                                            <th>ค่าบริการ</th>
-                                            <th id="th_cus_1" runat="server">
-                                                <asp:Label ID="lbCus01" runat="server"></asp:Label>
-                                            </th>
-                                            <th id="th_cus_1_rate" runat="server">Rate</th>
-                                            <th id="th_cus_2" runat="server">
-                                                <asp:Label ID="lbCus02" runat="server"></asp:Label>
-                                            </th>
-                                            <th id="th_cus_2_rate" runat="server">Rates</th>
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>ค่าเช่าหอพัก</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost01" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_1_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay01_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-                                            <td id="td_cus_1_1" runat="server">
-                                                <asp:TextBox ID="txtCost01_1" runat="server" CssClass="form-control"></asp:TextBox>
-                                            </td>
-                                            <td id="td_cus_2_1_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay01_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-                                            <td id="td_cus_2_1" runat="server">
-                                                <asp:TextBox ID="txtCost01_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>รายได้ค่าเช่าฟอร์นิเจอร์-หอพัก</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost02" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_2_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay02_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-                                            <td id="td_cus_1_2" runat="server">
-                                                <asp:TextBox ID="txtCost02_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_2_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay02_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-                                            <td id="td_cus_2_2" runat="server">
-                                                <asp:TextBox ID="txtCost02_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>ค่าน้ำ</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost03" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_3_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay03_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_3" runat="server">
-                                                <asp:TextBox ID="txtCost03_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_3_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay03_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_3" runat="server">
-                                                <asp:TextBox ID="txtCost03_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td>ค่าไฟ</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost04" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_4_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay04_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_4" runat="server">
-                                                <asp:TextBox ID="txtCost04_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_4_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay04_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_4" runat="server">
-                                                <asp:TextBox ID="txtCost04_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td>ค่าโทรศัพท์</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost05" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_5_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay05_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_5" runat="server">
-                                                <asp:TextBox ID="txtCost05_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_5_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay05_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_5" runat="server">
-                                                <asp:TextBox ID="txtCost05_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>6</td>
-                                            <td>ค่าอินเตอร์เนต</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost06" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_6_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay06_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_6" runat="server">
-                                                <asp:TextBox ID="txtCost06_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_6_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay06_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_6" runat="server">
-                                                <asp:TextBox ID="txtCost06_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>7</td>
-                                            <td>ค่าซ่อมแซม</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost07" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_7_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay07_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_7" runat="server">
-                                                <asp:TextBox ID="txtCost07_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_7_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay07_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_7" runat="server">
-                                                <asp:TextBox ID="txtCost07_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>8</td>
-                                            <td>ค่าปรับ</td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost08" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_8_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay08_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_8" runat="server">
-                                                <asp:TextBox ID="txtCost08_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_8_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay08_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_8" runat="server">
-                                                <asp:TextBox ID="txtCost08_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-                                        <tr>
-                                            <td>9</td>
-                                            <td>อื่น ๆ ระบุ &nbsp;<asp:TextBox ID="txtOther" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td>
-                                                <asp:TextBox ID="txtCost09" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_cus_1_9_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay09_1" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_1_9" runat="server">
-                                                <asp:TextBox ID="txtCost09_1" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                            <td id="td_cus_2_9_pay" runat="server">
-                                                <asp:DropDownList ID="ddlPay09_2" runat="server" DataTextField="Name" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlPay01_1_SelectedIndexChanged"></asp:DropDownList></td>
-
-                                            <td id="td_cus_2_9" runat="server">
-                                                <asp:TextBox ID="txtCost09_2" runat="server" CssClass="form-control"></asp:TextBox></td>
-                                        </tr>
-
-                                                                                <tr>
-                                            <td></td>
-                                            <td>รวมเป็นเงิน</td>
-                                            <td id="td_amout_1" runat="server">
-                                                <asp:TextBox ID="txtAmout1" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_amout_bank_1" runat="server">
-                                                &nbsp;</td>
-
-                                            <td id="td_amout_2" runat="server">
-                                                <asp:TextBox ID="txtAmout2" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                            <td id="td_amout_bank_2" runat="server">
-                                                &nbsp;</td>
-
-                                            <td id="td_amout_3" runat="server">
-                                                <asp:TextBox ID="txtAmout3" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <h4 class="form-section">สรุปค่าใช้จ่าย</h4>
-
-                        <div class="row">
-                            <!--/span-->
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3">จำนวนวันที่เข้าพัก</label>
-                                    <div class="col-md-9">
-                                        <asp:TextBox ID="txtStayDay" runat="server" CssClass="form-control"></asp:TextBox>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/span-->
-<%--                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3">รวมเป็นเงิน</label>
-                                    <div class="col-md-9">
-                                        <asp:TextBox ID="txtAmout" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                                    </div>
-                                </div>
-                            </div>--%>
-                        </div>
-
-                        <!--/row-->
-                        <div class="form-actions">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <asp:Button ID="btnSave" runat="server" class="btn green" Text="Submit" OnClick="btnSave_Click" />
-                                            <asp:Button ID="btnPrintInvoice" runat="server" class="btn green" Text="พิมพ์ใบแจ้งหนี้" OnClick="btnPrintInvoice_Click" />
-                                            <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"> Cancel</asp:LinkButton>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </asp:Panel>
                 </div>
                 <!-- END FORM-->
             </div>
         </div>
 
-
+        <%--</ContentTemplate>
+        </asp:UpdatePanel>--%>
     </form>
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->

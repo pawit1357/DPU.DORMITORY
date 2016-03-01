@@ -20,7 +20,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
         }
     
         public int ID { get; set; }
-        public Nullable<int> REF_ID { get; set; }
+        public Nullable<int> CUS_ID { get; set; }
+        public Nullable<int> SPONSOR_ID { get; set; }
         public Nullable<System.DateTime> POSTING_DATE { get; set; }
         public string SAP_DOCNO { get; set; }
         public Nullable<decimal> AMOUNT { get; set; }
@@ -30,9 +31,10 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public Nullable<System.DateTime> CREATE_DATE { get; set; }
         public Nullable<System.DateTime> UPDATE_DATE { get; set; }
         public Nullable<int> STATUS { get; set; }
-        public Nullable<int> INVOICE_TYPE { get; set; }
-        public string OTHER { get; set; }
         public Nullable<int> POST_TIME { get; set; }
+        public Nullable<bool> IS_ACTIVE { get; set; }
+        public string PAYER_NAME { get; set; }
+        public Nullable<System.DateTime> PAYMENT_DATE { get; set; }
     
         public virtual ICollection<TB_INVOICE_DETAIL> TB_INVOICE_DETAIL { get; set; }
     }

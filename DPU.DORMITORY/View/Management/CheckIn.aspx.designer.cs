@@ -22,6 +22,15 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
+        /// ToolkitScript1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ToolkitScriptManager ToolkitScript1;
+        
+        /// <summary>
         /// lbCommandName control.
         /// </summary>
         /// <remarks>
@@ -29,6 +38,78 @@ namespace DPU.DORMITORY.Web.View.Management {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lbCommandName;
+        
+        /// <summary>
+        /// idAc01 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl idAc01;
+        
+        /// <summary>
+        /// btnMainData control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnMainData;
+        
+        /// <summary>
+        /// idAc02 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl idAc02;
+        
+        /// <summary>
+        /// btnOwner control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnOwner;
+        
+        /// <summary>
+        /// idAc03 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl idAc03;
+        
+        /// <summary>
+        /// btnPaymentHistory control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnPaymentHistory;
+        
+        /// <summary>
+        /// idAc04 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl idAc04;
+        
+        /// <summary>
+        /// btnInvoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnInvoice;
         
         /// <summary>
         /// pCustomerInfo control.
@@ -112,6 +193,15 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.CheckBox cbPayer;
         
         /// <summary>
+        /// cbSTayAlone control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cbSTayAlone;
+        
+        /// <summary>
         /// txtIDCard control.
         /// </summary>
         /// <remarks>
@@ -166,15 +256,6 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.TextBox txtStatus;
         
         /// <summary>
-        /// gvFund control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView gvFund;
-        
-        /// <summary>
         /// txtAddress control.
         /// </summary>
         /// <remarks>
@@ -202,13 +283,13 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.TextBox txtSoi;
         
         /// <summary>
-        /// txtPronvice control.
+        /// txtTambon control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtPronvice;
+        protected global::System.Web.UI.WebControls.TextBox txtTambon;
         
         /// <summary>
         /// txtAmphur control.
@@ -220,13 +301,13 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.TextBox txtAmphur;
         
         /// <summary>
-        /// txtTambon control.
+        /// txtPronvice control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtTambon;
+        protected global::System.Web.UI.WebControls.TextBox txtPronvice;
         
         /// <summary>
         /// txtZipcode control.
@@ -301,6 +382,15 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.HiddenField hRoomID;
         
         /// <summary>
+        /// spanPoup control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl spanPoup;
+        
+        /// <summary>
         /// aPopupRoom control.
         /// </summary>
         /// <remarks>
@@ -346,31 +436,76 @@ namespace DPU.DORMITORY.Web.View.Management {
         protected global::System.Web.UI.WebControls.HiddenField hRoomMoveRoomID;
         
         /// <summary>
-        /// btnSave control.
+        /// btnRoom control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSave;
+        protected global::System.Web.UI.WebControls.LinkButton btnRoom;
         
         /// <summary>
-        /// btnPrintInvoice control.
+        /// gvRespPayment control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPrintInvoice;
+        protected global::System.Web.UI.WebControls.GridView gvRespPayment;
         
         /// <summary>
-        /// btnCancel control.
+        /// gvPaymentHistory control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCancel;
+        protected global::System.Web.UI.WebControls.GridView gvPaymentHistory;
+        
+        /// <summary>
+        /// gvInvoiceDetail control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView gvInvoiceDetail;
+        
+        /// <summary>
+        /// ddlBuild control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlBuild;
+        
+        /// <summary>
+        /// ddlRoom control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlRoom;
+        
+        /// <summary>
+        /// btnSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnSearch;
+        
+        /// <summary>
+        /// btnCancelSearch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCancelSearch;
         
         /// <summary>
         /// gvResult control.
@@ -380,6 +515,51 @@ namespace DPU.DORMITORY.Web.View.Management {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView gvResult;
+        
+        /// <summary>
+        /// btnClose control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnClose;
+        
+        /// <summary>
+        /// lnkFake control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkFake;
+        
+        /// <summary>
+        /// ModolPopupExtender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ModalPopupExtender ModolPopupExtender;
+        
+        /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
+        /// btnCancel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnCancel;
         
         /// <summary>
         /// gvRoomInfo control.

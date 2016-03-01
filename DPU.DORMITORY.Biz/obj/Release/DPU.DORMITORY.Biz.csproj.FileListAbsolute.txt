@@ -7,3 +7,7 @@ C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.csprojResolveAssemblyReference.cache
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.dll
 C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\obj\Release\DPU.DORMITORY.Biz.pdb
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\Gen_Bapizarfi_01_Bapizcmi003.exe
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\SAP.Connecter.Net.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\SAP.Connector.dll
+C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY.Biz\bin\Release\SAP.Connector.Rfc.dll

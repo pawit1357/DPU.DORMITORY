@@ -7,6 +7,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Linq;
 using System.Collections.Generic;
+using DPU.DORMITORY.Utils;
+//using System.Linq.Dynamic;
 
 namespace DPU.DORMITORY.Web.View.Management
 {
@@ -15,12 +17,20 @@ namespace DPU.DORMITORY.Web.View.Management
 
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_CUSTOMER> repCustomer;
+        private Repository<TB_ROOM> repRoom;
+        private Repository<TB_M_BUILD> repBuild;
 
         public SearchCustomer()
         {
             repCustomer = unitOfWork.Repository<TB_CUSTOMER>();
+            repRoom = unitOfWork.Repository<TB_ROOM>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
         }
 
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
+        }
         public IEnumerable searchResult
         {
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
@@ -41,6 +51,10 @@ namespace DPU.DORMITORY.Web.View.Management
             {
                 TB_CUSTOMER tmp = new TB_CUSTOMER();
                 tmp.STATUS  = Convert.ToInt32(CustomerStatusEnum.CheckIn);
+
+                tmp.BUILD_ID = String.IsNullOrEmpty(ddlBuild.SelectedValue) ? 0 : Convert.ToInt32(ddlBuild.SelectedValue);
+                tmp.ROOM_ID = String.IsNullOrEmpty(ddlRoom.SelectedValue) ? 0 : Convert.ToInt32(ddlRoom.SelectedValue);
+                tmp.FIRSTNAME = txtName.Text;
                 return tmp;
             }
         }
@@ -49,11 +63,32 @@ namespace DPU.DORMITORY.Web.View.Management
         {
             if (obj != null)
             {
-                gvResult.DataSource = obj.Search();
-                gvResult.DataBind();
-                gvResult.UseAccessibleHeader = true;
-                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                searchResult = obj.Search();
+                int resultCount = CustomUtils.Count(searchResult);
+                if (resultCount > 0)
+                {
+                    gvResult.DataSource = searchResult;
+                    gvResult.DataBind();
+                    gvResult.UseAccessibleHeader = true;
+                    gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                }
             }
+
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
+            ddlBuild.DataBind();
+            if (build != null && build.Count > 1)
+            {
+                ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+            else
+            {
+                int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataBind();
+                ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -83,5 +118,39 @@ namespace DPU.DORMITORY.Web.View.Management
             }
         }
         #endregion
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+            gvResult.UseAccessibleHeader = true;
+            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            //if (gvResult.Rows.Count > 0)
+            //{
+            //    pSearchResult.Visible = true;
+            //}
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            ddlBuild.SelectedIndex = 0;
+            ddlRoom.SelectedIndex = 0;
+            searchResult = obj.Search();
+        }
+
+        protected void ddlBuild_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
+            {
+                int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataBind();
+                ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+        }
+
+
+
     }
 }

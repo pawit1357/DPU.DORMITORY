@@ -16,11 +16,13 @@ namespace DPU.DORMITORY.Web.View.Master
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_RATES_GROUP> rateGroupRepo;
         private Repository<TB_RATES_GROUP_DETAIL> rateGroupDetailRepo;
+        private Repository<TB_M_BUILD> repBuild;
 
         public SearchRates()
         {
             rateGroupRepo = unitOfWork.Repository<TB_RATES_GROUP>();
             rateGroupDetailRepo = unitOfWork.Repository<TB_RATES_GROUP_DETAIL>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
 
         }
         public IEnumerable searchResult
@@ -34,7 +36,10 @@ namespace DPU.DORMITORY.Web.View.Master
             get { return (CommandNameEnum)ViewState[Constants.COMMAND_NAME]; }
             set { ViewState[Constants.COMMAND_NAME] = value; }
         }
-
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
+        }
         public int PKID { get; set; }
 
         public TB_RATES_GROUP obj
@@ -42,20 +47,35 @@ namespace DPU.DORMITORY.Web.View.Master
             get
             {
                 TB_RATES_GROUP tmp = new TB_RATES_GROUP();
+                tmp.BUILD_ID = String.IsNullOrEmpty(ddlBuild.SelectedValue) ? 0 : Convert.ToInt32(ddlBuild.SelectedValue);
+                tmp.NAME = txtName.Text;
                 return tmp;
             }
         }
 
         private void initialPage()
         {
-            gvResult.DataSource = obj.Search();
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
+            ddlBuild.DataBind();
+            if (build != null && build.Count > 1)
+            {
+                ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+            }
+
+            bindingData();
+
+        }
+        private void bindingData() {
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
             gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
         }
-
         protected void Page_Load(object sender, EventArgs e)
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
             if (!Page.IsPostBack)
             {
                 initialPage();
@@ -108,5 +128,17 @@ namespace DPU.DORMITORY.Web.View.Master
 
         }
         #endregion
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            bindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            ddlBuild.SelectedIndex = 0;
+            txtName.Text = string.Empty;
+            bindingData();
+        }
     }
 }

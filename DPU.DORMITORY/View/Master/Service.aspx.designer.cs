@@ -31,31 +31,49 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.Label lbCommandName;
         
         /// <summary>
-        /// txtID control.
+        /// litPageTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtID;
+        protected global::System.Web.UI.WebControls.Literal litPageTitle;
         
         /// <summary>
-        /// txtName control.
+        /// ddlBuildId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtName;
+        protected global::System.Web.UI.WebControls.DropDownList ddlBuildId;
         
         /// <summary>
-        /// txtNameEn control.
+        /// ddlCostType control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNameEn;
+        protected global::System.Web.UI.WebControls.DropDownList ddlCostType;
+        
+        /// <summary>
+        /// txtMainTrans control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtMainTrans;
+        
+        /// <summary>
+        /// txtSubTrans control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtSubTrans;
         
         /// <summary>
         /// btnSave control.

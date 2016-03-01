@@ -11,7 +11,7 @@ namespace DPU.DORMITORY
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
     }
 }

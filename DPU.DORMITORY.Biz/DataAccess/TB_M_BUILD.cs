@@ -16,6 +16,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
     {
         public TB_M_BUILD()
         {
+            this.TB_M_SERVICE = new HashSet<TB_M_SERVICE>();
             this.TB_RATES_GROUP = new HashSet<TB_RATES_GROUP>();
             this.TB_ROOM = new HashSet<TB_ROOM>();
         }
@@ -37,6 +38,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public string ADDRESS_LINE_1_EN { get; set; }
         public string ADDRESS_LINE_2_EN { get; set; }
     
+        public virtual ICollection<TB_M_SERVICE> TB_M_SERVICE { get; set; }
         public virtual ICollection<TB_RATES_GROUP> TB_RATES_GROUP { get; set; }
         public virtual ICollection<TB_ROOM> TB_ROOM { get; set; }
     }

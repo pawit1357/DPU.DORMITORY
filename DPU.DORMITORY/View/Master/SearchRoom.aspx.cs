@@ -13,7 +13,17 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_ROOM> roomRepo;
+        private Repository<TB_M_BUILD> repBuild;
 
+        private Repository<TB_M_ROOM_TYPE> repRoomType;
+
+        public SearchRoom()
+        {
+            roomRepo = unitOfWork.Repository<TB_ROOM>();
+            repRoomType = unitOfWork.Repository<TB_M_ROOM_TYPE>();
+            repBuild = unitOfWork.Repository<TB_M_BUILD>();
+
+        }
         public IEnumerable searchResult
         {
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
@@ -33,26 +43,43 @@ namespace DPU.DORMITORY.Web.View.Master
             get
             {
                 TB_ROOM tmp = new TB_ROOM();
+                tmp.BUILD_ID = String.IsNullOrEmpty(ddlBuild.SelectedValue) ? 0 : Convert.ToInt32(ddlBuild.SelectedValue);
+                tmp.ROOM_TYPE_ID = String.IsNullOrEmpty(ddlRoomType.SelectedValue) ? 0 : Convert.ToInt32(ddlRoomType.SelectedValue);
+                tmp.NUMBER = txtName.Text;
                 return tmp;
             }
         }
         private void initialPage()
         {
-            roomRepo = unitOfWork.Repository<TB_ROOM>();
-            
+
+            ddlBuild.DataSource = repBuild.Table.ToList();
+            ddlBuild.DataBind();
+            ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+
+            ddlRoomType.DataSource = repRoomType.Table.ToList();
+            ddlRoomType.DataBind();
+            ddlRoomType.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
+
             if (!Page.IsPostBack)
             {
-                
                 initialPage();
-                gvResult.DataSource = obj.Search();
-                gvResult.DataBind();
-                gvResult.UseAccessibleHeader = true;
-                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                bindingData();
             }
+        }
+
+        private void bindingData()
+        {
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+            gvResult.UseAccessibleHeader = true;
+            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
         }
 
         protected void lbAdd_Click(object sender, EventArgs e)
@@ -93,5 +120,18 @@ namespace DPU.DORMITORY.Web.View.Master
 
         }
         #endregion
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            bindingData();
+        }
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            ddlBuild.SelectedIndex = 0;
+            ddlRoomType.SelectedIndex = 0;
+            txtName.Text = string.Empty;
+            bindingData();
+        }
     }
 }

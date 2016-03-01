@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="RoomType.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Master.RoomType" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    
+
     <form runat="server" id="Form1" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <%--   <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         <asp:UpdatePanel ID="updResult" runat="server">
@@ -18,7 +19,8 @@
             <div class="portlet-title">
                 <div class="caption">
                     <i class="icon-equalizer font-red-sunglo"></i>
-                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;ประเภทห้อง</span>
+                    <span class="caption-subject font-red-sunglo bold uppercase">[<asp:Label ID="lbCommandName" runat="server" Text=""></asp:Label>]&nbsp;
+                        <asp:Literal ID="litPageTitle" runat="server" /></span>
                 </div>
                 <%--               <div class="tools">
                     <a href="#" class="collapse"></a>
@@ -27,9 +29,10 @@
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
 
+
                 <div class="form-body">
                     <%--<h3 class="form-section">บันทึกข้อมูลบริการ</h3>--%>
-                    <div class="row">
+                    <%--                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-3">รหัส</label>
@@ -38,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--%>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

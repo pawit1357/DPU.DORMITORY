@@ -66,7 +66,7 @@ namespace DPU.DORMITORY.Web.View.Management
         {
             SearchRoomForRent prvPage = Page.PreviousPage as SearchRoomForRent;
             this.CommandName = (prvPage == null) ? this.CommandName : prvPage.CommandName;
-            this.PKID = (prvPage == null) ? this.PKID : prvPage.PKID;
+            this.PKID = (prvPage == null) ? this.PKID : prvPage.ROOM_ID;
             this.PreviousPath = Constants.LINK_SEARCH_ROOM_FOR_RENT;
 
             objRoom = repRoom.Table.Where(x => x.ID == this.PKID).FirstOrDefault();
@@ -83,17 +83,18 @@ namespace DPU.DORMITORY.Web.View.Management
                 {
                     gvResult.DataSource = rateGroup.Search();
                     gvResult.DataBind();
-                    gvResult.UseAccessibleHeader = true;
-                    gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    //gvResult.UseAccessibleHeader = true;
+                    //gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
                 }
 
-                TB_CUSTOMER _customer = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID).FirstOrDefault();
+                TB_CUSTOMER _customer = new TB_CUSTOMER();// repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID).FirstOrDefault();
+                _customer.ROOM_ID = objRoom.ID;
                 if (_customer != null)
                 {
                     gvCustomer.DataSource = _customer.Search();
                     gvCustomer.DataBind();
-                    gvCustomer.UseAccessibleHeader = true;
-                    gvCustomer.HeaderRow.TableSection = TableRowSection.TableHeader;
+                    //gvCustomer.UseAccessibleHeader = true;
+                    //gvCustomer.HeaderRow.TableSection = TableRowSection.TableHeader;
                 }
             }
         }

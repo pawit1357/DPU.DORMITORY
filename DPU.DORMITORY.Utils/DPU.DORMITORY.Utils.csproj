@@ -42,8 +42,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomUtils.cs" />
+    <Compile Include="DormUtils.cs" />
     <Compile Include="MessageBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DPU.DORMITORY.Biz\DPU.DORMITORY.Biz.csproj">
+      <Project>{c1a30cf2-8031-4d1b-96cc-eed5e57689f4}</Project>
+      <Name>DPU.DORMITORY.Biz</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DPU.DORMITORY.Repositories\DPU.DORMITORY.Repositories.csproj">
+      <Project>{b0bc5801-575f-4398-a228-06067d63cf9a}</Project>
+      <Name>DPU.DORMITORY.Repositories</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

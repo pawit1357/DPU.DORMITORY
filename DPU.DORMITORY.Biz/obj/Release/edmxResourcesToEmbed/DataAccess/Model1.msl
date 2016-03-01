@@ -35,6 +35,7 @@
     <EntitySetMapping Name="TB_CUSTOMER">
       <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER">
         <MappingFragment StoreEntitySet="TB_CUSTOMER">
+          <ScalarProperty Name="STAY_ALONE" ColumnName="STAY_ALONE" />
           <ScalarProperty Name="PAYER" ColumnName="PAYER" />
           <ScalarProperty Name="HAS_STDNUM" ColumnName="HAS_STDNUM" />
           <ScalarProperty Name="STD_STATUS" ColumnName="STD_STATUS" />
@@ -59,11 +60,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TB_CUSTOMER_FUND">
-      <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER_FUND">
-        <MappingFragment StoreEntitySet="TB_CUSTOMER_FUND">
-          <ScalarProperty Name="FOR_SERVICE_ID" ColumnName="FOR_SERVICE_ID" />
-          <ScalarProperty Name="FUND_ID" ColumnName="FUND_ID" />
+    <EntitySetMapping Name="TB_CUSTOMER_PAYER">
+      <EntityTypeMapping TypeName="DORMModel.TB_CUSTOMER_PAYER">
+        <MappingFragment StoreEntitySet="TB_CUSTOMER_PAYER">
+          <ScalarProperty Name="ROOM_ID" ColumnName="ROOM_ID" />
+          <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+          <ScalarProperty Name="TERM_OF_PAYMENT_ID" ColumnName="TERM_OF_PAYMENT_ID" />
+          <ScalarProperty Name="SPONSOR_ID" ColumnName="SPONSOR_ID" />
+          <ScalarProperty Name="COST_TYPE_ID" ColumnName="COST_TYPE_ID" />
           <ScalarProperty Name="CUS_ID" ColumnName="CUS_ID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
@@ -89,9 +93,10 @@
     <EntitySetMapping Name="TB_INVOICE">
       <EntityTypeMapping TypeName="DORMModel.TB_INVOICE">
         <MappingFragment StoreEntitySet="TB_INVOICE">
+          <ScalarProperty Name="PAYMENT_DATE" ColumnName="PAYMENT_DATE" />
+          <ScalarProperty Name="PAYER_NAME" ColumnName="PAYER_NAME" />
+          <ScalarProperty Name="IS_ACTIVE" ColumnName="IS_ACTIVE" />
           <ScalarProperty Name="POST_TIME" ColumnName="POST_TIME" />
-          <ScalarProperty Name="OTHER" ColumnName="OTHER" />
-          <ScalarProperty Name="INVOICE_TYPE" ColumnName="INVOICE_TYPE" />
           <ScalarProperty Name="STATUS" ColumnName="STATUS" />
           <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
           <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
@@ -101,7 +106,8 @@
           <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
           <ScalarProperty Name="SAP_DOCNO" ColumnName="SAP_DOCNO" />
           <ScalarProperty Name="POSTING_DATE" ColumnName="POSTING_DATE" />
-          <ScalarProperty Name="REF_ID" ColumnName="REF_ID" />
+          <ScalarProperty Name="SPONSOR_ID" ColumnName="SPONSOR_ID" />
+          <ScalarProperty Name="CUS_ID" ColumnName="CUS_ID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -109,15 +115,11 @@
     <EntitySetMapping Name="TB_INVOICE_DETAIL">
       <EntityTypeMapping TypeName="DORMModel.TB_INVOICE_DETAIL">
         <MappingFragment StoreEntitySet="TB_INVOICE_DETAIL">
-          <ScalarProperty Name="SUB_TRANS" ColumnName="SUB_TRANS" />
-          <ScalarProperty Name="MAIN_TRANS" ColumnName="MAIN_TRANS" />
-          <ScalarProperty Name="PROFIT_CTR" ColumnName="PROFIT_CTR" />
-          <ScalarProperty Name="BA" ColumnName="BA" />
-          <ScalarProperty Name="COMPANY" ColumnName="COMPANY" />
-          <ScalarProperty Name="PAY_AMOUT" ColumnName="PAY_AMOUT" />
-          <ScalarProperty Name="PAY_BY" ColumnName="PAY_BY" />
+          <ScalarProperty Name="REMARK" ColumnName="REMARK" />
           <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
-          <ScalarProperty Name="SERVICE_ID" ColumnName="SERVICE_ID" />
+          <ScalarProperty Name="SPONSOR_ID" ColumnName="SPONSOR_ID" />
+          <ScalarProperty Name="CUS_ID" ColumnName="CUS_ID" />
+          <ScalarProperty Name="COST_TYPE_ID" ColumnName="COST_TYPE_ID" />
           <ScalarProperty Name="INVOICE_ID" ColumnName="INVOICE_ID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
@@ -145,6 +147,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_COST_TYPE">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_COST_TYPE">
+        <MappingFragment StoreEntitySet="TB_M_COST_TYPE">
+          <ScalarProperty Name="NAME_EN" ColumnName="NAME_EN" />
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="TB_M_CUSTOMER_TYPE">
       <EntityTypeMapping TypeName="DORMModel.TB_M_CUSTOMER_TYPE">
         <MappingFragment StoreEntitySet="TB_M_CUSTOMER_TYPE">
@@ -153,19 +164,10 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="TB_M_FUND">
-      <EntityTypeMapping TypeName="DORMModel.TB_M_FUND">
-        <MappingFragment StoreEntitySet="TB_M_FUND">
-          <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
-          <ScalarProperty Name="NAME" ColumnName="NAME" />
-          <ScalarProperty Name="FOR_SERVICE_ID" ColumnName="FOR_SERVICE_ID" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="TB_M_NATION">
       <EntityTypeMapping TypeName="DORMModel.TB_M_NATION">
         <MappingFragment StoreEntitySet="TB_M_NATION">
+          <ScalarProperty Name="NAME_EN" ColumnName="NAME_EN" />
           <ScalarProperty Name="NAME" ColumnName="NAME" />
           <ScalarProperty Name="CODE" ColumnName="CODE" />
           <ScalarProperty Name="ID" ColumnName="ID" />
@@ -183,7 +185,26 @@
     <EntitySetMapping Name="TB_M_SERVICE">
       <EntityTypeMapping TypeName="DORMModel.TB_M_SERVICE">
         <MappingFragment StoreEntitySet="TB_M_SERVICE">
-          <ScalarProperty Name="NAME_EN" ColumnName="NAME_EN" />
+          <ScalarProperty Name="GL_ACCOUNT" ColumnName="GL_ACCOUNT" />
+          <ScalarProperty Name="SUB_TRANS" ColumnName="SUB_TRANS" />
+          <ScalarProperty Name="MAIN_TRANS" ColumnName="MAIN_TRANS" />
+          <ScalarProperty Name="COST_ID" ColumnName="COST_ID" />
+          <ScalarProperty Name="BUILD_ID" ColumnName="BUILD_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_SPONSOR">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_SPONSOR">
+        <MappingFragment StoreEntitySet="TB_M_SPONSOR">
+          <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TB_M_TERM_OF_PAYMENT">
+      <EntityTypeMapping TypeName="DORMModel.TB_M_TERM_OF_PAYMENT">
+        <MappingFragment StoreEntitySet="TB_M_TERM_OF_PAYMENT">
           <ScalarProperty Name="NAME" ColumnName="NAME" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
@@ -200,6 +221,7 @@
     <EntitySetMapping Name="TB_RATES_GROUP">
       <EntityTypeMapping TypeName="DORMModel.TB_RATES_GROUP">
         <MappingFragment StoreEntitySet="TB_RATES_GROUP">
+          <ScalarProperty Name="CALCULATE_INVOICE_TYPE" ColumnName="CALCULATE_INVOICE_TYPE" />
           <ScalarProperty Name="UPDATE_DATE" ColumnName="UPDATE_DATE" />
           <ScalarProperty Name="CREATE_DATE" ColumnName="CREATE_DATE" />
           <ScalarProperty Name="UPDATE_BY" ColumnName="UPDATE_BY" />
@@ -208,6 +230,7 @@
           <ScalarProperty Name="INSURANCE_AMOUNT" ColumnName="INSURANCE_AMOUNT" />
           <ScalarProperty Name="DESCRIPTION" ColumnName="DESCRIPTION" />
           <ScalarProperty Name="NAME" ColumnName="NAME" />
+          <ScalarProperty Name="ROOM_TYPE_ID" ColumnName="ROOM_TYPE_ID" />
           <ScalarProperty Name="BUILD_ID" ColumnName="BUILD_ID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>
@@ -216,13 +239,14 @@
     <EntitySetMapping Name="TB_RATES_GROUP_DETAIL">
       <EntityTypeMapping TypeName="DORMModel.TB_RATES_GROUP_DETAIL">
         <MappingFragment StoreEntitySet="TB_RATES_GROUP_DETAIL">
+          <ScalarProperty Name="GL_ACCOUNT" ColumnName="GL_ACCOUNT" />
+          <ScalarProperty Name="SUB_TRANS" ColumnName="SUB_TRANS" />
+          <ScalarProperty Name="MAIN_TRANS" ColumnName="MAIN_TRANS" />
+          <ScalarProperty Name="REMARK" ColumnName="REMARK" />
           <ScalarProperty Name="VAT" ColumnName="VAT" />
           <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
           <ScalarProperty Name="UNIT" ColumnName="UNIT" />
-          <ScalarProperty Name="GL" ColumnName="GL" />
-          <ScalarProperty Name="SUBTRAN" ColumnName="SUBTRAN" />
-          <ScalarProperty Name="MAINTRAN" ColumnName="MAINTRAN" />
-          <ScalarProperty Name="SERVICE_ID" ColumnName="SERVICE_ID" />
+          <ScalarProperty Name="COST_TYPE_ID" ColumnName="COST_TYPE_ID" />
           <ScalarProperty Name="RATES_GROUP_ID" ColumnName="RATES_GROUP_ID" />
           <ScalarProperty Name="ID" ColumnName="ID" />
         </MappingFragment>

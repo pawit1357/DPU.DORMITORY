@@ -16,12 +16,13 @@
             <div class="portlet-body form">
                 <div class="form-body">
                     <!-- BEGIN FORM-->
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-3">อาคาร:</label>
                                 <div class="col-md-6">
-                                    <div class="input-group" style="text-align: left">
+                                    <div class="form-group" style="text-align: left">
                                         <asp:DropDownList ID="ddlBuild" runat="server" class="select2_category form-control" DataTextField="NAME" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlBuild_SelectedIndexChanged"></asp:DropDownList>
                                     </div>
                                 </div>
@@ -31,13 +32,25 @@
                             <div class="form-group">
                                 <label class="control-label col-md-3">ห้อง:</label>
                                 <div class="col-md-6">
-                                    <div class="input-group" style="text-align: left">
+                                    <div class="form-group" style="text-align: left">
                                         <asp:DropDownList ID="ddlRoom" runat="server" class="select2_category form-control" DataTextField="NUMBER" DataValueField="ID"></asp:DropDownList>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">สถานะห้อง:</label>
+                                <div class="col-md-6">
+                                    <div class="form-group" style="text-align: left">
+                                        <asp:DropDownList ID="ddlStatus" runat="server" class="select2_category form-control" DataTextField="NAME" DataValueField="ID" ></asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                            </div>
 
                     <div class="form-actions">
                         <div class="row">
@@ -53,6 +66,7 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- END FORM-->
                 </div>
             </div>
@@ -63,6 +77,7 @@
             </div>
         </div>
         <!-- BEGIN PAGE CONTENT-->
+        <asp:Panel ID="pSearchResult" runat="server">
         <div class="row">
             <div class="col-md-12">
                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -79,6 +94,11 @@
                         <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False"
                             CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
                             <Columns>
+                                                                                           <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
+                                    <ItemTemplate>
+                                        <%# Container.DataItemIndex + 1 %>
+                                    </ItemTemplate>
+                                </asp:TemplateField>
                                 <%--<asp:BoundField HeaderText="ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID" />--%>
                                 <asp:BoundField HeaderText="อาคาร" DataField="BUILD" ItemStyle-HorizontalAlign="Left" SortExpression="BUILD" />
                                 <asp:BoundField HeaderText="ชั้น" DataField="FLOOR" ItemStyle-HorizontalAlign="Left" SortExpression="FLOOR" />
@@ -134,6 +154,7 @@
 
             </div>
         </div>
+            </asp:Panel>
         <!-- END PAGE CONTENT-->
     </form>
     <!-- BEGIN PAGE LEVEL SCRIPTS -->
@@ -146,7 +167,9 @@
             // begin: third table
             table.dataTable({
                 // set the initial value
-                "pageLength": 10,
+                "pageLength": 50,
+                "searching": false,
+                "paging": true
             });
 
             $('.select2_category').select2({

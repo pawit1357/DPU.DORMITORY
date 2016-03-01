@@ -16,6 +16,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
         {
             using (DORMEntities ctx = new DORMEntities())
             {
+                ctx.Configuration.LazyLoadingEnabled = false;
+                ctx.Configuration.ProxyCreationEnabled = false;
                 var result = from rg in ctx.TB_RATES_GROUP
                              join b in ctx.TB_M_BUILD on rg.BUILD_ID equals b.ID
                              orderby rg.ID, rg.BUILD_ID, rg.NAME ascending

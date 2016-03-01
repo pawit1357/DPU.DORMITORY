@@ -13,8 +13,6 @@ namespace DPU.DORMITORY.Web.View.Master
     public partial class SearchBuilding : System.Web.UI.Page
     {
 
-
-
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_M_BUILD> rep;
 
@@ -37,13 +35,26 @@ namespace DPU.DORMITORY.Web.View.Master
 
         public int PKID { get; set; }
 
+        public TB_M_BUILD obj
+        {
+            get
+            {
+                TB_M_BUILD tmp = new TB_M_BUILD();
+                tmp.NAME = txtBuild.Text;
+                tmp.DESCRIPTION = txtDesc.Text;
+                return tmp;
+            }
+        }
+
         private void initialPage()
         {
+            litPageTitle.Text = new MenuBiz().getCurrentMenuName(Request.PhysicalPath);
             BindingData();
         }
         private void BindingData()
         {
-            gvResult.DataSource = rep.Table.ToList();
+            searchResult = obj.Search();
+            gvResult.DataSource = searchResult;
             gvResult.DataBind();
             gvResult.UseAccessibleHeader = true;
             gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
@@ -101,5 +112,17 @@ namespace DPU.DORMITORY.Web.View.Master
             }
         }
         #endregion
+
+        protected void btnCancel_Click(object sender, EventArgs e)
+        {
+            txtBuild.Text = string.Empty;
+            txtDesc.Text = string.Empty;
+            BindingData();
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            BindingData();
+        }
     }
 }
