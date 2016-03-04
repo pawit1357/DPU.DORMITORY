@@ -49,7 +49,7 @@ namespace DPU.DORMITORY.View.Account
         {
             get
             {
- 
+
                 TB_CUSTOMER tmp = new TB_CUSTOMER();
                 tmp.STATUS = Convert.ToInt32(CustomerStatusEnum.CheckIn);
                 return tmp;
@@ -64,6 +64,7 @@ namespace DPU.DORMITORY.View.Account
                 return tmp;
             }
         }
+
         public TB_INVOICE objInvoice
         {
             get
@@ -81,6 +82,7 @@ namespace DPU.DORMITORY.View.Account
                 return tmp;
             }
         }
+
         private void initialPage()
         {
 
@@ -98,6 +100,7 @@ namespace DPU.DORMITORY.View.Account
                 bindingData();
             }
         }
+
         private void bindingData()
         {
             searchResult = objInvoice.SearchPaymentHistory();
@@ -109,6 +112,7 @@ namespace DPU.DORMITORY.View.Account
                 gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
             }
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -140,13 +144,16 @@ namespace DPU.DORMITORY.View.Account
                         if (!String.IsNullOrEmpty(errorMessage))
                         {
                             MessageBox.Show(this, errorMessage);
-                           
                         }
                         #endregion
-                        initialPage();
+                        ModolPopupExtender.Show();
                     }
                     break;
+                case CommandNameEnum.PrintInvoice:
+                    Console.WriteLine("PRINT!!");
+                    break;
             }
+
         }
         protected void gvResult_RowDataBound(object sender, GridViewRowEventArgs e)
         {
@@ -154,8 +161,9 @@ namespace DPU.DORMITORY.View.Account
             {
                 Literal _litPaymentStatus = (Literal)e.Row.FindControl("litPaymentStatus");
                 LinkButton _btnPay = (LinkButton)e.Row.FindControl("btnPay");
+                LinkButton _btnPrint = (LinkButton)e.Row.FindControl("btnPrint");
 
-                
+
                 if (_litPaymentStatus != null)
                 {
                     if (!String.IsNullOrEmpty(_litPaymentStatus.Text))
@@ -165,11 +173,13 @@ namespace DPU.DORMITORY.View.Account
                             case "True":
                                 _litPaymentStatus.Text = Resources.MSG_PAYMENT_TRUE;
                                 _btnPay.Visible = false;
+                                _btnPrint.Visible = true;
                                 e.Row.ForeColor = System.Drawing.Color.Green;
                                 break;
                             case "False":
                                 _litPaymentStatus.Text = Resources.MSG_PAYMENT_FALSE;
                                 _btnPay.Visible = true;
+                                _btnPrint.Visible = false;
                                 e.Row.ForeColor = System.Drawing.Color.Black;
                                 break;
                         }
@@ -190,6 +200,11 @@ namespace DPU.DORMITORY.View.Account
             txtLastName.Text = string.Empty;
             txtSapDocNo.Text = string.Empty;
             bindingData();
+        }
+        protected void OK_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("PRINT!!!!");
+            initialPage();
         }
     }
 }

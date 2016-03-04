@@ -147,7 +147,9 @@
                                     <asp:TemplateField HeaderText="Action">
                                         <ItemTemplate>
                                             <asp:LinkButton ID="btnPay" runat="server" ToolTip="ชำระเงิน" CommandName="Payment" OnClientClick="return confirm('เปลี่ยนรายการที่เลือกให้เป็น ชำระเงินแล้ว?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-credit-card"></i></asp:LinkButton>
-                                        </ItemTemplate>
+                                            <asp:LinkButton ID="btnPrint" runat="server" ToolTip="พิมพ์ใบแจ้งหนี้" CommandName="PrintInvoice" OnClientClick="return confirm('ต้องการพิมพ์ใบแจ้งหนี้?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-credit-card"></i></asp:LinkButton>
+
+                                             </ItemTemplate>
                                     </asp:TemplateField>
                                 </Columns>
 
@@ -166,6 +168,34 @@
             </div>
         </div>
         <!-- END PAGE CONTENT-->
+
+        
+        <div class="modal-wide" id="pnlModalDemo" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        ยืนยัน
+                    </div>
+                </div>
+                <div class="modal-body" style="width: 600px; height: 400px; overflow-x: hidden; overflow-y: scroll; padding-bottom: 10px;">
+                    <h3>คุณต้องการพิมพ์ใบแจ้งหนี้</h3>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button ID="OK" runat="server" CssClass="btn purple" Style="margin-top: 10px; margin-left: 20px;" Text="พิมพ์ใบแจ้งหนี้" OnClick="OK_Click" />
+                    <asp:Button ID="btnClose" CssClass="btn default" Style="margin-top: 10px;" runat="server" Text="ปิด" />
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+
+        <asp:LinkButton ID="lnkFake" runat="server">
+        </asp:LinkButton>
+        <asp:ModalPopupExtender ID="ModolPopupExtender" runat="server" PopupControlID="pnlModalDemo"
+            TargetControlID="lnkFake" BackgroundCssClass="modal-backdrop modal-print-form fade in" BehaviorID="mpModalDemo"
+            CancelControlID="btnClose">
+        </asp:ModalPopupExtender>
+
     </form>
 
 

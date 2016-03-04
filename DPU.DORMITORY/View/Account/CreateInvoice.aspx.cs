@@ -748,6 +748,10 @@ namespace DPU.DORMITORY.Web.View.Account
 
                             rowIndex++;
                         }
+                        else
+                        {
+                            Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
+                        }
 
                     }
                 }
