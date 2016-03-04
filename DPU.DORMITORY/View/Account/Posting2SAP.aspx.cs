@@ -26,7 +26,6 @@ namespace DPU.DORMITORY.Web.View.Account
         private Repository<TB_M_SERVICE> repMService;
         private Repository<TB_CUSTOMER> repCustomer;
 
-
         public Posting2SAP()
         {
             repInvoice = unitOfWork.Repository<TB_INVOICE>();
@@ -43,7 +42,11 @@ namespace DPU.DORMITORY.Web.View.Account
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
             set { Session[GetType().Name + "searchResult"] = value; }
         }
-
+        public List<InvDetail> InvDetails
+        {
+            get { return (List<InvDetail>)Session[GetType().Name + "InvDetails"]; }
+            set { Session[GetType().Name + "InvDetails"] = value; }
+        }
         public CommandNameEnum CommandName
         {
             get { return (CommandNameEnum)ViewState[Constants.COMMAND_NAME]; }
@@ -64,10 +67,16 @@ namespace DPU.DORMITORY.Web.View.Account
             }
         }
 
+        public USER userLogin
+        {
+            get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
+        }
+
+
         private void initialPage()
         {
             txtPostingDate.Text = DateTime.Now.ToString("MM/yyyy");
-            ddlBuild.DataSource = repBuild.Table.ToList();
+            List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
             ddlBuild.DataBind();
             ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
 
@@ -116,7 +125,6 @@ namespace DPU.DORMITORY.Web.View.Account
             //int fail = 0;
             //logger.Debug(":: BEGIN TRANSFER ::");
             //logger.Debug(String.Format(":: Start Time > {0}, for month > {1}, build > {2}, room > {2}", startDate, txtPostingDate.Text, ddlBuild.SelectedItem.Text, ddlRoom.SelectedItem.Text));
-
 
             for (int i = 0; i < gvResult.Rows.Count; i++)
             {
@@ -238,9 +246,20 @@ namespace DPU.DORMITORY.Web.View.Account
                 case CommandNameEnum.View:
                     Console.WriteLine();
                     break;
-                case CommandNameEnum.Send2SAP:
-                    break;
+                //case CommandNameEnum.Send2SAP:
+                //    break;
                 case CommandNameEnum.ViewLogs:
+                    break;
+                case CommandNameEnum.EDIT_INVOICE:
+
+                    TB_INVOICE inv = new TB_INVOICE();
+                    inv.INV_ID = PKID;
+
+                    this.InvDetails = inv.getPrepareInvoiceDataByInvID();
+                    gvInvoiceDetail.DataSource = this.InvDetails;
+                    gvInvoiceDetail.DataBind();
+
+                    ModolPopupExtender.Show();
                     break;
 
             }
@@ -250,22 +269,107 @@ namespace DPU.DORMITORY.Web.View.Account
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
             {
-                //Literal _litPaymentStatus = (Literal)e.Row.FindControl("litPaymentStatus");
-                //if (_litPaymentStatus != null)
-                //{
-                //    if (!String.IsNullOrEmpty(_litPaymentStatus.Text))
-                //    {
-                //        switch (_litPaymentStatus.Text)
-                //        {
-                //            case "True":
-                //                _litPaymentStatus.Text = Resources.MSG_PAYMENT_TRUE;
-                //                break;
-                //            case "False":
-                //                _litPaymentStatus.Text = Resources.MSG_PAYMENT_FALSE;
-                //                break;
-                //        }
-                //    }
-                //}
+            }
+        }
+        #endregion
+        #region "Invoice Detail
+        protected void gvInvoiceDetail_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        {
+            gvInvoiceDetail.EditIndex = e.NewEditIndex;
+            gvInvoiceDetail.DataSource = this.InvDetails;
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        protected void gvInvoiceDetail_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        {
+            int pkid = Convert.ToInt32(gvInvoiceDetail.DataKeys[e.RowIndex].Values[0].ToString());
+            TextBox _txtPAY_AMOUNT = (TextBox)gvInvoiceDetail.Rows[e.RowIndex].FindControl("txtPAY_AMOUNT");
+            TextBox _txtREMARKT = (TextBox)gvInvoiceDetail.Rows[e.RowIndex].FindControl("txtREMARKT");
+
+            InvDetail detail = this.InvDetails.Find(x => x.ID == pkid);
+            if (detail != null)
+            {
+                detail.PAYMENT_AMOUNT = Convert.ToDecimal(_txtPAY_AMOUNT.Text);
+                detail.REMARK = _txtREMARKT.Text;
+            }
+            gvInvoiceDetail.EditIndex = -1;
+            gvInvoiceDetail.DataSource = this.InvDetails;
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        protected void gvInvoiceDetail_RowDataBound(object sender, System.Web.UI.WebControls.GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+
+
+                int _id = Convert.ToInt32(gvInvoiceDetail.DataKeys[e.Row.RowIndex].Values[0].ToString());
+                InvDetail _inv = this.InvDetails.Find(x => x.ID == _id);
+                if (_inv != null)
+                {
+                    LinkButton btnEdit = (LinkButton)e.Row.FindControl("btnEdit");
+
+                    CommandNameEnum cmd = (CommandNameEnum)Enum.ToObject(typeof(CommandNameEnum), (int)_inv.row_type);
+                    switch (cmd)
+                    {
+                        case CommandNameEnum.ITEM:
+                            e.Row.ForeColor = System.Drawing.Color.Black;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = true;
+                            }
+                            break;
+                        case CommandNameEnum.GROUP:
+                            e.Row.ForeColor = System.Drawing.Color.Green;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = false;
+                            }
+                            break;
+                        case CommandNameEnum.OTHER:
+                            e.Row.ForeColor = System.Drawing.Color.Violet;
+                            if (btnEdit != null)
+                            {
+                                btnEdit.Visible = false;
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
+        protected void gvInvoiceDetail_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            gvInvoiceDetail.EditIndex = -1;
+            gvInvoiceDetail.DataSource = this.InvDetails;
+            gvInvoiceDetail.DataBind();
+            //Show Popup
+            ModolPopupExtender.Show();
+        }
+
+        protected void gvInvoiceDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            int _deletePK = int.Parse(e.Keys[0].ToString().Split(Constants.CHAR_COMMA)[0]);
+
+            InvDetail _inv = this.InvDetails.Where(x => x.ID == _deletePK).FirstOrDefault();
+            if (_inv != null)
+            {
+                _inv.row_type = Convert.ToInt32(CommandNameEnum.Delete);
+                #region "MESSAGE RESULT"
+                String errorMessage = repInvoice.errorMessage;
+                if (!String.IsNullOrEmpty(errorMessage))
+                {
+                    MessageBox.Show(this, errorMessage);
+                }
+                else
+                {
+                    MessageBox.Show(this, Resources.MSG_SAVE_SUCCESS);
+                }
+                #endregion
             }
         }
         #endregion
@@ -281,5 +385,34 @@ namespace DPU.DORMITORY.Web.View.Account
             }
         }
 
+
+        protected void OK_Click(object sender, EventArgs e)
+        {
+            int inv_id = 0;
+            //Edit Item
+            foreach (InvDetail invDetail in this.InvDetails)
+            {
+                inv_id = invDetail.INV_ID;
+                TB_INVOICE_DETAIL editModel = repInoviceDetail.GetById(invDetail.ID);
+                if (editModel != null)
+                {
+                    editModel.AMOUNT = invDetail.PAYMENT_AMOUNT;
+                    repInoviceDetail.Update(editModel);
+                }
+            }
+            //Edit Parent
+            TB_INVOICE editModelInvocie = repInvoice.GetById(inv_id);
+            if (editModelInvocie != null)
+            {
+                editModelInvocie.AMOUNT = this.InvDetails.Sum(x => x.PAYMENT_AMOUNT).Value;
+                editModelInvocie.UPDATE_BY = userLogin.USER_ID;
+                editModelInvocie.UPDATE_DATE = DateTime.Now;
+                repInvoice.Update(editModelInvocie);
+            }
+
+            searchResult = obj.preparePostingData();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+        }
     }
 }

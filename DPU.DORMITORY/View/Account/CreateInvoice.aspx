@@ -59,6 +59,8 @@
                                         <div class="col-md-9">
                                             <div class="input-group" style="text-align: left">
                                                 <asp:TextBox ID="txtRoom" runat="server" CssClass="form-control" placeholder=""></asp:TextBox>
+                         <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender5" TargetControlID="txtRoom"
+                                                    FilterType="Numbers" ValidChars=".," runat="server" />
                                                 <span class="input-group-btn">
                                                     <%--<asp:Button ID="btnCheckRoom" runat="server" Text="Check" CssClass="btn green" OnClick="btnCheckRoom_Click" />--%>
                                                     <asp:LinkButton ID="btnCheckRoom" runat="server" CssClass="btn green" OnClick="btnCheckRoom_Click"> Check</asp:LinkButton>
@@ -312,115 +314,6 @@
                 allowClear: true
             });
 
-            var form1 = $('#Form1');
-            var error1 = $('.alert-danger', form1);
-            var success1 = $('.alert-success', form1);
-
-            form1.validate({
-                errorElement: 'span', //default input error message container
-                errorClass: 'help-block help-block-error', // default input error message class
-                focusInvalid: false, // do not focus the last invalid input
-                ignore: "",  // validate all fields including form hidden input
-                messages: {
-                    select_multi: {
-                        maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
-                        minlength: jQuery.validator.format("At least {0} items must be selected")
-                    }
-                },
-                rules: {
-
-                    ctl00$ContentPlaceHolder1$txtRoom: {
-                        required: true,
-                        number: true
-                    },
-                    //ctl00$ContentPlaceHolder1$txtCost01: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost02: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost03: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost04: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost05: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost06: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost07: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost08: {
-                    //    required: true,
-                    //    number: true
-                    //},
-                    //ctl00$ContentPlaceHolder1$txtCost09: {
-                    //    required: true,
-                    //    number: true
-                    //},
-
-                    ctl00$ContentPlaceHolder1$txtStayDay: {
-                        required: true,
-                        number: true
-                    },
-
-                    ctl00$ContentPlaceHolder1$txtElecMeterStart: {
-                        required: true,
-                        number: true
-                    },
-                    ctl00$ContentPlaceHolder1$txtElecMeterEnd: {
-                        required: true,
-                        number: true
-                    },
-
-                    ctl00$ContentPlaceHolder1$txtWaterMeterStart: {
-                        required: true,
-                        number: true
-                    },
-                    ctl00$ContentPlaceHolder1$txtWaterMeterEnd: {
-                        required: true,
-                        number: true
-                    },
-
-
-                },
-
-                invalidHandler: function (event, validator) { //display error alert on form submit              
-                    success1.hide();
-                    error1.show();
-                    Metronic.scrollTo(error1, -200);
-                },
-
-                highlight: function (element) { // hightlight error inputs
-                    $(element)
-                        .closest('.form-group').addClass('has-error'); // set error class to the control group
-                },
-
-                unhighlight: function (element) { // revert the change done by hightlight
-                    $(element)
-                        .closest('.form-group').removeClass('has-error'); // set error class to the control group
-                },
-
-                success: function (label) {
-                    label
-                        .closest('.form-group').removeClass('has-error'); // set success class to the control group
-                },
-
-                submitHandler: function (form) {
-                    form.submit();
-                }
-            });
         });
     </script>
     <!-- END JAVASCRIPTS -->

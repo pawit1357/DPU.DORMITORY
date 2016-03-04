@@ -7,6 +7,5 @@ C:\Users\pawit\Documents\Visual Studio 2013\Projects\DPU.DORMITORY\DPU.DORMITORY
 C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\DPU.DORMITORY.Repositories.dll
 C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\DPU.DORMITORY.Repositories.pdb
 C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\bin\Debug\EntityFramework.dll
-C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\obj\Debug\DPU.DORMITORY.Repositories.csprojResolveAssemblyReference.cache
 C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\obj\Debug\DPU.DORMITORY.Repositories.dll
 C:\Users\icnsk\Documents\Visual Studio 2015\Projects\DPU.DORMITORY\DPU.DORMITORY.Repositories\obj\Debug\DPU.DORMITORY.Repositories.pdb

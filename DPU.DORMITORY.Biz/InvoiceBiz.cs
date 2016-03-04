@@ -16,7 +16,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public int Count { get; set; }
         #endregion
 
-
+        public int INV_ID { get; set; }
         public int ROOM_ID { get; set; }
         #region "COST"
         public int BUILD_ID { get; set; }
@@ -247,7 +247,11 @@ namespace DPU.DORMITORY.Biz.DataAccess
                                                         BID = b.ID,
                                                         b.BA
                                                     });
+                if(ID >0)
+                {
+                    result = result.Where(x => x.ID == ID);
 
+                }
                 if (BUILD_ID > 0)
                 {
                     result = result.Where(x => x.BUILD_ID == BUILD_ID);
@@ -350,12 +354,49 @@ namespace DPU.DORMITORY.Biz.DataAccess
                 return result.ToList();
             }
         }
+
+        public List<InvDetail> getPrepareInvoiceDataByInvID()
+        {
+
+            using (DORMEntities ctx = new DORMEntities())
+            {
+                var result = from CUSTOMER in ctx.TB_CUSTOMER
+                             join INV_DETAIL in ctx.TB_INVOICE_DETAIL on CUSTOMER.ID equals INV_DETAIL.CUS_ID
+                             join CT in ctx.TB_M_COST_TYPE on INV_DETAIL.COST_TYPE_ID equals CT.ID
+                             //join ROOM in ctx.TB_ROOM on CUSTOMER.ROOM_ID equals ROOM.ID
+                             //join BUILD in ctx.TB_M_BUILD on ROOM.BUILD_ID equals BUILD.ID
+                             //join CUSTOMER_PAYER in ctx.TB_CUSTOMER_PAYER on CUSTOMER.ID equals CUSTOMER_PAYER.CUS_ID
+                             //join TERM_OF_PAYMENT in ctx.TB_M_TERM_OF_PAYMENT on CUSTOMER_PAYER.TERM_OF_PAYMENT_ID equals TERM_OF_PAYMENT.ID
+                             //join RATES_GROUP_DETAIL in ctx.TB_RATES_GROUP_DETAIL on ROOM.RATES_GROUP_ID equals RATES_GROUP_DETAIL.RATES_GROUP_ID
+                             //join SPONSOR in ctx.TB_M_SPONSOR on CUSTOMER_PAYER.SPONSOR_ID equals SPONSOR.ID
+                             where CUSTOMER.STATUS == 0 //&& M_SERVICE.ID == RATES_GROUP_DETAIL.SERVICE_ID
+                             orderby CUSTOMER.ID
+                             select new InvDetail
+                             {
+                                 ID = INV_DETAIL.ID,
+                                 INV_ID = INV_DETAIL.INVOICE_ID,
+                                 CUS_ID = CUSTOMER.ID,
+                                 M_SERVICE_NAME = CT.NAME,//M_SERVICE.NAME,
+                                 PAYER_NAME ="",
+                                 PAYMENT_AMOUNT = INV_DETAIL.AMOUNT,
+                                 REMARK = INV_DETAIL.REMARK
+                             };
+
+                if (this.INV_ID > 0)
+                {
+                    result = result.Where(x => x.INV_ID == this.INV_ID);
+                }
+                return  result.ToList();
+            }
+        }
     }
 
 }
 [Serializable]
 public class InvDetail
 {
+    public int INV_ID { get; set; }
+
     public String CUSTOMER_NAME { get; set; }
     public int ID { get; set; }
     public int? SPONSOR_ID { get; set; }

@@ -880,8 +880,6 @@ namespace DPU.DORMITORY.Web.View.Account
             ModolPopupExtender.Show();
         }
 
-        #endregion
-
         protected void gvInvoiceDetail_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             int _deletePK = int.Parse(e.Keys[0].ToString().Split(Constants.CHAR_COMMA)[0]);
@@ -903,7 +901,7 @@ namespace DPU.DORMITORY.Web.View.Account
                 #endregion
             }
         }
-
+        #endregion
         protected void GridView1_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int index = Convert.ToInt32(e.CommandArgument);

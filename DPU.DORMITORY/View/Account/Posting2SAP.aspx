@@ -1,7 +1,11 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="Posting2SAP.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Account.Posting2SAP" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <form id="Form1" method="post" runat="server" class="form-horizontal">
+        <asp:ToolkitScriptManager ID="ToolkitScript1" runat="server" />
 
         <!-- BEGIN PAGE CONTENT-->
         <div class="row">
@@ -93,27 +97,26 @@
                             <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
                                 CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
                                 <Columns>
-                                    <asp:BoundField HeaderText="POST ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID"/>
-                                    <asp:BoundField HeaderText="BUILDING ID" DataField="BID" ItemStyle-HorizontalAlign="Left" SortExpression="BID"/>
-
+                                    <asp:BoundField HeaderText="POST ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID" />
+                                    <asp:BoundField HeaderText="BUILDING ID" DataField="BID" ItemStyle-HorizontalAlign="Left" SortExpression="BID" />
                                     <asp:BoundField HeaderText="เดือน" DataField="POSTING_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="POSTING_DATE" DataFormatString="{0:MM/yyyy}" />
-                                    <asp:BoundField HeaderText="อาคาร" DataField="NAME" ItemStyle-HorizontalAlign="Left" SortExpression="NAME"/>
-                                    <asp:BoundField HeaderText="ห้อง" DataField="NUMBER" ItemStyle-HorizontalAlign="Left" SortExpression="NUMBER"  />
-                                    <%--<asp:BoundField HeaderText="เลขทะเบียน/ผู้สนับสุน" DataField="REF_NUM" ItemStyle-HorizontalAlign="Left" SortExpression="REF_NUM"/>--%>
-                                     <asp:BoundField HeaderText="เลขทะเบียน" DataField="CUSTOMER_NUMBER" ItemStyle-HorizontalAlign="Left" />
+                                    <asp:BoundField HeaderText="อาคาร" DataField="NAME" ItemStyle-HorizontalAlign="Left" SortExpression="NAME" />
+                                    <asp:BoundField HeaderText="ห้อง" DataField="NUMBER" ItemStyle-HorizontalAlign="Left" SortExpression="NUMBER" />
+                                    <asp:BoundField HeaderText="เลขทะเบียน" DataField="CUSTOMER_NUMBER" ItemStyle-HorizontalAlign="Left" />
                                     <asp:BoundField HeaderText="ชื่อ" DataField="PAYER_NAME" ItemStyle-HorizontalAlign="Left" />
-
-<%--                                    <asp:BoundField HeaderText="Company" DataField="COMPANY" ItemStyle-HorizontalAlign="Left" />--%>
                                     <asp:BoundField HeaderText="BA" DataField="BA" ItemStyle-HorizontalAlign="Left" />
-<%--                                    <asp:BoundField HeaderText="Profit Ctr." DataField="PROFIT_CTR" ItemStyle-HorizontalAlign="Left" />--%>
-<%--                                    <asp:BoundField HeaderText="Main trans" DataField="MAIN_TRANS" ItemStyle-HorizontalAlign="Left" />--%>
-                                    <%--<asp:BoundField HeaderText="Sub trans" DataField="SUB_TRANS" ItemStyle-HorizontalAlign="Left" />--%>
-            <%--                        <asp:BoundField HeaderText="Service" DataField="SERVICE" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="ผู้ชำระ" DataField="PAY_BY" ItemStyle-HorizontalAlign="Left" />
-                                    <asp:BoundField HeaderText="BP No." DataField="BP_NO" ItemStyle-HorizontalAlign="Left" />--%>
-
-                                    
                                     <asp:BoundField HeaderText="Amout" DataField="AMOUNT" ItemStyle-HorizontalAlign="Left" />
+                                    <asp:TemplateField HeaderText="">
+                                        <ItemTemplate>
+                                            <asp:LinkButton ID="btnEdit" runat="server" ToolTip="EDIT_INVOICE" CommandName="EDIT_INVOICE" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-edit"></i></asp:LinkButton>
+                                        </ItemTemplate>
+                                        <EditItemTemplate>
+                                            <asp:LinkButton ID="btnUpdate" runat="server" ToolTip="Update" ValidationGroup="CreditLineGrid"
+                                                CommandName="Update"><i class="fa fa-save"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="LinkCancel" runat="server" ToolTip="Cancel" CausesValidation="false"
+                                                CommandName="Cancel"><i class="fa fa-remove"></i></asp:LinkButton>
+                                        </EditItemTemplate>
+                                    </asp:TemplateField>
                                 </Columns>
 
                                 <EmptyDataTemplate>
@@ -123,49 +126,7 @@
                                 </EmptyDataTemplate>
                             </asp:GridView>
 
-                            <%--<asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
-                            CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
-                            <Columns>
-                                <asp:TemplateField HeaderText="หอพัก" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Literal ID="litBuild" runat="server" Text='<%# Eval("BUILD")%>' />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:BoundField HeaderText="ประจำเดือน" DataField="POSTING_DATE" ItemStyle-HorizontalAlign="Left" SortExpression="POSTING_DATE" DataFormatString="{0:MM-yyyy}" />
-                                <asp:TemplateField HeaderText="จำนวนข้อมูลทั้งหมด (Records)" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Literal ID="litTotalRecord" runat="server" Text='<%# Eval("TOTAL_ROW")%>' />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="โอนสำเร็จ (Records)" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Literal ID="litSuccessRecord" runat="server" Text='<%# Eval("COMPLETE_ROW")%>' />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="โอนไม่สำเร็จ (Records)" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Literal ID="litFailRecord" runat="server" Text='<%# Eval("ERROR_ROW")%>' />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Result" ItemStyle-HorizontalAlign="Center">
-                                    <ItemTemplate>
-                                        <asp:Literal ID="litResult" runat="server" />
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Action">
-                                    <ItemTemplate>
-                                        <asp:LinkButton ID="btnInfo" runat="server" ToolTip="Info" CommandName="View" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-search-plus"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="btnSend2SAP" runat="server" ToolTip="Info" CommandName="Send2SAP" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-cogs"></i></asp:LinkButton>
-                                        <asp:LinkButton ID="btnLog" runat="server" ToolTip="Info" CommandName="ViewLogs" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-code"></i></asp:LinkButton>
-                                    </ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                            <EmptyDataTemplate>
-                                <div class="data-not-found">
-                                    <asp:Literal ID="libDataNotFound" runat="server" Text="Data Not found" />
-                                </div>
-                            </EmptyDataTemplate>
-                        </asp:GridView>--%>
+
                         </div>
                     </div>
                     <!-- END EXAMPLE TABLE PORTLET-->
@@ -175,6 +136,93 @@
             </div>
         </div>
         <!-- END PAGE CONTENT-->
+
+        <div class="modal-wide" id="pnlModalDemo" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        แก้ไขรายละเอียดค่าใช้จ่าย
+                    </div>
+                </div>
+                <div class="modal-body" style="width: 600px; height: 400px; overflow-x: hidden; overflow-y: scroll; padding-bottom: 10px;">
+                    <asp:GridView ID="gvInvoiceDetail" runat="server" AutoGenerateColumns="False" Width="550px" CssClass="table table-striped table-hover table-bordered"
+                        ShowHeaderWhenEmpty="True" DataKeyNames="ID,row_type" OnRowDataBound="gvInvoiceDetail_RowDataBound" OnRowEditing="gvInvoiceDetail_RowEditing" OnRowUpdating="gvInvoiceDetail_RowUpdating" OnRowCancelingEdit="gvInvoiceDetail_RowCancelingEdit" OnRowDeleting="gvInvoiceDetail_RowDeleting">
+                        <Columns>
+                            <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <%# Container.DataItemIndex + 1 %>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="รายการค่าใช้จ่าย" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:Literal ID="litM_SERVICE_NAME" runat="server" Text='<%# Eval("M_SERVICE_NAME")%>' />
+                                </ItemTemplate>
+                                <ItemStyle HorizontalAlign="Left" />
+                            </asp:TemplateField>
+                            <%--                     <asp:TemplateField HeaderText="ผู้ชำระ" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:Literal ID="litPAYER_NAME" runat="server" Text='<%# Eval("PAYER_NAME")%>' />
+                                </ItemTemplate>
+                                <ItemStyle HorizontalAlign="Left" />
+                            </asp:TemplateField>--%>
+
+                            <asp:TemplateField HeaderText="จำนวนเงินที่ชำระ" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:Literal ID="litPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' />
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' class="form-control"></asp:TextBox>
+                                    <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtPAY_AMOUNT"
+                                        FilterType="Numbers" ValidChars=".," runat="server" />
+                                </EditItemTemplate>
+                                <ItemStyle HorizontalAlign="Right" />
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="หมายเหตุ" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:Literal ID="litREMARK" runat="server" Text='<%# Eval("REMARK")%>' />
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:TextBox ID="txtREMARKT" runat="server" Text='<%# Eval("REMARK")%>' class="form-control"></asp:TextBox>
+                                </EditItemTemplate>
+                                <ItemStyle HorizontalAlign="Right" />
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="btnEdit" runat="server" ToolTip="Edit" CommandName="Edit" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-edit"></i></asp:LinkButton>
+                                </ItemTemplate>
+                                <EditItemTemplate>
+                                    <asp:LinkButton ID="btnUpdate" runat="server" ToolTip="Update" ValidationGroup="CreditLineGrid"
+                                        CommandName="Update"><i class="fa fa-save"></i></asp:LinkButton>
+                                    <asp:LinkButton ID="LinkCancel" runat="server" ToolTip="Cancel" CausesValidation="false"
+                                        CommandName="Cancel"><i class="fa fa-remove"></i></asp:LinkButton>
+                                </EditItemTemplate>
+                            </asp:TemplateField>
+                        </Columns>
+
+                        <EmptyDataTemplate>
+                            <div class="data-not-found">
+                                <asp:Literal ID="libDataNotFound" runat="server" Text="Data Not found" />
+                            </div>
+                        </EmptyDataTemplate>
+                    </asp:GridView>
+                </div>
+                <div class="modal-footer">
+                    <asp:Button ID="OK" runat="server" CssClass="btn purple" Style="margin-top: 10px; margin-left: 20px;" Text="บันทึก" OnClick="OK_Click" />
+
+                    <asp:Button ID="btnClose" CssClass="btn default" Style="margin-top: 10px;" runat="server" Text="ปิด" OnClick="btnCancel_Click" />
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+
+        <asp:LinkButton ID="lnkFake" runat="server">
+        </asp:LinkButton>
+        <asp:ModalPopupExtender ID="ModolPopupExtender" runat="server" PopupControlID="pnlModalDemo"
+            TargetControlID="lnkFake" BackgroundCssClass="modal-backdrop modal-print-form fade in" BehaviorID="mpModalDemo"
+            CancelControlID="btnClose">
+        </asp:ModalPopupExtender>
+
     </form>
 
     <!-- BEGIN PAGE LEVEL SCRIPTS -->

@@ -119,7 +119,8 @@ namespace DPU.DORMITORY.Biz
         Page =18,
         ITEM = 19,
         GROUP = 20,
-        OTHER = 21
+        OTHER = 21,
+        EDIT_INVOICE = 22
     }
 
     public enum MenuRoleActionEnum : int
