@@ -146,8 +146,8 @@
                                     </asp:TemplateField>
                                     <asp:TemplateField HeaderText="Action">
                                         <ItemTemplate>
-                                            <asp:LinkButton ID="btnPay" runat="server" ToolTip="ชำระเงิน" CommandName="Payment" OnClientClick="return confirm('เปลี่ยนรายการที่เลือกให้เป็น ชำระเงินแล้ว?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-credit-card"></i></asp:LinkButton>
-                                            <asp:LinkButton ID="btnPrint" runat="server" ToolTip="พิมพ์ใบแจ้งหนี้" CommandName="PrintInvoice" OnClientClick="return confirm('ต้องการพิมพ์ใบแจ้งหนี้?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-credit-card"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="btnPay" runat="server" ToolTip="ชำระเงิน" CommandName="Payment" OnClientClick="return confirm('เปลี่ยนรายการที่เลือกให้เป็น ชำระเงินแล้ว?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-cc-visa"></i></asp:LinkButton>
+                                            <asp:LinkButton ID="btnPrint" runat="server" ToolTip="พิมพ์ใบแจ้งหนี้" CommandName="PrintInvoice" OnClientClick="return confirm('ต้องการพิมพ์ใบแจ้งหนี้?');" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-print"></i></asp:LinkButton>
 
                                              </ItemTemplate>
                                     </asp:TemplateField>

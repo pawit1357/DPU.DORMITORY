@@ -73,7 +73,7 @@ namespace DPU.DORMITORY.View.Account
                 //tmp.RoomNumber = txtRoom.Text;
                 tmp.BUILD_ID = Convert.ToInt32(ddlBuild.SelectedValue);
                 tmp.ROOM_NUMBER = txtRoomNum.Text;
-                tmp.PAYMENT_STATUS = false;
+                tmp.PAYMENT_STATUS = true;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
                 tmp.FIRSTNAME = txtFirstName.Text;
                 tmp.SURNAME = txtLastName.Text;
@@ -121,10 +121,7 @@ namespace DPU.DORMITORY.View.Account
             }
         }
 
-
         #region "GRIDVIEW RESULT"
-
-
         protected void gvResult_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
         {
             CommandNameEnum cmd = (CommandNameEnum)Enum.Parse(typeof(CommandNameEnum), e.CommandName, true);
@@ -155,6 +152,7 @@ namespace DPU.DORMITORY.View.Account
             }
 
         }
+
         protected void gvResult_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             if (e.Row.RowType == DataControlRowType.DataRow)
