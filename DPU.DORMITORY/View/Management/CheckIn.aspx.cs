@@ -539,8 +539,9 @@ namespace DPU.DORMITORY.Web.View.Management
                 ZSTD_INFOTable result = sapBiz.getStudentInfo(txtCustomerID.Text);
                 if (result != null)
                 {
-                    if (result[0] != null)
+                    if (result.Count > 0)
                     {
+
                         ZSTD_INFO info = result[0];
                         if (info != null)
                         {
@@ -1448,7 +1449,7 @@ namespace DPU.DORMITORY.Web.View.Management
                 gvInvoiceDetail.DataSource = this.InvDetails.OrderBy(x => x.ID);
                 gvInvoiceDetail.DataBind();
                 //}
-                    #endregion
+                #endregion
             }
         }
 

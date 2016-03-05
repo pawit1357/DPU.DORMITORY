@@ -12,6 +12,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
 using System.Transactions;
+using Gen_Bapizarfi_01_Bapizcmi003;
 
 namespace DPU.DORMITORY.Web.View.Account
 {
@@ -97,7 +98,11 @@ namespace DPU.DORMITORY.Web.View.Account
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
             set { Session[GetType().Name + "searchResult"] = value; }
         }
-
+        public List<String> errorList
+        {
+            get { return (List<String>)Session[GetType().Name + "errorList"]; }
+            set { Session[GetType().Name + "errorList"] = value; }
+        }
         public TB_ROOM objRoom
         {
             get { return (TB_ROOM)ViewState["ObjRoom"]; }
@@ -195,6 +200,7 @@ namespace DPU.DORMITORY.Web.View.Account
         {
             CommandName = new CommandNameEnum();
             InvDetails = new List<InvDetail>();
+            errorList = new List<string>();
             List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
 
             ddlBuild.DataSource = build;
@@ -353,6 +359,7 @@ namespace DPU.DORMITORY.Web.View.Account
                                                              .ToList();
                     foreach (var item in invFund)
                     {
+                        
                         InvDetail detail = this.InvDetails.Where(x => x.SPONSOR_ID == item.GroupID && x.row_type == 2).FirstOrDefault();
                         TB_INVOICE inv = new TB_INVOICE();
                         inv.SPONSOR_ID = detail.SPONSOR_ID;
@@ -391,7 +398,7 @@ namespace DPU.DORMITORY.Web.View.Account
                     foreach (var item in invCus)
                     {
                         //item.Customers.FirstOrDefault().
-
+                        
                         InvDetail detail = this.InvDetails.Where(x => x.CUS_ID == item.GroupID && x.row_type == 1).FirstOrDefault();
                         TB_INVOICE inv = new TB_INVOICE();
                         inv.SPONSOR_ID = detail.SPONSOR_ID;
@@ -546,6 +553,7 @@ namespace DPU.DORMITORY.Web.View.Account
                 }
             }
         }
+
         protected void gvPaymentHistory_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             int invoice_id = int.Parse(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[0]);
@@ -602,7 +610,6 @@ namespace DPU.DORMITORY.Web.View.Account
             crystalReport.PrintToPrinter(1, true, 0, 0);
         }
 
-
         private void calculate()
         {
             DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text);
@@ -632,8 +639,37 @@ namespace DPU.DORMITORY.Web.View.Account
                     int rowIndex = 1;
                     foreach (TB_CUSTOMER cus in listCus)
                     {
+                        //Update Status
+                        ZSTD_INFOTable result = sapBiz.getStudentInfo(cus.CUSTOMER_NUMBER);
+                        if (result != null )
+                        {
+                            if (result.Count>0) {
+                                ZSTD_INFO info = result[0];
+                                if (info != null)
+                                {
+                                    TB_CUSTOMER _updateCus = repCustomer.GetById(cus.ID);
+                                    _updateCus.STD_STATUS = info.Status;
+                                    repCustomer.Update(_updateCus);
+                                    cus.STD_STATUS = info.Status;
+                                }
+                            }
+                            else
+                            {
+                                errorList.Add(String.Format("ไม่พบข้อมูล {0} ใน SLCM", cus.CUSTOMER_NUMBER));
+                                continue;
+                            }
+                        }
+
                         Boolean existInvoice = repInvoice.Table.Where(x => x.POSTING_DATE.Value.Year == postingDate.Year && x.POSTING_DATE.Value.Month == postingDate.Month && x.CUS_ID == cus.ID).Any();
-                        if (!existInvoice)
+                        if (existInvoice)
+                        {
+                            errorList.Add(String.Format("มีรายการตั้งหนี้ {0} เดือน {1} ไว้แล้ว",cus.CUSTOMER_NUMBER,txtPostingDate.Text));
+                        }
+                        if (!cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
+                        {
+                            errorList.Add(String.Format("สถานะของ {0} ไม่ถูกต้องกรุณาตรวจสอบกับฝ่ายทะเบียน", cus.CUSTOMER_NUMBER));
+                        }
+                        if (!existInvoice && cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
                         {
                             List<TB_CUSTOMER_PAYER> cusPays = repCustomerPayer.Table.Where(x => x.CUS_ID == cus.ID && x.SPONSOR_ID != 0).ToList();
 
@@ -746,6 +782,7 @@ namespace DPU.DORMITORY.Web.View.Account
                         }
                         else
                         {
+                            //MessageBox.Show(this, "มีการตั้งหนี้ของ");
                             Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
                         }
 
@@ -758,6 +795,15 @@ namespace DPU.DORMITORY.Web.View.Account
                 dt = PivotTable.GetInversedDataTable(this.InvDetails.Where(x => x.IS_ACTIVE = true).ToDataTable(), "M_SERVICE_NAME", "PAYER_NAME", "PAYMENT_AMOUNT", "-", false);
                 GridView1.DataSource = dt;
                 GridView1.DataBind();
+               
+                if (errorList.Count > 0)
+                {
+                    litErrorMessage.Text = MessageBox.GenWarnning(errorList);
+                }
+                else
+                {
+                    litErrorMessage.Text = String.Empty;
+                }
                 //GridView1.Columns[1].HeaderText = String.Empty;//
                 //}
                 #endregion

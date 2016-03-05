@@ -157,6 +157,8 @@
                                             <asp:CommandField ShowSelectButton="True" />
                                         </Columns>
                                     </asp:GridView>
+                                                                <asp:Literal ID="litErrorMessage" runat="server"></asp:Literal>
+
                                     <br />
                                 </div>
                             </div>
