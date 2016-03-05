@@ -434,23 +434,23 @@
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:TextBox ID="txtAmout" runat="server" Text='<%# Eval("AMOUNT")%>' CssClass="form-control"></asp:TextBox>
-  <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtAmout"
-                                                                            FilterType="Numbers" ValidChars=".," runat="server" />                                     
+                                                <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtAmout"
+                                                    FilterType="Numbers" ValidChars=".," runat="server" />
 
                                             </EditItemTemplate>
                                             <FooterTemplate>
                                                 <asp:TextBox ID="txtAmout" runat="server" CssClass="form-control"></asp:TextBox>
-                                                 <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtAmout"
-                                                                            FilterType="Numbers" ValidChars=".," runat="server" />   
+                                                <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtAmout"
+                                                    FilterType="Numbers" ValidChars=".," runat="server" />
                                             </FooterTemplate>
                                             <ItemStyle HorizontalAlign="Center" />
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="">
                                             <ItemTemplate>
                                                 <asp:LinkButton ID="btnEdit" runat="server" ToolTip="Edit" CommandName="Edit" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-edit"></i></asp:LinkButton>
-                                                <asp:LinkButton ID="btnDelete" runat="server" ToolTip="Delete" CommandName="Delete"  OnClientClick="return confirm('Are you sure you want to delete this record?');" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-trash"></i></asp:LinkButton>
+                                                <asp:LinkButton ID="btnDelete" runat="server" ToolTip="Delete" CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-trash"></i></asp:LinkButton>
 
-                                                 </ItemTemplate>
+                                            </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:LinkButton ID="btnUpdate" runat="server" ToolTip="Update" ValidationGroup="CreditLineGrid"
                                                     CommandName="Update"><i class="fa fa-save"></i></asp:LinkButton>
@@ -690,7 +690,7 @@
                                             <label class="control-label col-md-3">ห้อง:</label>
                                             <div class="col-md-6">
                                                 <div class="form-group" style="text-align: left">
-                                                    <asp:DropDownList ID="ddlRoom" runat="server"  DataTextField="NUMBER" DataValueField="ID"></asp:DropDownList>
+                                                    <asp:DropDownList ID="ddlRoom" runat="server" DataTextField="NUMBER" DataValueField="ID"></asp:DropDownList>
                                                 </div>
                                             </div>
                                         </div>
@@ -777,7 +777,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">รายการค่าใช้จ่ายtle">รายการค่าใช้จ่าย</h4>
+                        <h4 class="modal-title">รายการค่าใช้จ่าย</h4>
                     </div>
                     <div class="modal-body">
 

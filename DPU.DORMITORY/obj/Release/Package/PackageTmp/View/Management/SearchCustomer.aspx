@@ -92,7 +92,7 @@
                     </div>
                     <div class="portlet-body">
                         <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
-                            CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand">
+                            CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
                             <Columns>
                                 <asp:TemplateField HeaderText="ลำดับ" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
@@ -102,6 +102,7 @@
                                 <asp:TemplateField HeaderText="อาคาร" ItemStyle-HorizontalAlign="Center">
                                     <ItemTemplate>
                                         <asp:Literal ID="litBuildName" runat="server" Text='<%# Eval("BUILD_NAME")%>' />
+                                        <asp:HiddenField ID="hCustomerStatus" runat="server" Value='<%# Eval("STD_STATUS")%>'/>
                                     </ItemTemplate>
                                     <ItemStyle HorizontalAlign="Left" />
                                 </asp:TemplateField>
@@ -152,7 +153,8 @@
                                 <asp:BoundField HeaderText="วันที่เข้าพัก" DataField="CHECKIN_DATE" DataFormatString="{0:dd/MM/yyyy}"
                                     ItemStyle-HorizontalAlign="Center" />
 
-
+                                <asp:BoundField HeaderText="สถานะนักผู้พัก" DataField="STD_STATUS"
+                                    ItemStyle-HorizontalAlign="Center" />
                                 <asp:TemplateField HeaderText="Action">
                                     <ItemTemplate>
                                         <asp:LinkButton ID="btnInfo" runat="server" ToolTip="Edit" CommandName="Edit" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-edit"></i></asp:LinkButton>

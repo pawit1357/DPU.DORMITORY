@@ -16,89 +16,90 @@
                         </div>
                     </div>
                     <div class="portlet-body">
-                        
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">อาคาร:</label>
-                                <div class="col-md-6">
-                                    <div class="form-group" style="text-align: left">
-                                        <asp:DropDownList ID="ddlBuild" runat="server" class="select2_category form-control" DataTextField="NAME" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlBuild_SelectedIndexChanged"></asp:DropDownList>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">ห้อง:</label>
-                                <div class="col-md-6">
-                                    <div class="form-group" style="text-align: left">
-                                        <asp:DropDownList ID="ddlRoom" runat="server" class="select2_category form-control" DataTextField="NUMBER" DataValueField="ID"></asp:DropDownList>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">เลขที่ใบแจ้งหนี้:</label>
-                                <div class="col-md-6">
 
-                                    <div class="form-group" style="text-align: left">
-                                        <asp:TextBox ID="txtInvoiceNo" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label col-md-3">ชื่อ:</label>
-                                <div class="col-md-6">
-
-                                    <div class="form-group" style="text-align: left">
-                                        <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label class="control-label col-md-3">สถานะ:
-                                                </label>
-                                                <div class="radio-list">
-                                                                <label class="radio-inline">
-                                                        <asp:RadioButton ID="rdPayStatus" GroupName="Status" runat="server" Checked="true"  />ทั้งหมด
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <asp:RadioButton ID="rdPayStatus00" GroupName="Status" runat="server" />ยังไม่ได้ชำระเงิน
-                                                    </label>
-                                                    <label class="radio-inline">
-                                                        <asp:RadioButton ID="rdPayStatus01" GroupName="Status" runat="server"  />ชำระเงินเรียบร้อยแล้ว
-                                                    </label>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                    <div class="form-actions">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-offset-3 col-md-9">
-                                        <asp:LinkButton ID="btnSearch" runat="server" class="btn green" OnClick="btnSearch_Click"><i class="icon-search"></i> Search</asp:LinkButton>
-                                        <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"><i class="icon-refresh"></i> Cancel</asp:LinkButton>
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">อาคาร:</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:DropDownList ID="ddlBuild" runat="server" class="select2_category form-control" DataTextField="NAME" DataValueField="ID" AutoPostBack="True" OnSelectedIndexChanged="ddlBuild_SelectedIndexChanged"></asp:DropDownList>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">ห้อง:</label>
+                                    <div class="col-md-6">
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:DropDownList ID="ddlRoom" runat="server" class="select2_category form-control" DataTextField="NUMBER" DataValueField="ID"></asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">เลขที่ใบแจ้งหนี้:</label>
+                                    <div class="col-md-6">
+
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:TextBox ID="txtInvoiceNo" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">ชื่อ:</label>
+                                    <div class="col-md-6">
+
+                                        <div class="form-group" style="text-align: left">
+                                            <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="" MaxLength="50"></asp:TextBox>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">
+                                        สถานะ:
+                                    </label>
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+                                            <asp:RadioButton ID="rdPayStatus" GroupName="Status" runat="server" Checked="true" />ทั้งหมด
+                                        </label>
+                                        <label class="radio-inline">
+                                            <asp:RadioButton ID="rdPayStatus00" GroupName="Status" runat="server" />ยังไม่ได้ชำระเงิน
+                                        </label>
+                                        <label class="radio-inline">
+                                            <asp:RadioButton ID="rdPayStatus01" GroupName="Status" runat="server" />ชำระเงินเรียบร้อยแล้ว
+                                        </label>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <asp:LinkButton ID="btnSearch" runat="server" class="btn green" OnClick="btnSearch_Click"><i class="icon-search"></i> Search</asp:LinkButton>
+                                            <asp:LinkButton ID="btnCancel" runat="server" class="btn default" OnClick="btnCancel_Click"><i class="icon-refresh"></i> Cancel</asp:LinkButton>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
 
                         <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False" AllowPaging="False"
                             CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" OnRowDataBound="gvResult_RowDataBound">
