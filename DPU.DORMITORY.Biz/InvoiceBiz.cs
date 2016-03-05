@@ -12,6 +12,7 @@ namespace DPU.DORMITORY.Biz.DataAccess
         public CommandNameEnum RowState { get; set; }
         public Boolean FilterPaymentStatus { get; set; }
         public Boolean HasDocumentNo { get; set; }
+        public Boolean ShowAllPayment { get; set; }
         public String RoomNumber { get; set; }
         public int Count { get; set; }
         #endregion
@@ -135,11 +136,11 @@ namespace DPU.DORMITORY.Biz.DataAccess
                 //{
                 //    result = result.Where(x => x.PAYMENT_STATUS == this.STATUS);
                 //}
-                if (!FilterPaymentStatus)
+                if (!FilterPaymentStatus && !ShowAllPayment)
                 {
                     result = result.Where(x => x.PAYMENT_STATUS == this.PAYMENT_STATUS);
                 }
-      
+
                 if (SHOW_WITHOUT_SPONSOR)
                 {
                     result = result.Where(x => x.SPONSOR_ID == 0);

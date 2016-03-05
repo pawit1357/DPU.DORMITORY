@@ -213,7 +213,7 @@ namespace DPU.DORMITORY.Web.View.Management
             {
                 TB_INVOICE tmp = new TB_INVOICE();
                 tmp.CUS_ID = objCustomer.ID;
-                tmp.FilterPaymentStatus = false;
+                //tmp.FilterPaymentStatus = false;
                 tmp.SHOW_WITHOUT_SPONSOR = true;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
                 return tmp;

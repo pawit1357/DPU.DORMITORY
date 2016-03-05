@@ -9,6 +9,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Linq;
 using System.Collections.Generic;
+using CrystalDecisions.CrystalReports.Engine;
+
 namespace DPU.DORMITORY.View.Account
 {
     public partial class SearchRecieve : System.Web.UI.Page
@@ -27,6 +29,7 @@ namespace DPU.DORMITORY.View.Account
             repRoom = unitOfWork.Repository<TB_ROOM>();
             repBuild = unitOfWork.Repository<TB_M_BUILD>();
         }
+
         public USER userLogin
         {
             get { return ((Session[Constants.SESSION_USER] != null) ? (USER)Session[Constants.SESSION_USER] : null); }
@@ -43,7 +46,11 @@ namespace DPU.DORMITORY.View.Account
             set { ViewState[Constants.COMMAND_NAME] = value; }
         }
 
-        public int PKID { get; set; }
+        public int PKID
+        {
+            get { return (int)Session[GetType().Name + "PKID"]; }
+            set { Session[GetType().Name + "PKID"] = value; }
+        }
 
         public TB_CUSTOMER obj
         {
@@ -74,6 +81,7 @@ namespace DPU.DORMITORY.View.Account
                 tmp.BUILD_ID = Convert.ToInt32(ddlBuild.SelectedValue);
                 tmp.ROOM_NUMBER = txtRoomNum.Text;
                 tmp.PAYMENT_STATUS = true;
+                tmp.ShowAllPayment = true;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
                 tmp.FIRSTNAME = txtFirstName.Text;
                 tmp.SURNAME = txtLastName.Text;
@@ -147,6 +155,8 @@ namespace DPU.DORMITORY.View.Account
                     }
                     break;
                 case CommandNameEnum.PrintInvoice:
+
+                    print(this.PKID);
                     Console.WriteLine("PRINT!!");
                     break;
             }
@@ -201,8 +211,27 @@ namespace DPU.DORMITORY.View.Account
         }
         protected void OK_Click(object sender, EventArgs e)
         {
+            print(this.PKID);
             Console.WriteLine("PRINT!!!!");
+
             initialPage();
+        }
+
+
+        private void print(int invoice_id)
+        {
+
+            ReportDocument _rpt = new ReportDocument();
+            _rpt.Load(Configuration.PathReportRecieve);
+            _rpt.SetDatabaseLogon(Configuration.DbUserName, Configuration.DbPassword, Configuration.DbServiceIP, Configuration.DbCatalog);
+            _rpt.SetParameterValue("P_ROOM_ID", 0);
+            _rpt.SetParameterValue("P_CUSTOMER_ID", 0);
+            _rpt.SetParameterValue("P_INVOICE_ID", invoice_id);
+            _rpt.SetParameterValue("P_MONTH", 0);
+            _rpt.SetParameterValue("P_YEAR", 0);
+            _rpt.SetParameterValue("P_BUILD", 0);
+            _rpt.SetParameterValue("P_NATION", 1);
+            _rpt.PrintToPrinter(1, true, 1, 1);
         }
     }
 }

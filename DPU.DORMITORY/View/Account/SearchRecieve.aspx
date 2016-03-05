@@ -1,6 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="SearchRecieve.aspx.cs" Inherits="DPU.DORMITORY.View.Account.SearchRecieve" %>
+﻿ <%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="SearchRecieve.aspx.cs" Inherits="DPU.DORMITORY.View.Account.SearchRecieve" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+<%@ Register Assembly="CrystalDecisions.Web, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304" Namespace="CrystalDecisions.Web" TagPrefix="asp" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <form id="Form1" method="post" runat="server" class="form-horizontal">
@@ -170,16 +171,16 @@
         <!-- END PAGE CONTENT-->
 
         
-        <div class="modal-wide" id="pnlModalDemo" style="display: none;">
+        <div class="modal-fade" id="pnlModalDemo" style="display: none;">
             <div class="modal-content">
-                <div class="modal-header">
+<%--                <div class="modal-header">
                     <div class="modal-title">
-                        ยืนยัน
+                        คุณต้องการพิมพ์ใบแจ้งหนี้
                     </div>
                 </div>
-                <div class="modal-body" style="width: 600px; height: 400px; overflow-x: hidden; overflow-y: scroll; padding-bottom: 10px;">
-                    <h3>คุณต้องการพิมพ์ใบแจ้งหนี้</h3>
-                </div>
+                <div class="modal-body" style="width: 200px; height: 50px; overflow-x: hidden; overflow-y: scroll; padding-bottom: 10px;">
+
+                </div>--%>
                 <div class="modal-footer">
                     <asp:Button ID="OK" runat="server" CssClass="btn purple" Style="margin-top: 10px; margin-left: 20px;" Text="พิมพ์ใบแจ้งหนี้" OnClick="OK_Click" />
                     <asp:Button ID="btnClose" CssClass="btn default" Style="margin-top: 10px;" runat="server" Text="ปิด" />

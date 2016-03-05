@@ -151,7 +151,7 @@ namespace DPU.DORMITORY.Web.View.Account
                 TB_INVOICE tmp = new TB_INVOICE();
                 tmp.BUILD_ID = Convert.ToInt16(ddlBuild.SelectedValue);
                 tmp.ROOM_NUMBER = txtRoom.Text;
-                tmp.FilterPaymentStatus = false;
+                //tmp.FilterPaymentStatus = false;
                 tmp.PAYMENT_STATUS = false;
                 tmp.STATUS = Convert.ToInt32(InvoiceStatusEmum.Open);
                 //tmp.OTHER = txtOther.Text;
