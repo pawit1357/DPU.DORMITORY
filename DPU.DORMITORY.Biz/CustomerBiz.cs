@@ -44,7 +44,8 @@ namespace DPU.DORMITORY.Biz.DataAccess
                                  c.RESERV_DATE,
                                  cp.PHONE,
                                  c.ROOM_ID,
-                                 c.STAY_ALONE
+                                 c.STAY_ALONE,
+                                 c.STD_STATUS
                              };
 
                 if (this.ROOM_ID > 0)

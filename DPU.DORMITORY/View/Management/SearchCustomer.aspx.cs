@@ -108,6 +108,7 @@ namespace DPU.DORMITORY.Web.View.Management
             CommandNameEnum cmd = (CommandNameEnum)Enum.Parse(typeof(CommandNameEnum), e.CommandName, true);
             this.CommandName = cmd;
             this.PKID = int.Parse(e.CommandArgument.ToString().Split(Constants.CHAR_COMMA)[0]);
+
             switch (cmd)
             {
                 case CommandNameEnum.Edit:
@@ -115,6 +116,40 @@ namespace DPU.DORMITORY.Web.View.Management
                 case CommandNameEnum.MoveRoom:
                     Server.Transfer(Constants.LINK_CHECK_IN);
                     break;
+            }
+        }
+
+
+        protected void gvResult_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                HiddenField _hCustomerStatus = (HiddenField)e.Row.FindControl("hCustomerStatus");
+                LinkButton _btnInfo = (LinkButton)e.Row.FindControl("btnInfo");
+                LinkButton _btnCheckOut = (LinkButton)e.Row.FindControl("btnCheckOut");
+                LinkButton _btnChangeRoom = (LinkButton)e.Row.FindControl("btnChangeRoom");
+
+                if (_hCustomerStatus != null)
+                {
+                    if (!String.IsNullOrEmpty(_hCustomerStatus.Value))
+                    {
+                        switch (_hCustomerStatus.Value)
+                        {
+                            case "กำลังศึกษาอยู่":
+                                e.Row.ForeColor = System.Drawing.Color.Black;
+                                _btnInfo.Visible = true;
+                                _btnCheckOut.Visible = true;
+                                _btnChangeRoom.Visible = true;
+                                break;
+                            default:
+                                e.Row.ForeColor = System.Drawing.Color.Red;
+                                _btnInfo.Visible = true;
+                                _btnCheckOut.Visible = false;
+                                _btnChangeRoom.Visible = false;
+                                break;
+                        }
+                    }
+                }
             }
         }
         #endregion
@@ -149,8 +184,6 @@ namespace DPU.DORMITORY.Web.View.Management
                 ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
             }
         }
-
-
 
     }
 }

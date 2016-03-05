@@ -388,6 +388,11 @@ namespace DPU.DORMITORY.Web.View.Management
                     txtCustomerID.Enabled = false;
                     btnCheckCustomer.Visible = false;
                     btnSave.Visible = true;
+
+                    if (!txtStatus.Text.Equals("กำลังศึกษาอยู่"))
+                    {
+                        txtCustomerID.Enabled = true;
+                    }
                     break;
             }
 

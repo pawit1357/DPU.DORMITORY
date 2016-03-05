@@ -7,15 +7,11 @@ using DPU.DORMITORY.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using MoreLinq;
 using System.Data;
 using System.Transactions;
-using System.Text;
-using Gen_Bapizarfi_01_Bapizcmi003;
 
 namespace DPU.DORMITORY.Web.View.Account
 {
