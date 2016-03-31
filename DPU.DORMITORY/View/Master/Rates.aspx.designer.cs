@@ -22,6 +22,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
+        /// ToolkitScript1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ToolkitScriptManager ToolkitScript1;
+        
+        /// <summary>
         /// lbCommandName control.
         /// </summary>
         /// <remarks>
@@ -85,6 +94,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.TextBox txtAmout;
         
         /// <summary>
+        /// FilteredTextBoxExtenderReceiptinAc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtenderReceiptinAc;
+        
+        /// <summary>
         /// lbDate control.
         /// </summary>
         /// <remarks>
@@ -121,13 +139,22 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.TextBox txtEndDate;
         
         /// <summary>
-        /// ddlCalType control.
+        /// rdCalType_1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlCalType;
+        protected global::System.Web.UI.WebControls.RadioButton rdCalType_1;
+        
+        /// <summary>
+        /// rdCalType_2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton rdCalType_2;
         
         /// <summary>
         /// gvResult control.

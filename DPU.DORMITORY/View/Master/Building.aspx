@@ -1,12 +1,17 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="Building.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Master.Building" %>
 
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <form runat="server" id="Form1" method="POST" enctype="multipart/form-data" class="form-horizontal">
         <%--   <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
         <asp:UpdatePanel ID="updResult" runat="server">
+        <asp:ToolkitScriptManager ID="ToolkitScript1" runat="server" />
 
             <ContentTemplate>--%>
+                <asp:ToolkitScriptManager ID="ToolkitScript1" runat="server" />
+
         <div class="alert alert-danger display-hide">
             <button class="close" data-close="alert"></button>
             You have some form errors. Please check below.
@@ -131,6 +136,8 @@
                                 <label class="control-label col-md-3">COMPANY<span class="required" aria-required="true">*</span></label>
                                 <div class="col-md-9">
                                     <asp:TextBox ID="txtCompany" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                                            <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtCompany"
+                                                            FilterType="Numbers" ValidChars=".," runat="server" />
                                 </div>
                             </div>
                         </div>
@@ -141,6 +148,8 @@
                                 <label class="control-label col-md-3">BA<span class="required" aria-required="true">*</span></label>
                                 <div class="col-md-9">
                                     <asp:TextBox ID="txtBA" runat="server" CssClass="form-control"></asp:TextBox>
+                                                                                  <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender1" TargetControlID="txtBA"
+                                                            FilterType="Numbers" ValidChars=".," runat="server" />
                                 </div>
                             </div>
                         </div>
@@ -151,6 +160,8 @@
                                 <label class="control-label col-md-3">PROFIT CTR<span class="required" aria-required="true">*</span></label>
                                 <div class="col-md-9">
                                     <asp:TextBox ID="txtProfitCtr" runat="server" CssClass="form-control"></asp:TextBox>
+                                                      <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtender2" TargetControlID="txtProfitCtr"
+                                                            FilterType="Numbers" ValidChars=".," runat="server" />
                                 </div>
                             </div>
                         </div>

@@ -788,8 +788,8 @@ namespace DPU.DORMITORY.Web.View.Account
                             else
                             {
                                 //MessageBox.Show(this, "มีการตั้งหนี้ของ");
-                                Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
-                                errorList.Add(String.Format("มีการตั้งหนี้ของเดือนนี้ไปแล้ว"));
+                                //Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
+                                //errorList.Add(String.Format("มีการตั้งหนี้ของเดือนนี้ไปแล้ว"));
 
                             }
 

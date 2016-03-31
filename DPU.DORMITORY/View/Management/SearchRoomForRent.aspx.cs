@@ -292,6 +292,16 @@ namespace DPU.DORMITORY.Web.View.Management
 
         protected void ddlBuild_SelectedIndexChanged(object sender, EventArgs e)
         {
+            searchResult = obj.SearchForRent();
+            gvResult.DataSource = searchResult;
+            gvResult.DataBind();
+
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+                pSearchResult.Visible = true;
+            }
             //if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
             //{
             //    int buildId = Convert.ToInt32(ddlBuild.SelectedValue);

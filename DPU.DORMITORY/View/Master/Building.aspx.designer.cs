@@ -22,6 +22,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.HtmlControls.HtmlForm Form1;
         
         /// <summary>
+        /// ToolkitScript1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.ToolkitScriptManager ToolkitScript1;
+        
+        /// <summary>
         /// lbCommandName control.
         /// </summary>
         /// <remarks>
@@ -121,6 +130,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.TextBox txtCompany;
         
         /// <summary>
+        /// FilteredTextBoxExtenderReceiptinAc control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtenderReceiptinAc;
+        
+        /// <summary>
         /// txtBA control.
         /// </summary>
         /// <remarks>
@@ -130,6 +148,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         protected global::System.Web.UI.WebControls.TextBox txtBA;
         
         /// <summary>
+        /// FilteredTextBoxExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender1;
+        
+        /// <summary>
         /// txtProfitCtr control.
         /// </summary>
         /// <remarks>
@@ -137,6 +164,15 @@ namespace DPU.DORMITORY.Web.View.Master {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtProfitCtr;
+        
+        /// <summary>
+        /// FilteredTextBoxExtender2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.FilteredTextBoxExtender FilteredTextBoxExtender2;
         
         /// <summary>
         /// btnSave control.

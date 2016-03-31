@@ -204,18 +204,6 @@
                                                     </ItemTemplate>
                                                     <ItemStyle HorizontalAlign="Left" />
                                                 </asp:TemplateField>
-                                                <%--                                               <asp:TemplateField HeaderText="หน่วย" ItemStyle-HorizontalAlign="Center">
-                                                            <ItemTemplate>
-                                                                <asp:Literal ID="litRATES_GROUP_DETAIL_UNIT" runat="server" Text='<%# Eval("RATE_UNIT")%>' />
-                                                            </ItemTemplate>
-                                                            <ItemStyle HorizontalAlign="Center" />
-                                                        </asp:TemplateField>
-                                                        <asp:TemplateField HeaderText="ราคาต่อหน่วย" ItemStyle-HorizontalAlign="Center">
-                                                            <ItemTemplate>
-                                                                <asp:Literal ID="litRATE_AMOUNT" runat="server" Text='<%# Eval("RATE_AMOUNT","{0:N2}")%>' />
-                                                            </ItemTemplate>
-                                                            <ItemStyle HorizontalAlign="Right" />
-                                                        </asp:TemplateField>--%>
 
                                                 <asp:TemplateField HeaderText="จำนวนเงินที่ชำระ" ItemStyle-HorizontalAlign="Center">
                                                     <ItemTemplate>
@@ -224,7 +212,7 @@
                                                     <EditItemTemplate>
                                                         <asp:TextBox ID="txtPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' class="form-control"></asp:TextBox>
                                                         <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtPAY_AMOUNT"
-                                                            FilterType="Numbers" ValidChars=".," runat="server" />
+                                                            FilterType="Numbers,Custom" ValidChars=".," runat="server" />
                                                     </EditItemTemplate>
                                                     <ItemStyle HorizontalAlign="Right" />
                                                 </asp:TemplateField>
@@ -240,8 +228,7 @@
                                                 <asp:TemplateField HeaderText="">
                                                     <ItemTemplate>
                                                         <asp:LinkButton ID="btnEdit" runat="server" ToolTip="Edit" CommandName="Edit" CommandArgument='<%# Eval("ID")%>'><i class="fa fa-edit"></i></asp:LinkButton>
-                                                        <%--      <asp:LinkButton ID="btnDelete" runat="server" ToolTip="Delete" CommandName="Delete" OnClientClick="return confirm('Are you sure you want to delete this record?');"
-                                                        CommandArgument='<%# Eval("ID")%>'><i class="fa fa-trash"></i></asp:LinkButton>--%>
+
                                                     </ItemTemplate>
                                                     <EditItemTemplate>
                                                         <asp:LinkButton ID="btnUpdate" runat="server" ToolTip="Update" ValidationGroup="CreditLineGrid"

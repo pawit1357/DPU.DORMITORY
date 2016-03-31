@@ -63,7 +63,7 @@
                                                     FilterType="Numbers" ValidChars=".," runat="server" />
                                                 <span class="input-group-btn">
                                                     <%--<asp:Button ID="btnCheckRoom" runat="server" Text="Check" CssClass="btn green" OnClick="btnCheckRoom_Click" />--%>
-                                                    <asp:LinkButton ID="btnCheckRoom" runat="server" CssClass="btn green" OnClick="btnCheckRoom_Click"> Check</asp:LinkButton>
+                                                    <asp:LinkButton ID="btnCheckRoom" runat="server" CssClass="btn green" OnClick="btnCheckRoom_Click"> ตรวจสอบ</asp:LinkButton>
                                                 </span>
                                             </div>
                                         </div>

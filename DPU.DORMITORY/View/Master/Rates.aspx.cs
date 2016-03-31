@@ -82,7 +82,7 @@ namespace DPU.DORMITORY.Web.View.Master
                 _obj.UPDATE_BY = userLogin.USER_ID;
                 _obj.CREATE_DATE = DateTime.Now;
                 _obj.UPDATE_DATE = DateTime.Now;
-                _obj.CALCULATE_INVOICE_TYPE = Convert.ToInt32(ddlCalType.SelectedValue);
+                _obj.CALCULATE_INVOICE_TYPE = (rdCalType_1.Checked) ? 1 : 2;// Convert.ToInt32(ddlCalType.SelectedValue);
                 _obj.TB_RATES_GROUP_DETAIL = listRateGroupDetal;
                 _obj.RowState = CommandName;
                 return _obj;
@@ -155,11 +155,13 @@ namespace DPU.DORMITORY.Web.View.Master
                 //List<TB_M_SERVICE> serviceList = repService.Table.ToList();
                 if (_obj.CALCULATE_INVOICE_TYPE == null)
                 {
-                    ddlCalType.SelectedValue = "1";
+                    //ddlCalType.SelectedValue = "1";
+                    rdCalType_1.Checked = true;
                 }
                 else
                 {
-                    ddlCalType.SelectedValue = _obj.CALCULATE_INVOICE_TYPE.Value.ToString();
+                    //ddlCalType.SelectedValue = _obj.CALCULATE_INVOICE_TYPE.Value.ToString();
+                    rdCalType_1.Checked = _obj.CALCULATE_INVOICE_TYPE.Value == 1 ? true : false;
                 }
                 listRateGroupDetal = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == _obj.ID).ToList();
                 if (listRateGroupDetal != null)
