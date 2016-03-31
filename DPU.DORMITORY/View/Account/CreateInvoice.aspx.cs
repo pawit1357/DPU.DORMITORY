@@ -98,11 +98,11 @@ namespace DPU.DORMITORY.Web.View.Account
             get { return (IEnumerable)Session[GetType().Name + "searchResult"]; }
             set { Session[GetType().Name + "searchResult"] = value; }
         }
-        public List<String> errorList
-        {
-            get { return (List<String>)Session[GetType().Name + "errorList"]; }
-            set { Session[GetType().Name + "errorList"] = value; }
-        }
+        //public List<String> errorList
+        //{
+        //    get { return (List<String>)Session[GetType().Name + "errorList"]; }
+        //    set { Session[GetType().Name + "errorList"] = value; }
+        //}
         public TB_ROOM objRoom
         {
             get { return (TB_ROOM)ViewState["ObjRoom"]; }
@@ -200,7 +200,7 @@ namespace DPU.DORMITORY.Web.View.Account
         {
             CommandName = new CommandNameEnum();
             InvDetails = new List<InvDetail>();
-            errorList = new List<string>();
+            //errorList = new List<string>();
             List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
 
             ddlBuild.DataSource = build;
@@ -612,204 +612,224 @@ namespace DPU.DORMITORY.Web.View.Account
 
         private void calculate()
         {
-            DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text);
-
-            List<InvDetail> tmps = new List<InvDetail>();
-            List<int> pkIds = new List<int>();
-
-            if (objRoom != null)
+            List<String> errorList = new List<string>();
+            if (!String.IsNullOrEmpty(txtPostingDate.Text))
             {
-                int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
-                List<TB_CUSTOMER> listCus = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
-                if (listCus != null && listCus.Count > 0)
+                DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text);
+
+                List<InvDetail> tmps = new List<InvDetail>();
+                List<int> pkIds = new List<int>();
+
+
+                if (objRoom != null)
                 {
-                    #region "SET WATER & ELECTRIC"
-                    decimal WaterMeterEnd = CustomUtils.isNumber(txtWaterMeterEnd.Text) ? Convert.ToDecimal(txtWaterMeterEnd.Text) : Convert.ToDecimal(0);
-                    decimal WaterMeterStart = CustomUtils.isNumber(txtWaterMeterStart.Text) ? Convert.ToDecimal(txtWaterMeterStart.Text) : Convert.ToDecimal(0);
-
-                    decimal ElecMeterEnd = CustomUtils.isNumber(txtElecMeterEnd.Text) ? Convert.ToDecimal(txtElecMeterEnd.Text) : Convert.ToDecimal(0);
-                    decimal ElecMeterStart = CustomUtils.isNumber(txtElecMeterStart.Text) ? Convert.ToDecimal(txtElecMeterStart.Text) : Convert.ToDecimal(0);
-
-                    lbWaterUnit.Text = (WaterMeterEnd - WaterMeterStart) + "";
-                    lbElecUnit.Text = (ElecMeterEnd - ElecMeterStart) + "";
-                    #endregion
-
-                    #region "Payment Detail"
-                    int order = 1;
-                    int rowIndex = 1;
-                    foreach (TB_CUSTOMER cus in listCus)
+                    int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
+                    List<TB_CUSTOMER> listCus = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
+                    if (listCus != null && listCus.Count > 0)
                     {
-                        //Update Status
-                        ZSTD_INFOTable result = sapBiz.getStudentInfo(cus.CUSTOMER_NUMBER);
-                        if (result != null )
+                        #region "SET WATER & ELECTRIC"
+                        decimal WaterMeterEnd = CustomUtils.isNumber(txtWaterMeterEnd.Text) ? Convert.ToDecimal(txtWaterMeterEnd.Text) : Convert.ToDecimal(0);
+                        decimal WaterMeterStart = CustomUtils.isNumber(txtWaterMeterStart.Text) ? Convert.ToDecimal(txtWaterMeterStart.Text) : Convert.ToDecimal(0);
+
+                        decimal ElecMeterEnd = CustomUtils.isNumber(txtElecMeterEnd.Text) ? Convert.ToDecimal(txtElecMeterEnd.Text) : Convert.ToDecimal(0);
+                        decimal ElecMeterStart = CustomUtils.isNumber(txtElecMeterStart.Text) ? Convert.ToDecimal(txtElecMeterStart.Text) : Convert.ToDecimal(0);
+
+                        lbWaterUnit.Text = (WaterMeterEnd - WaterMeterStart) + "";
+                        lbElecUnit.Text = (ElecMeterEnd - ElecMeterStart) + "";
+                        #endregion
+
+                        #region "Payment Detail"
+                        int order = 1;
+                        int rowIndex = 1;
+                        foreach (TB_CUSTOMER cus in listCus)
                         {
-                            if (result.Count>0) {
-                                ZSTD_INFO info = result[0];
-                                if (info != null)
-                                {
-                                    TB_CUSTOMER _updateCus = repCustomer.GetById(cus.ID);
-                                    _updateCus.STD_STATUS = info.Status;
-                                    repCustomer.Update(_updateCus);
-                                    cus.STD_STATUS = info.Status;
-                                }
-                            }
-                            else
+                            //Update Status
+                            ZSTD_INFOTable result = sapBiz.getStudentInfo(cus.CUSTOMER_NUMBER);
+                            if (result != null)
                             {
-                                errorList.Add(String.Format("ไม่พบข้อมูล {0} ใน SLCM", cus.CUSTOMER_NUMBER));
-                                continue;
-                            }
-                        }
-
-                        Boolean existInvoice = repInvoice.Table.Where(x => x.POSTING_DATE.Value.Year == postingDate.Year && x.POSTING_DATE.Value.Month == postingDate.Month && x.CUS_ID == cus.ID).Any();
-                        if (existInvoice)
-                        {
-                            errorList.Add(String.Format("มีรายการตั้งหนี้ {0} เดือน {1} ไว้แล้ว",cus.CUSTOMER_NUMBER,txtPostingDate.Text));
-                        }
-                        if (!cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
-                        {
-                            errorList.Add(String.Format("สถานะของ {0} ไม่ถูกต้องกรุณาตรวจสอบกับฝ่ายทะเบียน", cus.CUSTOMER_NUMBER));
-                        }
-                        if (!existInvoice && cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
-                        {
-                            List<TB_CUSTOMER_PAYER> cusPays = repCustomerPayer.Table.Where(x => x.CUS_ID == cus.ID && x.SPONSOR_ID != 0).ToList();
-
-                            List<TB_RATES_GROUP_DETAIL> details = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
-                            foreach (TB_RATES_GROUP_DETAIL _detail in details)
-                            {
-                                TB_CUSTOMER_PAYER sponsor = cusPays.Where(x => x.COST_TYPE_ID == _detail.COST_TYPE_ID).FirstOrDefault();
-                                if (sponsor == null)
+                                if (result.Count > 0)
                                 {
-                                    InvDetail _tmp = new InvDetail();
-                                    _tmp.ID = order;
-                                    _tmp.SPONSOR_ID = 0;
-                                    _tmp.CUS_ID = cus.ID;
-
-                                    TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
-                                    if (cusType != null)
+                                    ZSTD_INFO info = result[0];
+                                    if (info != null)
                                     {
-                                        _tmp.M_SERVICE_NAME = cusType.NAME;
-                                        _tmp.COST_TYPE_ID = cusType.ID;
+                                        TB_CUSTOMER _updateCus = repCustomer.GetById(cus.ID);
+                                        _updateCus.STD_STATUS = info.Status;
+                                        repCustomer.Update(_updateCus);
+                                        cus.STD_STATUS = info.Status;
                                     }
-
-                                    _tmp.PAYER_NAME = String.Format("{0} {1}", cus.FIRSTNAME, cus.SURNAME);
-                                    _tmp.RATE_UNIT = _detail.UNIT;
-                                    _tmp.RATE_AMOUNT = _detail.AMOUNT;
-                                    _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
-
-                                    if (_detail.COST_TYPE_ID == 3)
-                                    {
-                                        _tmp.RATE_UNIT = Convert.ToInt32(lbElecUnit.Text);
-                                        _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbElecUnit.Text);
-                                    }
-                                    else if (_detail.COST_TYPE_ID == 4)
-                                    {
-                                        _tmp.RATE_UNIT = Convert.ToInt32(lbWaterUnit.Text);
-                                        _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbWaterUnit.Text);
-                                    }
-                                    _tmp.row_type = Convert.ToInt32(PayTypeEnum.SELF);
-
-                                    TB_RATES_GROUP _rate = repRateGroup.Table.Where(x => x.ID == _detail.RATES_GROUP_ID).FirstOrDefault();
-                                    if (_rate != null)
-                                    {
-                                        CalculateInvoiceEnum cmd = (CalculateInvoiceEnum)Enum.ToObject(typeof(CalculateInvoiceEnum), (int)_rate.CALCULATE_INVOICE_TYPE);
-                                        switch (cmd)
-                                        {
-                                            case CalculateInvoiceEnum.ByPerson:
-                                                _tmp.PAYMENT_AMOUNT = (_tmp.PAYMENT_AMOUNT == null) ? 0 : _tmp.PAYMENT_AMOUNT.Value / listCus.Count;
-
-                                                break;
-                                            case CalculateInvoiceEnum.ByRoom:
-
-                                                //Find Payer
-                                                TB_CUSTOMER _customer = listCus.Where(x => x.PAYER == true).FirstOrDefault();
-                                                if (_customer != null)
-                                                {
-                                                    _tmp.PAYER_NAME = String.Format("{0} {1}", _customer.FIRSTNAME, _customer.SURNAME);
-                                                }
-                                                else
-                                                {
-                                                    _tmp.PAYER_NAME = (listCus.Count == 2) ? (listCus[0].FIRSTNAME + " " + listCus[0].SURNAME + "," + listCus[1].FIRSTNAME + " " + listCus[1].SURNAME) : String.Empty;
-                                                }
-                                                break;
-                                        }
-                                    }
-                                    _tmp.IS_ACTIVE = (_tmp.CUS_ID.Value == listCus[0].ID) ? true : false;
-                                    tmps.Add(_tmp);
-                                    order++;
                                 }
                                 else
                                 {
-                                    //Sponsor
-                                    InvDetail _tmp = new InvDetail();
-                                    _tmp.ID = order;
-                                    _tmp.SPONSOR_ID = sponsor.SPONSOR_ID;
-                                    _tmp.CUS_ID = sponsor.CUS_ID;
-                                    TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
-                                    if (cusType != null)
-                                    {
-                                        _tmp.M_SERVICE_NAME = cusType.NAME;
-                                        _tmp.COST_TYPE_ID = cusType.ID;
-                                    }
-                                    TB_M_SPONSOR _sponsor = repSponsor.Table.Where(x => x.ID == sponsor.SPONSOR_ID).FirstOrDefault();
-                                    if (_sponsor != null)
-                                    {
-                                        _tmp.PAYER_NAME = _sponsor.NAME;
-                                    }
-                                    _tmp.RATE_UNIT = _detail.UNIT;
-                                    _tmp.RATE_AMOUNT = sponsor.AMOUNT;
-                                    _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
-                                    _tmp.IS_ACTIVE = true;
-                                    _tmp.row_type = Convert.ToInt32(PayTypeEnum.FUND);
-                                    if (!pkIds.Contains(sponsor.SPONSOR_ID.Value))
-                                    {
-                                        tmps.Add(_tmp);
-                                        pkIds.Add(sponsor.SPONSOR_ID.Value);
-                                    }
-                                    else
-                                    {
-                                        InvDetail invTmp = tmps.Where(x => x.SPONSOR_ID.Value == sponsor.SPONSOR_ID.Value).FirstOrDefault();
-                                        if (invTmp != null)
-                                        {
-                                            invTmp.PAYMENT_AMOUNT = invTmp.PAYMENT_AMOUNT + _tmp.PAYMENT_AMOUNT;
-                                        }
-                                    }
-
-                                    order++;
+                                    errorList.Add(String.Format("ไม่พบข้อมูล {0} ใน SLCM", cus.CUSTOMER_NUMBER));
+                                    continue;
                                 }
                             }
 
-                            rowIndex++;
-                        }
-                        else
-                        {
-                            //MessageBox.Show(this, "มีการตั้งหนี้ของ");
-                            Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
-                        }
+                            Boolean existInvoice = repInvoice.Table.Where(x => x.POSTING_DATE.Value.Year == postingDate.Year && x.POSTING_DATE.Value.Month == postingDate.Month && x.CUS_ID == cus.ID).Any();
+                            if (existInvoice)
+                            {
+                                errorList.Add(String.Format("มีรายการตั้งหนี้ {0} เดือน {1} ไว้แล้ว", cus.CUSTOMER_NUMBER, txtPostingDate.Text));
+                            }
+                            if (!cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
+                            {
+                                errorList.Add(String.Format("สถานะของ {0} ไม่ถูกต้องกรุณาตรวจสอบกับฝ่ายทะเบียน", cus.CUSTOMER_NUMBER));
+                            }
+                            if (!existInvoice && cus.STD_STATUS.Equals("กำลังศึกษาอยู่"))
+                            {
+                                List<TB_CUSTOMER_PAYER> cusPays = repCustomerPayer.Table.Where(x => x.CUS_ID == cus.ID && x.SPONSOR_ID != 0).ToList();
 
+                                List<TB_RATES_GROUP_DETAIL> details = repRateGroupDetail.Table.Where(x => x.RATES_GROUP_ID == objRoom.RATES_GROUP_ID).ToList();
+                                foreach (TB_RATES_GROUP_DETAIL _detail in details)
+                                {
+                                    TB_CUSTOMER_PAYER sponsor = cusPays.Where(x => x.COST_TYPE_ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                    if (sponsor == null)
+                                    {
+                                        InvDetail _tmp = new InvDetail();
+                                        _tmp.ID = order;
+                                        _tmp.SPONSOR_ID = 0;
+                                        _tmp.CUS_ID = cus.ID;
+
+                                        TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                        if (cusType != null)
+                                        {
+                                            _tmp.M_SERVICE_NAME = cusType.NAME;
+                                            _tmp.COST_TYPE_ID = cusType.ID;
+                                        }
+
+                                        _tmp.PAYER_NAME = String.Format("{0} {1}", cus.FIRSTNAME, cus.SURNAME);
+                                        _tmp.RATE_UNIT = _detail.UNIT;
+                                        _tmp.RATE_AMOUNT = _detail.AMOUNT;
+                                        _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
+
+                                        if (_detail.COST_TYPE_ID == 3)
+                                        {
+                                            _tmp.RATE_UNIT = Convert.ToInt32(lbElecUnit.Text);
+                                            _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbElecUnit.Text);
+                                        }
+                                        else if (_detail.COST_TYPE_ID == 4)
+                                        {
+                                            _tmp.RATE_UNIT = Convert.ToInt32(lbWaterUnit.Text);
+                                            _tmp.PAYMENT_AMOUNT = _detail.AMOUNT * Convert.ToInt32(lbWaterUnit.Text);
+                                        }
+                                        _tmp.row_type = Convert.ToInt32(PayTypeEnum.SELF);
+
+                                        TB_RATES_GROUP _rate = repRateGroup.Table.Where(x => x.ID == _detail.RATES_GROUP_ID).FirstOrDefault();
+                                        if (_rate != null)
+                                        {
+                                            CalculateInvoiceEnum cmd = (CalculateInvoiceEnum)Enum.ToObject(typeof(CalculateInvoiceEnum), (int)_rate.CALCULATE_INVOICE_TYPE);
+                                            switch (cmd)
+                                            {
+                                                case CalculateInvoiceEnum.ByPerson:
+                                                    _tmp.PAYMENT_AMOUNT = (_tmp.PAYMENT_AMOUNT == null) ? 0 : _tmp.PAYMENT_AMOUNT.Value / listCus.Count;
+
+                                                    break;
+                                                case CalculateInvoiceEnum.ByRoom:
+
+                                                    //Find Payer
+                                                    TB_CUSTOMER _customer = listCus.Where(x => x.PAYER == true).FirstOrDefault();
+                                                    if (_customer != null)
+                                                    {
+                                                        _tmp.PAYER_NAME = String.Format("{0} {1}", _customer.FIRSTNAME, _customer.SURNAME);
+                                                    }
+                                                    else
+                                                    {
+                                                        _tmp.PAYER_NAME = (listCus.Count == 2) ? (listCus[0].FIRSTNAME + " " + listCus[0].SURNAME + "," + listCus[1].FIRSTNAME + " " + listCus[1].SURNAME) : String.Empty;
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                        _tmp.IS_ACTIVE = (_tmp.CUS_ID.Value == listCus[0].ID) ? true : false;
+                                        tmps.Add(_tmp);
+                                        order++;
+                                    }
+                                    else
+                                    {
+                                        //Sponsor
+                                        InvDetail _tmp = new InvDetail();
+                                        _tmp.ID = order;
+                                        _tmp.SPONSOR_ID = sponsor.SPONSOR_ID;
+                                        _tmp.CUS_ID = sponsor.CUS_ID;
+                                        TB_M_COST_TYPE cusType = repCostType.Table.Where(x => x.ID == _detail.COST_TYPE_ID).FirstOrDefault();
+                                        if (cusType != null)
+                                        {
+                                            _tmp.M_SERVICE_NAME = cusType.NAME;
+                                            _tmp.COST_TYPE_ID = cusType.ID;
+                                        }
+                                        TB_M_SPONSOR _sponsor = repSponsor.Table.Where(x => x.ID == sponsor.SPONSOR_ID).FirstOrDefault();
+                                        if (_sponsor != null)
+                                        {
+                                            _tmp.PAYER_NAME = _sponsor.NAME;
+                                        }
+                                        _tmp.RATE_UNIT = _detail.UNIT;
+                                        _tmp.RATE_AMOUNT = sponsor.AMOUNT;
+                                        _tmp.PAYMENT_AMOUNT = _tmp.RATE_AMOUNT * _tmp.RATE_UNIT;
+                                        _tmp.IS_ACTIVE = true;
+                                        _tmp.row_type = Convert.ToInt32(PayTypeEnum.FUND);
+                                        if (!pkIds.Contains(sponsor.SPONSOR_ID.Value))
+                                        {
+                                            tmps.Add(_tmp);
+                                            pkIds.Add(sponsor.SPONSOR_ID.Value);
+                                        }
+                                        else
+                                        {
+                                            InvDetail invTmp = tmps.Where(x => x.SPONSOR_ID.Value == sponsor.SPONSOR_ID.Value).FirstOrDefault();
+                                            if (invTmp != null)
+                                            {
+                                                invTmp.PAYMENT_AMOUNT = invTmp.PAYMENT_AMOUNT + _tmp.PAYMENT_AMOUNT;
+                                            }
+                                        }
+
+                                        order++;
+                                    }
+                                }
+
+                                rowIndex++;
+                            }
+                            else
+                            {
+                                //MessageBox.Show(this, "มีการตั้งหนี้ของ");
+                                Console.WriteLine("มีการตั้งหนี้ของเดือนนี้ไปแล้ว");
+                                errorList.Add(String.Format("มีการตั้งหนี้ของเดือนนี้ไปแล้ว"));
+
+                            }
+
+                        }
                     }
-                }
 
 
-                this.InvDetails = tmps;
-                DataTable dt = new DataTable();
-                dt = PivotTable.GetInversedDataTable(this.InvDetails.Where(x => x.IS_ACTIVE = true).ToDataTable(), "M_SERVICE_NAME", "PAYER_NAME", "PAYMENT_AMOUNT", "-", false);
-                GridView1.DataSource = dt;
-                GridView1.DataBind();
-               
-                if (errorList.Count > 0)
-                {
-                    litErrorMessage.Text = MessageBox.GenWarnning(errorList);
+                    this.InvDetails = tmps;
+                    DataTable dt = new DataTable();
+                    dt = PivotTable.GetInversedDataTable(this.InvDetails.Where(x => x.IS_ACTIVE = true).ToDataTable(), "M_SERVICE_NAME", "PAYER_NAME", "PAYMENT_AMOUNT", "-", false);
+                    GridView1.DataSource = dt;
+                    GridView1.DataBind();
+
+
+                    //GridView1.Columns[1].HeaderText = String.Empty;//
+                    //}
+                    #endregion
                 }
                 else
                 {
-                    litErrorMessage.Text = String.Empty;
+                    errorList.Add(String.Format("กรุณาป้อนหมายเลขห้องแล้วกดปุ่ม ตรวจสอบ"));
+
                 }
-                //GridView1.Columns[1].HeaderText = String.Empty;//
-                //}
-                #endregion
+            }
+            else
+            {
+
+                errorList.Add(String.Format("กรุณาระบุวันที่ตั้งหนี้"));
+
+
             }
 
-
+            if (errorList.Count > 0)
+            {
+                litErrorMessage.Text = MessageBox.GenWarnning(errorList);
+            }
+            else
+            {
+                litErrorMessage.Text = String.Empty;
+            }
 
             //BUTTON STATUS
             btnCalculate.CssClass = Constants.CSS_BUTTON_CALCULATE;

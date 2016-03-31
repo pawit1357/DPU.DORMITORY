@@ -84,7 +84,7 @@ namespace DPU.DORMITORY.Web.View.Management
             else
             {
                 int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
-                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList().OrderBy(x=>x.NUMBER);
                 ddlRoom.DataBind();
                 ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
             }
@@ -159,12 +159,12 @@ namespace DPU.DORMITORY.Web.View.Management
             searchResult = obj.Search();
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
-            //if (gvResult.Rows.Count > 0)
-            //{
-            //    pSearchResult.Visible = true;
-            //}
+
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
@@ -179,7 +179,7 @@ namespace DPU.DORMITORY.Web.View.Management
             if (!String.IsNullOrEmpty(ddlBuild.SelectedValue))
             {
                 int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
-                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList().OrderBy(x => x.NUMBER);
                 ddlRoom.DataBind();
                 ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
             }

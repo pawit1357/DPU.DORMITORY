@@ -73,6 +73,8 @@ namespace DPU.DORMITORY.Biz
             _rpt.SetParameterValue("P_INVOICE_ID", 0);
             _rpt.SetParameterValue("P_MONTH", date.Month);
             _rpt.SetParameterValue("P_YEAR", date.Year);
+            _rpt.SetParameterValue("P_BUILD", build_id);
+
             return _rpt;
         }
 

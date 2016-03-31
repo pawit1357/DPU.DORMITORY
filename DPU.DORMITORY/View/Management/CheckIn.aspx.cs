@@ -409,15 +409,25 @@ namespace DPU.DORMITORY.Web.View.Management
 
 
             //repRoom.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+
             room.respoList = userLogin.respoList;
             room.STATUS = Convert.ToInt32(RoomStatusEmum.Available);
             room.BUILD_ID = Convert.ToInt32(ddlBuild.SelectedValue);
             room.ID = Convert.ToInt32(ddlRoom.SelectedValue);
             searchRoomResult = room.SearchForRent();
             gvResult.DataSource = searchRoomResult;
+
+
+
+            //gvResult.Columns[4].s = DataGridViewColumnSortMode.NotSortable;
+
+
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
         }
 
         private void fillInData()
@@ -1277,85 +1287,7 @@ namespace DPU.DORMITORY.Web.View.Management
 
         }
 
-        //private void fillMeterData()
-        //{
-        //    txtPostingDate.Text = DateTime.Now.ToString("MM/yyyy");
-
-
-        //    if (objRoom != null)
-        //    {
-        //        int cusStatus = Convert.ToInt32(CustomerStatusEnum.CheckIn);
-        //        customers = repCustomer.Table.Where(x => x.ROOM_ID == objRoom.ID && x.STATUS == cusStatus).ToList();
-        //        if (customers != null && customers.Count > 0)
-        //        {
-
-        //            Boolean notHasStdNum = customers.Where(x => x.HAS_STDNUM == false).Any();
-        //            InvoiceType = (notHasStdNum) ? InvoiceTypeEnum.ROOM : InvoiceTypeEnum.CUSTOMER;
-
-        //            #region "SET PREVIOS METER"
-
-        //            DateTime postingDate = Convert.ToDateTime(txtPostingDate.Text);
-
-
-        //            //Check Current Month
-        //            List<TB_ROOM_METER> meters = repMeter.Table.Where(x => x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).ToList();
-        //            if (meters != null && meters.Count > 0)
-        //            {
-        //                TB_ROOM_METER meterElec = meters.Where(x => x.METER_TYPE == 3).FirstOrDefault();
-        //                if (meterElec != null)
-        //                {
-        //                    txtElecMeterStart.Text = meterElec.METER_START.Value.ToString();
-        //                    txtElecMeterEnd.Text = meterElec.METER_END.Value.ToString();
-        //                }
-        //                TB_ROOM_METER meterWater = meters.Where(x => x.METER_TYPE == 4).FirstOrDefault();
-        //                if (meterWater != null)
-        //                {
-        //                    txtWaterMeterStart.Text = meterWater.METER_START.Value.ToString();
-        //                    txtWaterMeterEnd.Text = meterWater.METER_END.Value.ToString();
-        //                }
-        //            }
-        //            else
-        //            {
-        //                //Check Prevoid Month
-        //                postingDate = postingDate.AddMonths(-1);
-        //                meters = repMeter.Table.Where(x => x.ROOM_ID == objRoom.ID && x.METER_DATE.Year == postingDate.Year && x.METER_DATE.Month == postingDate.Month).ToList();
-        //                if (meters != null && meters.Count > 0)
-        //                {
-        //                    TB_ROOM_METER meterElec = meters.Where(x => x.METER_TYPE == 3).FirstOrDefault();
-        //                    if (meterElec != null)
-        //                    {
-        //                        txtElecMeterStart.Text = meterElec.METER_END.Value.ToString();
-        //                    }
-        //                    else
-        //                    {
-        //                        txtElecMeterStart.Text = string.Empty;
-        //                    }
-        //                    TB_ROOM_METER meterWater = meters.Where(x => x.METER_TYPE == 4).FirstOrDefault();
-        //                    if (meterWater != null)
-        //                    {
-        //                        txtWaterMeterStart.Text = meterWater.METER_END.Value.ToString();
-        //                    }
-        //                    else
-        //                    {
-        //                        txtWaterMeterStart.Text = string.Empty;
-        //                    }
-        //                }
-        //            }
-        //            #endregion
-
-
-
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show(this.Page, String.Format(Resources.MSG_NO_CUSTOMER_IN_ROOM, objRoom.NUMBER));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        MessageBox.Show(this.Page, Resources.MSG_NO_ROOM);
-        //    }
-        //}
+        
 
         private void calculate()
         {
@@ -1466,14 +1398,13 @@ namespace DPU.DORMITORY.Web.View.Management
             if (build != null && build.Count > 1)
             {
                 ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
-            }
-            else
-            {
                 int buildId = Convert.ToInt32(ddlBuild.SelectedValue);
-                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).ToList();
+                ddlRoom.DataSource = repRoom.Table.Where(x => x.BUILD_ID == buildId).OrderBy(x => x.NUMBER).ToList();
                 ddlRoom.DataBind();
                 ddlRoom.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
+
             }
+
 
             ModolPopupExtender.Show();
         }

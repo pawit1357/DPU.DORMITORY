@@ -274,10 +274,11 @@ namespace DPU.DORMITORY.Web.View.Management
             searchResult = obj.SearchForRent();
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+
             if (gvResult.Rows.Count > 0)
             {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
                 pSearchResult.Visible = true;
             }
         }

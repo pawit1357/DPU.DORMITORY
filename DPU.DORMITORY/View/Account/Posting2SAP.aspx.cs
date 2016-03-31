@@ -77,6 +77,7 @@ namespace DPU.DORMITORY.Web.View.Account
         {
             txtPostingDate.Text = DateTime.Now.ToString("MM/yyyy");
             List<TB_M_BUILD> build = repBuild.Table.Where(x => userLogin.respoList.Contains(x.BUILD_ID.Value)).ToList();
+            ddlBuild.DataSource = build;
             ddlBuild.DataBind();
             ddlBuild.Items.Insert(0, new ListItem(Constants.PLEASE_SELECT, "0"));
 
@@ -88,8 +89,11 @@ namespace DPU.DORMITORY.Web.View.Account
             searchResult = obj.preparePostingData();
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
 
             btnTransfer.Attributes.Add("onclick", "return confirm('ต้องการที่จะโอนข้อมูลไปยัง SAP ?');");
             pMainPage.Visible = true;
@@ -109,8 +113,11 @@ namespace DPU.DORMITORY.Web.View.Account
             searchResult = obj.preparePostingData();
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
-            gvResult.UseAccessibleHeader = true;
-            gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)

@@ -628,7 +628,9 @@
                                             </ItemTemplate>
                                             <EditItemTemplate>
                                                 <asp:TextBox ID="txtPAY_AMOUNT" runat="server" Text='<%# Eval("PAYMENT_AMOUNT","{0:N2}")%>' class="form-control"></asp:TextBox>
-                                            </EditItemTemplate>
+                                                      <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtPAY_AMOUNT"
+                                                        FilterType="Numbers" ValidChars=".," runat="server" />
+                                                  </EditItemTemplate>
                                             <ItemStyle HorizontalAlign="Right" />
                                         </asp:TemplateField>
                                         <asp:TemplateField HeaderText="หมายเหตุ" ItemStyle-HorizontalAlign="Center">
@@ -714,18 +716,18 @@
 
 
                                 <asp:GridView ID="gvResult" runat="server" AutoGenerateColumns="False"
-                                    CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand">
+                                    CssClass="table table-striped table-hover table-bordered" ShowHeaderWhenEmpty="True" DataKeyNames="ID" OnRowCommand="gvResult_RowCommand" PageSize="20">
                                     <Columns>
                                         <%--<asp:BoundField HeaderText="ID" DataField="ID" ItemStyle-HorizontalAlign="Left" SortExpression="ID" />--%>
-                                        <asp:BoundField HeaderText="อาคาร" DataField="BUILD" ItemStyle-HorizontalAlign="Left" SortExpression="BUILD" />
-                                        <asp:BoundField HeaderText="ประเภทห้อง" DataField="ROOM_TYPE" ItemStyle-HorizontalAlign="Left" SortExpression="ROOM_TYPE" />
+                                        <asp:BoundField HeaderText="อาคาร" DataField="BUILD" ItemStyle-HorizontalAlign="Center" SortExpression="BUILD" />
+                                        <asp:BoundField HeaderText="ประเภทห้อง" DataField="ROOM_TYPE" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" SortExpression="ROOM_TYPE" />
                                         <%--                                <asp:BoundField HeaderText="กลุ่มอัตราค่าห้อง" DataField="RATE_GROUP" ItemStyle-HorizontalAlign="Left" SortExpression="RATE_GROUP" />--%>
-                                        <asp:BoundField HeaderText="ชั้น" DataField="FLOOR" ItemStyle-HorizontalAlign="Left" SortExpression="FLOOR" />
-                                        <asp:BoundField HeaderText="เลขห้อง" DataField="NUMBER" ItemStyle-HorizontalAlign="Left" SortExpression="NUMBER" />
+                                        <asp:BoundField HeaderText="ชั้น" DataField="FLOOR" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" SortExpression="FLOOR" />
+                                        <asp:BoundField HeaderText="เลขห้อง" DataField="NUMBER" ItemStyle-HorizontalAlign="Center" HeaderStyle-HorizontalAlign="Center" SortExpression="NUMBER" />
 
                                         <asp:TemplateField HeaderText="">
                                             <ItemTemplate>
-                                                <asp:LinkButton ID="btnSelect" runat="server" ToolTip="Select" CommandName="Select" CommandArgument='<%# Eval("ID")%>'><i class="fa  fa-check-square-o"></i></asp:LinkButton>
+                                                <asp:LinkButton ID="btnSelect" runat="server" ToolTip="Select" CommandName="Select" CommandArgument='<%# Eval("ID")%>'><%--<i class="fa  fa-check-square-o"></i>--%>เลือก</asp:LinkButton>
                                             </ItemTemplate>
                                         </asp:TemplateField>
                                     </Columns>
@@ -871,7 +873,13 @@
             table.dataTable({
                 "pageLength": 50,
                 "searching": false,
-                "paging": false
+                "aoColumns": [
+                     null,
+                     null,
+                     null,
+                     null,
+                     { "bSortable": false } // <-- disable sorting for column 3
+                ]
             });
 
             //openModal();
@@ -987,10 +995,10 @@
 
         });
 
-        function openModal() {
-            alert('');
-            $('#PopupRoom').modal('show');
-        }
+        //function openModal() {
+        //    alert('');
+        //    $('#PopupRoom').modal('show');
+        //}
     </script>
     <!-- END JAVASCRIPTS -->
 

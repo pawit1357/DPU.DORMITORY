@@ -18,10 +18,12 @@ namespace DPU.DORMITORY.Web.View.Master
 
         private UnitOfWork unitOfWork = new UnitOfWork();
         private Repository<TB_M_CUSTOMER_TYPE> rep;
-
+        private Repository<TB_CUSTOMER> repCus;
         public SearchCustomerType()
         {
             rep = unitOfWork.Repository<TB_M_CUSTOMER_TYPE>();
+            repCus = unitOfWork.Repository<TB_CUSTOMER>();
+
         }
 
         public IEnumerable searchResult
@@ -106,15 +108,27 @@ namespace DPU.DORMITORY.Web.View.Master
             var editModel = rep.GetById(this.PKID);
             if (editModel != null)
             {
-                rep.Delete(editModel);
-                #region "MESSAGE RESULT"
-                String errorMessage = rep.errorMessage;
-                if (!String.IsNullOrEmpty(errorMessage))
-                {
-                    MessageBox.Show(this, errorMessage);
-                }
-                #endregion
-                BindingData();
+
+                    Boolean isExistCustomerType= repCus.Table.Where(x => x.CUSTOMER_TYPE_ID == this.PKID).Any();
+                    if (!isExistCustomerType)
+                    {
+                        rep.Delete(editModel);
+                        #region "MESSAGE RESULT"
+                        String errorMessage = rep.errorMessage;
+                        if (!String.IsNullOrEmpty(errorMessage))
+                        {
+                            MessageBox.Show(this, errorMessage);
+                        }
+                        #endregion
+                        BindingData();
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, "ไม่สามารถลบข้อมูลได้เนื่องจากมีการใช้งานประเภทลูกค้านี้ในระบบ");
+
+                    }
+
+
             }
         }
         #endregion
