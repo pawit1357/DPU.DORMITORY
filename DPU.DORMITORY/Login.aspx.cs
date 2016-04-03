@@ -50,7 +50,7 @@ namespace DPU.DORMITORY.Web
                         if (!Convert.ToBoolean(user.IS_FORCE_CHANGE_PASSWORD))
                         {
                             //removeSession();
-                            Response.Redirect(Constants.LINK_DASHBOARD);
+                            Response.Redirect(Constants.LINK_SEARCH_ROOM_FOR_RENT);
                         }
                         else
                         {

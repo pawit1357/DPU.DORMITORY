@@ -1,12 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Main.Master" AutoEventWireup="true" CodeBehind="Rates.aspx.cs" Inherits="DPU.DORMITORY.Web.View.Master.Rates" %>
 
-<%--<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>--%>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <%--      <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>--%>
     <form id="Form1" method="post" runat="server" class="form-horizontal">
-<%--        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
+        <asp:ToolkitScriptManager ID="ToolkitScript1" runat="server" />
 
         <%--<asp:HiddenField ID="hPKID" Value="0" runat="server" />--%>
         <div class="portlet light bordered">
@@ -28,7 +28,7 @@
                 <div class="form-body">
                     <div class="alert alert-danger display-hide">
                         <button class="close" data-close="alert"></button>
-                        You have some form errors. Please check below.
+                        กรุณาตรวจสอบว่าป้อนข้อมูลครบทุกช่องหรือไม่
                     </div>
                     <div class="alert alert-success display-hide">
                         <button class="close" data-close="alert"></button>
@@ -81,6 +81,8 @@
                                 <label class="control-label col-md-3">อัตราค่าประกัน<span class="required" aria-required="true">*</span></label>
                                 <div class="col-md-6">
                                     <asp:TextBox ID="txtAmout" runat="server" class="form-control"></asp:TextBox>
+                                                        <asp:FilteredTextBoxExtender ID="FilteredTextBoxExtenderReceiptinAc" TargetControlID="txtAmout"
+                                                            FilterType="Custom,Numbers" ValidChars=".," runat="server" />
                                 </div>
                             </div>
                         </div>
@@ -120,11 +122,21 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label col-md-3">คิดค่าห้องตาม:<span class="required" aria-required="true">*</span></label>
+                                         <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <asp:RadioButton ID="rdCalType_1" GroupName="Sample_enough" runat="server" Checked="true" />คิดรายบุคคล
+                                    </label>
+                                    <label class="radio-inline">
+                                        <asp:RadioButton ID="rdCalType_2" GroupName="Sample_enough" runat="server" />คิดตามห้อง
+                                    </label>
+
+                                </div>
                                 <div class="col-md-6">
-                                    <asp:DropDownList ID="ddlCalType" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID">
+
+                        <%--            <asp:DropDownList ID="ddlCalType" runat="server" class="select2_category form-control" DataTextField="Name" DataValueField="ID">
                                         <asp:ListItem Value="1">คิดรายบุคคล</asp:ListItem>
                                         <asp:ListItem Value="2">คิดตามห้อง</asp:ListItem>
-                                    </asp:DropDownList>
+                                    </asp:DropDownList>--%>
                                 </div>
                             </div>
                         </div>

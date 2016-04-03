@@ -92,6 +92,11 @@ namespace DPU.DORMITORY.Web.View.Management
           
             gvResult.DataSource = searchResult;
             gvResult.DataBind();
+            if (gvResult.Rows.Count > 0)
+            {
+                gvResult.UseAccessibleHeader = true;
+                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            }
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -102,13 +107,13 @@ namespace DPU.DORMITORY.Web.View.Management
             {
                 initialPage();
             }
-            if (searchResult != null)
-            {
-                gvResult.DataSource = searchResult;
-                gvResult.DataBind();
-                gvResult.UseAccessibleHeader = true;
-                gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
-            }
+            //if (searchResult != null)
+            //{
+            //    gvResult.DataSource = searchResult;
+            //    gvResult.DataBind();
+            //    gvResult.UseAccessibleHeader = true;
+            //    gvResult.HeaderRow.TableSection = TableRowSection.TableHeader;
+            //}
         }
 
         protected void lbAdd_Click(object sender, EventArgs e)
